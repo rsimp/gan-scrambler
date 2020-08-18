@@ -11,7 +11,7 @@ import { importAll } from "app/common/webpack";
 import * as serviceWorker from "./serviceWorker";
 
 // execute any init scripts
-importAll(require.context("./", true, /\/init\.(ts|tsx)$/));
+importAll(require.context("./", true, /\/on-startup\.(ts|tsx)$/));
 
 // include all global stylesheets
 importAll(require.context("./", true, /\.global\.css$/));

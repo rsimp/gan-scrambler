@@ -2,13 +2,13 @@ import React from "react";
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import { Setup } from "app/setup";
+import { DeviceWidgetContainer } from "app/device-widget";
 
 export const Router = (): JSX.Element => (
   <BrowserRouter>
     <Switch>
       <Route path="/setup">
-        <Setup />
+        <DeviceWidgetContainer />
       </Route>
       <Route path="/">{null}</Route>
     </Switch>
