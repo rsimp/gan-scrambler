@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { IntlProvider } from "react-intl";
 
-import { Router } from "app/router";
+import { MainScreen } from "app/main-screen";
 import { createStore } from "app/common/store";
 import { messages, locale } from "translations";
 import { importAll } from "app/common/webpack";
@@ -22,7 +22,7 @@ const store = createStore();
 ReactDOM.render(
   <Provider store={store}>
     <IntlProvider locale={locale} messages={messages}>
-      <Router />
+      <MainScreen />
     </IntlProvider>
   </Provider>,
   document.getElementById("root")

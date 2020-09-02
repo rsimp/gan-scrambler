@@ -4,6 +4,7 @@ import createSagaMiddleware from "redux-saga";
 import { SagaIterator } from "redux-saga";
 import { call, spawn, delay } from "redux-saga/effects";
 
+// ApplicationState will be dynamically populated from on-startup.ts scripts
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ApplicationState {}
 const reducerRegistry: { [key: string]: Reducer } = {};

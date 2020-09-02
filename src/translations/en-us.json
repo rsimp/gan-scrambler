@@ -1,8 +1,5 @@
 {
-    "layout": {
-        "navigation": {
-            "home": "Home",
-            "setup": "Setup"
-        }
-    }
+    "appTitle": "GAN Scrambler",
+    "scrambleGenerator.actions.generate": "Generate",
+    "scrambleGenerator.actions.execute": "Execute"
 }
