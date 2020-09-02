@@ -37,7 +37,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "debug": "react-scripts start --inspect-brk",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

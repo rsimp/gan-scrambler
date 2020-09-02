@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography, Box } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { RobotWidgetContainer } from "app/robot-widget";
-import { ScrambleGenerator } from "app/scramble-generator";
+import { ScrambleGeneratorContainer } from "app/scramble-generator";
 
 export function MainScreen(): JSX.Element {
   return (
@@ -17,7 +17,7 @@ export function MainScreen(): JSX.Element {
         </Toolbar>
       </AppBar>
 
-      <ScrambleGenerator />
+      <ScrambleGeneratorContainer />
     </Box>
   );
 }

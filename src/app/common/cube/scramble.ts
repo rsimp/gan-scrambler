@@ -1,3 +1,5 @@
+import { chunk } from "app/common/array-reducers";
+
 const cubeFaces = ["F", "R", "U", "B", "L", "D"];
 const moveModifier = ["", "2", "'"];
 const moveMap: Record<string, string> = {
@@ -25,7 +27,7 @@ function getRandom<T>(arr: Array<T>) {
 
 export interface Scramble {
   code: string;
-  GANEncoding: string;
+  GANEncoding: Array<string>;
 }
 
 export function generateScramble(): Scramble {
@@ -33,13 +35,16 @@ export function generateScramble(): Scramble {
   let lastMove = "";
   const moveList = [...Array(24)].map(() => {
     lastMove = getRandom(
-      cubeFaces.filter((move) => move !== lastMove && move !== "F")
+      cubeFaces.filter((move) => move !== lastMove && move !== "U")
     );
     const modifier = getRandom(moveModifier);
     return lastMove + modifier;
   });
   return {
     code: moveList.join(" "),
-    GANEncoding: moveList.map((move) => moveMap[move]).join(""),
+    GANEncoding: moveList
+      .map((move) => moveMap[move])
+      .reduce(chunk(12), [])
+      .map((moves) => moves.join("")),
   };
 }

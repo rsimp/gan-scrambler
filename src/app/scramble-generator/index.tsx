@@ -5,22 +5,20 @@ import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "app/common/store";
 
-import { getRobotDevice } from "app/robot-widget/store/selectors";
-import { RobotState } from "app/robot-widget/store/types";
+import { getRobotServer } from "app/robot-widget/store/selectors";
 
 import { generateScramble, Scramble } from "app/common/cube/scramble";
 import { CubePreview } from "app/cube-preview";
 
-const SCRAMBLE_SERVICE_UUID = 0x180a;
-const MODEL_NUMBER_SERVICE_UUID = 0x2a24;
+const SCRAMBLE_SERVICE_UUID = 0xfff0;
+const SCRAMBLE_CHARACTERISTIC_UUID = 0xfff3;
 
 interface ScrambleGeneratorProps {
-  robotDevice?: RobotState["device"];
+  robotServer: BluetoothRemoteGATTServer | null;
 }
 
 export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
   const [scramble, setScramble] = useState<Scramble | null>(null);
-  const robotServer = props?.robotDevice?.gatt;
   return (
     <Box display="flex" flexDirection="column" alignItems="flex-start">
       <Button
@@ -37,10 +35,25 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
           <CubePreview scramble={scramble} />
           <Button
             variant="contained"
-            disabled={robotServer}
-            onClick={() => {
-              if (robotServer) {
-                const;
+            disabled={!Boolean(props.robotServer)}
+            onClick={async () => {
+              try {
+                if (props.robotServer) {
+                  const scrambleService = await props.robotServer.getPrimaryService(
+                    SCRAMBLE_SERVICE_UUID
+                  );
+                  const scrambleExecuteCharacteristic = await scrambleService.getCharacteristic(
+                    SCRAMBLE_CHARACTERISTIC_UUID
+                  );
+
+                  for (const GANEncodingChunk of scramble.GANEncoding) {
+                    await scrambleExecuteCharacteristic.writeValue(
+                      new TextEncoder().encode(GANEncodingChunk)
+                    );
+                  }
+                }
+              } catch (error) {
+                console.log(error);
               }
             }}
           >
@@ -54,6 +67,6 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
 
 export const ScrambleGeneratorContainer = connect(
   (state: ApplicationState) => ({
-    robotDevice: getRobotDevice(state),
+    robotServer: getRobotServer(state),
   })
 )(ScrambleGenerator);

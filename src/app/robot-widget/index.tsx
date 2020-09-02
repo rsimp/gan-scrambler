@@ -14,6 +14,8 @@ import styles from "./styles.module.css";
 const DEVICE_INFO_SERVICE_UUID = 0x180a;
 const MODEL_NUMBER_SERVICE_UUID = 0x2a24;
 
+const SCRAMBLE_SERVICE_UUID = 0xfff0;
+
 interface RobotWidgetProps {
   registerRobot: typeof registerRobot;
   unregisterRobot: typeof unregisterRobot;
@@ -35,6 +37,7 @@ export function RobotWidget(props: RobotWidgetProps): JSX.Element {
                   { namePrefix: "GAN" },
                   { services: [DEVICE_INFO_SERVICE_UUID] },
                 ],
+                optionalServices: [SCRAMBLE_SERVICE_UUID],
               });
               const server = await device.gatt?.connect();
               if (server) {
