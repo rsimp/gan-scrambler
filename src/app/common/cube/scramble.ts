@@ -2,24 +2,39 @@ import { chunkReducer } from "app/common/array-reducers";
 
 const cubeFaces = ["D", "L", "B", "U", "R", "F"];
 const moveModifiers = ["", "2", "'"];
-const moveMap: Record<string, string> = {
-  R: "0",
-  R2: "1",
-  "R'": "2",
-  F: "3",
-  F2: "4",
-  "F'": "5",
-  D: "6",
-  D2: "7",
-  "D'": "8",
-  L: "9",
-  L2: "a",
-  "L'": "b",
-  B: "c",
-  B2: "d",
-  "B'": "e",
+const moveMap: Record<string, number> = {
+  R: 0,
+  R2: 1,
+  "R'": 2,
+  F: 3,
+  F2: 4,
+  "F'": 5,
+  D: 6,
+  D2: 7,
+  "D'": 8,
+  L: 9,
+  L2: 10,
+  "L'": 11,
+  B: 12,
+  B2: 13,
+  "B'": 14,
 };
 
+/*
+           +----------+
+           | 24 25 26 |
+           | 31  U 27 |
+           | 30 29 28 |
++----------+----------+----------+----------+
+| 08 09 10 | 40 41 42 | 32 33 34 | 16 17 18 |
+| 15  L 11 | 47  F 43 | 39  R 35 | 23  B 19 |
+| 14 13 12 | 46 45 44 | 38 37 36 | 22 21 20 |
++----------+----------+----------+----------+
+           | 00 01 02 |
+           | 07  D 03 |
+           | 06 05 04 |
+           +----------+
+*/
 const faceEdges: Record<string, Array<number>> = {
   D: [46, 45, 44, 38, 37, 36, 22, 21, 20, 14, 13, 12],
   L: [24, 31, 30, 40, 47, 46, 0, 7, 6, 20, 19, 18],
@@ -32,7 +47,7 @@ const faceEdges: Record<string, Array<number>> = {
 export interface Scramble {
   code: string;
   cubeState: string;
-  GANEncoding: Array<string>; // chunked for the robot
+  GANEncoding: Array<number>;
 }
 
 export function generateScramble(): Scramble {
@@ -42,14 +57,14 @@ export function generateScramble(): Scramble {
     code: moveList.join(" "),
     GANEncoding: moveList
       .map((move) => moveMap[move])
-      .reduce(chunkReducer(12), [])
-      .map((moves) => moves.join("")),
+      .reduce(chunkReducer(2), [])
+      .map((moves) => moves[0] * 16 + moves[1]),
     cubeState: cube.currentState,
   };
 }
 
 function createCube() {
-  const cubeHistory = ["yyyyyyyyoooooooobbbbbbbbwwwwwwwwrrrrrrrrgggggggg"];
+  const cubeHistory = ["DDDDDDDDLLLLLLLLBBBBBBBBUUUUUUUURRRRRRRRFFFFFFFF"];
   const reset = () => cubeHistory.splice(1);
   const twist = (cubeStateStr: string, move: string) => {
     const cubeFace = move.charAt(0);
@@ -76,7 +91,7 @@ function createCube() {
 
     return cubeState.join("");
   };
-  const scramble = (total = 25) => {
+  const scramble = (total = 26) => {
     const moves = [];
     let currentState = cubeHistory[cubeHistory.length - 1];
 
@@ -85,6 +100,9 @@ function createCube() {
       const move =
         cubeFaces[Math.floor(Math.random() * 6)] +
         moveModifiers[Math.floor(Math.random() * 3)];
+      if (move.charAt(0) === "U") {
+        continue;
+      }
       // Don't move the same face twice in a row
       if (
         moves.length > 0 &&

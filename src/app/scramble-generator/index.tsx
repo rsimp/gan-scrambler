@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, Box, Typography } from "@material-ui/core";
+import {
+  Button,
+  Box,
+  Typography,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "app/common/store";
@@ -17,10 +26,33 @@ interface ScrambleGeneratorProps {
   robotServer: BluetoothRemoteGATTServer | null;
 }
 
+type ScrambleType = "full" | "cross" | "f2l" | "oll" | "pll";
+
 export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
+  const [scrambleType, setScrambleType] = useState<ScrambleType>("full");
   const [scramble, setScramble] = useState<Scramble | null>(null);
   return (
     <Box display="flex" flexDirection="column" alignItems="flex-start">
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Scramble Type</FormLabel>
+        <RadioGroup
+          row
+          aria-label="Scramble Type"
+          name="scrambleType"
+          value={scrambleType}
+          onChange={(e) =>
+            setScrambleType(e.currentTarget.value as ScrambleType)
+          }
+        >
+          <FormControlLabel value="full" control={<Radio />} label="Full" />
+          <FormControlLabel value="cross" control={<Radio />} label="Cross" />
+          <FormControlLabel
+            value="f2l"
+            control={<Radio />}
+            label="First Two Layers"
+          />
+        </RadioGroup>
+      </FormControl>
       <Button
         variant="contained"
         onClick={() => {
@@ -46,11 +78,9 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
                     SCRAMBLE_CHARACTERISTIC_UUID
                   );
 
-                  for (const GANEncodingChunk of scramble.GANEncoding) {
-                    await scrambleExecuteCharacteristic.writeValue(
-                      new TextEncoder().encode(GANEncodingChunk)
-                    );
-                  }
+                  await scrambleExecuteCharacteristic.writeValue(
+                    new Uint8Array(scramble.GANEncoding)
+                  );
                 }
               } catch (error) {
                 console.log(error);
