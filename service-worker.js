@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/gan-scrambler/precache-manifest.a7813f78bb623f52255971dc9de17cd2.js"
+  "/gan-scrambler/precache-manifest.375eaaa7f2e8551f103cd04fda777548.js"
 );
 
 self.addEventListener('message', (event) => {
