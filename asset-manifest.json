@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/gan-scrambler/static/css/main.b962f37a.chunk.css",
-    "main.js": "/gan-scrambler/static/js/main.80840969.chunk.js",
-    "main.js.map": "/gan-scrambler/static/js/main.80840969.chunk.js.map",
+    "main.js": "/gan-scrambler/static/js/main.b96b50e6.chunk.js",
+    "main.js.map": "/gan-scrambler/static/js/main.b96b50e6.chunk.js.map",
     "runtime-main.js": "/gan-scrambler/static/js/runtime-main.0f2eb7fc.js",
     "runtime-main.js.map": "/gan-scrambler/static/js/runtime-main.0f2eb7fc.js.map",
     "static/js/2.bb85d537.chunk.js": "/gan-scrambler/static/js/2.bb85d537.chunk.js",
     "static/js/2.bb85d537.chunk.js.map": "/gan-scrambler/static/js/2.bb85d537.chunk.js.map",
     "index.html": "/gan-scrambler/index.html",
-    "precache-manifest.375eaaa7f2e8551f103cd04fda777548.js": "/gan-scrambler/precache-manifest.375eaaa7f2e8551f103cd04fda777548.js",
+    "precache-manifest.e727596c23e13e4063835a2dcafcc587.js": "/gan-scrambler/precache-manifest.e727596c23e13e4063835a2dcafcc587.js",
     "service-worker.js": "/gan-scrambler/service-worker.js",
     "static/css/main.b962f37a.chunk.css.map": "/gan-scrambler/static/css/main.b962f37a.chunk.css.map",
     "static/js/2.bb85d537.chunk.js.LICENSE.txt": "/gan-scrambler/static/js/2.bb85d537.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.0f2eb7fc.js",
     "static/js/2.bb85d537.chunk.js",
     "static/css/main.b962f37a.chunk.css",
-    "static/js/main.80840969.chunk.js"
+    "static/js/main.b96b50e6.chunk.js"
   ]
 }
