@@ -45,12 +45,6 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
           }
         >
           <FormControlLabel value="full" control={<Radio />} label="Full" />
-          <FormControlLabel value="cross" control={<Radio />} label="Cross" />
-          <FormControlLabel
-            value="f2l"
-            control={<Radio />}
-            label="First Two Layers"
-          />
         </RadioGroup>
       </FormControl>
       <Button

@@ -33,11 +33,11 @@ export function RobotWidget(props: RobotWidgetProps): JSX.Element {
           onClick={async () => {
             try {
               const device = await navigator.bluetooth.requestDevice({
-                filters: [
-                  { namePrefix: "GAN" },
-                  { services: [DEVICE_INFO_SERVICE_UUID] },
+                filters: [{ namePrefix: "GAN" }],
+                optionalServices: [
+                  SCRAMBLE_SERVICE_UUID,
+                  DEVICE_INFO_SERVICE_UUID,
                 ],
-                optionalServices: [SCRAMBLE_SERVICE_UUID],
               });
               const server = await device.gatt?.connect();
               if (server) {
