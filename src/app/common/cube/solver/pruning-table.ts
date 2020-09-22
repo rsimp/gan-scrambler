@@ -1,26 +1,29 @@
 import { cartesian } from "./tools";
+import { MoveTable } from "./move-table";
 
 /**
  * A pruning table gives a lower bound on the number of moves
  * required to reach a target state.
  */
 class PruningTable {
-  constructor(moveTables, moves) {
+  table: number[];
+  constructor(moveTables: MoveTable[], moves: number[]) {
+    this.table = [];
     this.computePruningTable(moveTables, moves);
   }
 
-  setPruningValue(index, value) {
+  setPruningValue(index: number, value: number): void {
     this.table[index >> 3] ^= (0xf ^ value) << ((index & 7) << 2);
   }
 
-  getPruningValue(index) {
+  getPruningValue(index: number): number {
     return (this.table[index >> 3] >> ((index & 7) << 2)) & 0xf;
   }
 
-  computePruningTable(moveTables, moves) {
+  computePruningTable(moveTables: MoveTable[], moves: number[]): void {
     const size = moveTables.reduce((acc, obj) => acc * obj.size, 1);
 
-    this.table = [];
+    this.table.length = 0;
 
     for (let i = 0; i < (size + 7) >> 3; i += 1) {
       this.table.push(-1);

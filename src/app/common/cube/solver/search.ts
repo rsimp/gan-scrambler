@@ -1,14 +1,50 @@
 import { parseAlgorithm, formatAlgorithm, invertAlgorithm } from "./algorithms";
-import PruningTable from "./PruningTable";
+import PruningTable from "./pruning-table";
 import { allMoves } from "./cube";
+import { MoveTable } from "./move-table";
+
+export interface CreateTableCallback {
+  (): {
+    moveTables: MoveTable[];
+    pruningTables: string[][];
+  };
+}
+
+export interface SearchSolution {
+  indexes: number[];
+  solution: number[]; // array of move indexes
+}
+
+export interface SearchSettings {
+  scramble: string;
+  maxDepth?: number;
+  lastMove?: number;
+  format?: boolean;
+  indexes?: number[];
+}
+
+type DefaultedSearchSettings = Required<
+  Pick<SearchSettings, "maxDepth" | "lastMove" | "format">
+> &
+  SearchSettings;
 
 class Search {
-  constructor(createTables, moves = allMoves) {
+  moves: number[];
+  initialized!: boolean;
+  moveTables!: MoveTable[];
+  settings!: DefaultedSearchSettings;
+  pruningTables!: Array<{
+    pruningTable: PruningTable;
+    moveTableIndexes: number[];
+  }>;
+  createTables: CreateTableCallback;
+
+  constructor(createTables: CreateTableCallback, moves = allMoves) {
     this.createTables = createTables;
     this.moves = moves;
   }
 
-  initialize() {
+  initialize(): void {
     if (this.initialized) {
       return;
     }
@@ -30,7 +66,7 @@ class Search {
         (a, b) => this.moveTables[a].size - this.moveTables[b].size
       );
 
-      const mappedTables = [];
+      const mappedTables: MoveTable[] = [];
 
       moveTableIndexes.forEach((i) => mappedTables.push(this.moveTables[i]));
 
@@ -43,14 +79,12 @@ class Search {
     });
   }
 
-  handleSolution(solution, indexes) {
-    return {
-      solution,
-      indexes,
-    };
-  }
-
-  search(indexes, depth, lastMove, solution) {
+  search(
+    indexes: number[],
+    depth: number,
+    lastMove: number,
+    solution: number[]
+  ): false | SearchSolution {
     let minimumDistance = 0;
 
     for (let i = 0; i < this.pruningTables.length; i += 1) {
@@ -83,7 +117,10 @@ class Search {
     }
 
     if (minimumDistance === 0) {
-      return this.handleSolution(solution, indexes);
+      return {
+        solution,
+        indexes,
+      };
     }
 
     if (depth > 0) {
@@ -117,12 +154,12 @@ class Search {
     return false;
   }
 
-  solve(settings) {
+  solve(settings: SearchSettings): false | string | SearchSolution {
     this.initialize();
 
     this.settings = {
       maxDepth: 22, // For the Kociemba solver.
-      lastMove: null,
+      lastMove: 0,
       format: true,
       ...settings,
     };
