@@ -15,13 +15,25 @@ export interface SearchSolution {
   solution: number[]; // array of move indexes
 }
 
-export interface SearchSettings {
-  scramble: string;
+interface BaseSearchSettings {
+  scramble?: string;
   maxDepth?: number;
   lastMove?: number;
   format?: boolean;
   indexes?: number[];
 }
+
+export interface SearchSettingsWithoutFormat extends BaseSearchSettings {
+  format: false;
+}
+
+export interface SearchSettingsWithFormat extends BaseSearchSettings {
+  format?: true;
+}
+
+export type SearchSettings =
+  | SearchSettingsWithFormat
+  | SearchSettingsWithoutFormat;
 
 type DefaultedSearchSettings = Required<
   Pick<SearchSettings, "maxDepth" | "lastMove" | "format">
@@ -79,12 +91,22 @@ class Search {
     });
   }
 
+  handleSolution(
+    solution: number[],
+    indexes: number[]
+  ): SearchSolution | false {
+    return {
+      solution,
+      indexes,
+    };
+  }
+
   search(
     indexes: number[],
     depth: number,
     lastMove: number,
     solution: number[]
-  ): false | SearchSolution {
+  ): SearchSolution | false {
     let minimumDistance = 0;
 
     for (let i = 0; i < this.pruningTables.length; i += 1) {
@@ -117,10 +139,7 @@ class Search {
     }
 
     if (minimumDistance === 0) {
-      return {
-        solution,
-        indexes,
-      };
+      return this.handleSolution(solution, indexes);
     }
 
     if (depth > 0) {
@@ -154,7 +173,9 @@ class Search {
     return false;
   }
 
-  solve(settings: SearchSettings): false | string | SearchSolution {
+  solve(settings: SearchSettingsWithFormat): string | false;
+  solve(settings: SearchSettingsWithoutFormat): SearchSolution | false;
+  solve(settings: SearchSettings): SearchSolution | string | false {
     this.initialize();
 
     this.settings = {

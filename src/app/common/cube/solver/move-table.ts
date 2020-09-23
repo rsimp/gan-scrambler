@@ -32,18 +32,28 @@ type GetVectorCallback = (index: number) => number[];
 type CubieMoveCallback = (pieces: number[], moveIndex: number) => number[];
 type GetIndexCallback = (pieces: number[]) => number;
 
-export interface MoveTableSettings {
+interface BaseMoveTableSettings {
   name: string;
   size: number;
-  table?: number[][];
   defaultIndex?: number;
   solvedIndexes?: number[];
-  moves?: number[];
   doMove?: (table: number[][], index: number, move: number) => number;
+}
+
+interface MoveTableSettingsWithTable extends BaseMoveTableSettings {
+  table: number[][];
+}
+
+export interface MoveTableSettingsWithoutTable extends BaseMoveTableSettings {
+  moves?: number[];
   getVector: GetVectorCallback;
   cubieMove: (pieces: number[], moveIndex: number) => number[];
   getIndex: GetIndexCallback;
 }
+
+export type MoveTableSettings =
+  | MoveTableSettingsWithTable
+  | MoveTableSettingsWithoutTable;
 
 export class MoveTable {
   name: string;
@@ -72,7 +82,7 @@ export class MoveTable {
       this.doMove = (index, move) => doMove(this.table, index, move);
     }
 
-    if (settings.table) {
+    if ("table" in settings) {
       this.table = settings.table;
 
       // If a pre-generated table is provide, do not generate another one.
@@ -126,9 +136,9 @@ export class MoveTable {
 
 export interface PermutationTableSettings {
   name: string;
-  moves: number[];
+  moves?: number[];
   affected: number[];
-  reversed: boolean;
+  reversed?: boolean;
   size?: number;
 }
 

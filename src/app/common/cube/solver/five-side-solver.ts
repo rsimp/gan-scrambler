@@ -13,7 +13,7 @@ import {
   createCornerOrientationTable,
 } from "./move-table";
 
-import Search from "./search";
+import Search, { SearchSolution } from "./search";
 
 const fiveSideMoves = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17];
 
@@ -34,7 +34,7 @@ const phaseTwoSearch = new Search(() => {
   // Since returning to the cubie level to perform the solution
   // would be slow, we use two helper tables in phase one which
   // later are merged into the final phase two coordinate.
-  const getMergeCoord = (x, y) => {
+  const getMergeCoord = (x: number, y: number) => {
     const a = getPermutationFromIndex(x, [0, 1, 2], 12);
     const b = getPermutationFromIndex(y, [3, 4, 5], 12);
 
@@ -92,14 +92,20 @@ const phaseTwoSearch = new Search(() => {
 }, phaseTwoMoves);
 
 class TwoPhaseSearch extends Search {
-  constructor(...args) {
+  maxDepth: number;
+  solution: number[];
+
+  constructor(...args: ConstructorParameters<typeof Search>) {
     super(...args);
 
     this.maxDepth = 40;
-    this.solution = null;
+    this.solution = [];
   }
 
-  handleSolution(solution, indexes) {
+  handleSolution(
+    solution: number[],
+    indexes: number[]
+  ): SearchSolution | false {
     const lastMove = solution.slice(-1)[0];
 
     // We do not allow solutions which end in a phase two move, as we then
@@ -119,11 +125,8 @@ class TwoPhaseSearch extends Search {
         indexes[5],
         merge[indexes[6]][indexes[7]],
       ],
-
       maxDepth: this.maxDepth - solution.length,
-
       lastMove,
-
       format: false,
     });
 
@@ -228,7 +231,10 @@ export const FiveSideSearch = new TwoPhaseSearch(() => {
   };
 }, fiveSideMoves);
 
-const FiveSideSolver = (scramble, maxDepth = 40) => {
+const FiveSideSolver = (
+  scramble: string | number[],
+  maxDepth = 40
+): SearchSolution | false | string => {
   if (Array.isArray(scramble)) {
     return FiveSideSearch.solve({
       indexes: scramble,
@@ -244,7 +250,12 @@ const FiveSideSolver = (scramble, maxDepth = 40) => {
 
 export default FiveSideSolver;
 
-export const solveCoordinates = (eo, ep, co, cp) =>
+export const solveCoordinates = (
+  eo: number[],
+  ep: number[],
+  co: number[],
+  cp: number[]
+): ReturnType<typeof FiveSideSolver> =>
   FiveSideSolver([
     Math.floor(getIndexFromPermutation(ep, [8, 9, 10, 11], true) / 24),
     getIndexFromOrientation(co, 3),
