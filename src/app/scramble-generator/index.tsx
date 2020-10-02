@@ -16,7 +16,10 @@ import { ApplicationState } from "app/common/store";
 
 import { getRobotServer } from "app/robot-widget/store/selectors";
 
-import { generateScramble, Scramble } from "app/common/cube/scramble";
+import { generateScramble } from "app/common/cube/scramblers/full";
+import { generateOLLScramble } from "app/common/cube/scramblers/oll";
+import { getGANEncoding } from "app/common/cube/libs/gan-encoder";
+import { crossSolver } from "app/common/cube/solvers/cross-solver";
 import { CubePreview } from "app/cube-preview";
 
 const SCRAMBLE_SERVICE_UUID = 0xfff0;
@@ -26,11 +29,11 @@ interface ScrambleGeneratorProps {
   robotServer: BluetoothRemoteGATTServer | null;
 }
 
-type ScrambleType = "full" | "cross" | "f2l" | "oll" | "pll";
+type ScrambleType = "full" | "f2l" | "oll" | "pll";
 
 export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
   const [scrambleType, setScrambleType] = useState<ScrambleType>("full");
-  const [scramble, setScramble] = useState<Scramble | null>(null);
+  const [scramble, setScramble] = useState<string | null>(null);
   return (
     <Box display="flex" flexDirection="column" alignItems="flex-start">
       <FormControl component="fieldset">
@@ -45,20 +48,40 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
           }
         >
           <FormControlLabel value="full" control={<Radio />} label="Full" />
+          <FormControlLabel value="f2l" control={<Radio />} label="F2L" />
+          <FormControlLabel value="oll" control={<Radio />} label="OLL" />
+          <FormControlLabel value="pll" control={<Radio />} label="PLL" />
         </RadioGroup>
       </FormControl>
       <Button
         variant="contained"
         onClick={() => {
-          setScramble(generateScramble());
+          switch (scrambleType) {
+            case "full":
+              setScramble(generateScramble());
+              break;
+            case "f2l":
+              const scramble = generateScramble(19);
+              const solveCode = crossSolver(scramble);
+              if (solveCode) {
+                setScramble(`x2 ${scramble} ${solveCode} x2`);
+              }
+              break;
+            case "oll":
+              const ollScramble = generateOLLScramble();
+              if (ollScramble) {
+                setScramble(ollScramble);
+              }
+              break;
+          }
         }}
       >
         <FormattedMessage id="scrambleGenerator.actions.generate" />
       </Button>
       {scramble && (
         <>
-          <Typography variant="body1">{scramble.code}</Typography>
-          <CubePreview scramble={scramble} />
+          <Typography variant="body1">{scramble}</Typography>
+          <CubePreview scrambleCode={scramble} />
           <Button
             variant="contained"
             disabled={!Boolean(props.robotServer)}
@@ -73,7 +96,7 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
                   );
 
                   await scrambleExecuteCharacteristic.writeValue(
-                    new Uint8Array(scramble.GANEncoding)
+                    getGANEncoding(scramble)
                   );
                 }
               } catch (error) {

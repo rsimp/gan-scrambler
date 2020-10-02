@@ -3,7 +3,7 @@ import {
   getPermutationFromIndex,
   getIndexFromOrientation,
   getParity,
-} from "./coordinates";
+} from "app/common/cube/libs/coordinates";
 
 import {
   MoveTable,
@@ -11,11 +11,11 @@ import {
   createCornerPermutationTable,
   createEdgeOrientationTable,
   createCornerOrientationTable,
-} from "./move-table";
+} from "app/common/cube/libs/move-table";
 
-import Search, { SearchSolution } from "./search";
+import Search, { SearchSolution } from "app/common/cube/libs/search";
 
-const fiveSideMoves = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17];
+import { fiveSideMoves } from "app/common/cube/libs/cube";
 
 // In phase two, only quarter moves of U and D and double turns of
 // all the other faces are allowed, in order to keep the cube in
@@ -234,7 +234,7 @@ export const FiveSideSearch = new TwoPhaseSearch(() => {
 const FiveSideSolver = (
   scramble: string | number[],
   maxDepth = 40
-): SearchSolution | false | string => {
+): false | string => {
   if (Array.isArray(scramble)) {
     return FiveSideSearch.solve({
       indexes: scramble,

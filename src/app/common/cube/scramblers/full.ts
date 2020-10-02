@@ -1,24 +1,5 @@
-import { chunkReducer } from "app/common/array-reducers";
-
 const cubeFaces = ["D", "L", "B", "U", "R", "F"];
 const moveModifiers = ["", "2", "'"];
-const moveMap: Record<string, number> = {
-  R: 0,
-  R2: 1,
-  "R'": 2,
-  F: 3,
-  F2: 4,
-  "F'": 5,
-  D: 6,
-  D2: 7,
-  "D'": 8,
-  L: 9,
-  L2: 10,
-  "L'": 11,
-  B: 12,
-  B2: 13,
-  "B'": 14,
-};
 
 /*
            +----------+
@@ -44,23 +25,10 @@ const faceEdges: Record<string, Array<number>> = {
   F: [30, 29, 28, 32, 39, 38, 2, 1, 0, 12, 11, 10],
 };
 
-export interface Scramble {
-  code: string;
-  cubeState: string;
-  GANEncoding: Array<number>;
-}
-
-export function generateScramble(): Scramble {
+export function generateScramble(total = 26): string {
   const cube = createCube();
-  const moveList = cube.scramble();
-  return {
-    code: moveList.join(" "),
-    GANEncoding: moveList
-      .map((move) => moveMap[move])
-      .reduce(chunkReducer(2), [])
-      .map((moves) => moves[0] * 16 + moves[1]),
-    cubeState: cube.currentState,
-  };
+  const moveList = cube.scramble(total);
+  return moveList.join(" ");
 }
 
 function createCube() {

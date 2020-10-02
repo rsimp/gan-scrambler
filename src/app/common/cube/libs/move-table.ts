@@ -110,7 +110,7 @@ export class MoveTable {
     const table: number[][] = [];
 
     for (let i = 0; i < size; i += 1) {
-      this.table.push([]);
+      table.push([]);
     }
 
     // Create a matrix which stores the result after
@@ -119,13 +119,13 @@ export class MoveTable {
       for (let j = 0; j < moves.length; j += 1) {
         const move = moves[j];
 
-        if (!this.table[i][move]) {
+        if (!table[i][move]) {
           // Assign both the value and its inverse at once
           // to avoid exess computing on the cubie level.
           const result = cubieMove(i, move);
           const inverse = move - 2 * (move % 3) + 2;
-          this.table[i][move] = result;
-          this.table[result][inverse] = i;
+          table[i][move] = result;
+          table[result][inverse] = i;
         }
       }
     }
