@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box } from "@material-ui/core";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { RobotWidgetContainer } from "app/robot-widget";
@@ -7,7 +7,7 @@ import { ScrambleGeneratorContainer } from "app/scramble-generator";
 
 export function MainScreen(): JSX.Element {
   return (
-    <Box flexGrow={1}>
+    <div className="flex-grow-1">
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5">
@@ -18,6 +18,6 @@ export function MainScreen(): JSX.Element {
       </AppBar>
 
       <ScrambleGeneratorContainer />
-    </Box>
+    </div>
   );
 }

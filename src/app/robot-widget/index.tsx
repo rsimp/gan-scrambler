@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { IconButton, Box } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import { BluetoothConnected, Bluetooth } from "@material-ui/icons";
 
 import { ApplicationState } from "app/common/store";
@@ -8,8 +8,6 @@ import { ApplicationState } from "app/common/store";
 import { unregisterRobot, registerRobot } from "app/robot-widget/store/actions";
 import { getRobotDevice } from "app/robot-widget/store/selectors";
 import { RobotState } from "app/robot-widget/store/types";
-
-import styles from "./styles.module.css";
 
 const DEVICE_INFO_SERVICE_UUID = 0x180a;
 const MODEL_NUMBER_SERVICE_UUID = 0x2a24;
@@ -26,8 +24,8 @@ export function RobotWidget(props: RobotWidgetProps): JSX.Element {
   // TODO pull callback into useCallback hook
   // TODO pull async with dispatch into a saga
   return (
-    <Box flexDirection="row" flexGrow={1}>
-      <div className={styles.robotWidgetContainer}>
+    <div className="flex-row flex-grow-1">
+      <div className="flex-row justify-end">
         <IconButton
           color="inherit"
           onClick={async () => {
@@ -66,7 +64,7 @@ export function RobotWidget(props: RobotWidgetProps): JSX.Element {
           {props.robotDevice ? <BluetoothConnected /> : <Bluetooth />}
         </IconButton>
       </div>
-    </Box>
+    </div>
   );
 }
 

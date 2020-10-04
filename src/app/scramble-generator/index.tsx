@@ -35,7 +35,7 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
   const [scrambleType, setScrambleType] = useState<ScrambleType>("full");
   const [scramble, setScramble] = useState<string | null>(null);
   return (
-    <Box display="flex" flexDirection="column" alignItems="flex-start">
+    <div className="flex-col items-start">
       <FormControl component="fieldset">
         <FormLabel component="legend">Scramble Type</FormLabel>
         <RadioGroup
@@ -108,7 +108,7 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
           </Button>
         </>
       )}
-    </Box>
+    </div>
   );
 }
 
