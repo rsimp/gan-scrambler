@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   Button,
-  Box,
   Typography,
   FormControl,
   FormLabel,
@@ -64,7 +63,7 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
               const scramble = generateScramble(19);
               const solveCode = crossSolver(scramble);
               if (solveCode) {
-                setScramble(`x2 ${scramble} ${solveCode} x2`);
+                setScramble(`${scramble} ${solveCode}`);
               }
               break;
             case "oll":

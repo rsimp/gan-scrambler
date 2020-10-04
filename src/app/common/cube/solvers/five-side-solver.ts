@@ -20,7 +20,7 @@ import { fiveSideMoves } from "app/common/cube/libs/cube";
 // In phase two, only quarter moves of U and D and double turns of
 // all the other faces are allowed, in order to keep the cube in
 // the phase two group G1.
-const phaseTwoMoves = [1, 10, 4, 6, 7, 8, 15, 16, 17];
+const phaseTwoMoves = [10, 4, 13, 6, 7, 8, 15, 16, 17];
 
 // The following tables are being used in both phases.
 let parity: MoveTable;

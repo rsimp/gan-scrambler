@@ -68,7 +68,7 @@ function createCube() {
       const move =
         cubeFaces[Math.floor(Math.random() * 6)] +
         moveModifiers[Math.floor(Math.random() * 3)];
-      if (move.charAt(0) === "U") {
+      if (move.charAt(0) === "F") {
         continue;
       }
       // Don't move the same face twice in a row

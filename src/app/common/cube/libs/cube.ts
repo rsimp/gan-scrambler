@@ -182,9 +182,27 @@ export const doAlgorithm = (
  * All the moves which can be performed on a cube.
  */
 export const allMoves = [
-  0,
+  0, //f
   1,
   2,
+  3, //r
+  4,
+  5,
+  6, //u
+  7,
+  8,
+  9, //b
+  10,
+  11,
+  12, //l
+  13,
+  14,
+  15, //d
+  16,
+  17,
+];
+
+export const fiveSideMoves = [
   3,
   4,
   5,
@@ -201,5 +219,3 @@ export const allMoves = [
   16,
   17,
 ];
-
-export const fiveSideMoves = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17];

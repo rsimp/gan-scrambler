@@ -14,7 +14,7 @@ import * as serviceWorker from "./serviceWorker";
 importAll(require.context("./", true, /\/on-startup\.(ts|tsx)$/));
 
 // include all global stylesheets
-importAll(require.context("./", true, /\.global\.css$/));
+importAll(require.context("./", true, /\.css$/));
 
 // create store
 const store = createStore();
