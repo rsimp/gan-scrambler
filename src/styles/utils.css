@@ -19,3 +19,7 @@
 .items-start	{
   align-items: flex-start;
 }
+
+.justify-end {
+  justify-content: flex-end;
+}

@@ -13,7 +13,9 @@ export function MainScreen(): JSX.Element {
           <Typography variant="h5">
             <FormattedMessage id="appTitle" />
           </Typography>
-          <RobotWidgetContainer />
+          <div className="flex-row flex-grow-1 justify-end">
+            <RobotWidgetContainer />
+          </div>
         </Toolbar>
       </AppBar>
 
