@@ -20,6 +20,7 @@ import { generateOLLScramble } from "app/common/cube/scramblers/oll";
 import { getGANEncoding } from "app/common/cube/libs/gan-encoder";
 import { crossSolver } from "app/common/cube/solvers/cross-solver";
 import { CubePreview } from "app/cube-preview";
+import { generatePLLScramble } from "app/common/cube/scramblers/pll";
 
 const SCRAMBLE_SERVICE_UUID = 0xfff0;
 const SCRAMBLE_CHARACTERISTIC_UUID = 0xfff3;
@@ -60,6 +61,7 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
               setScramble(generateScramble());
               break;
             case "f2l":
+              // faster to do a simple cross solve than a full solve
               const scramble = generateScramble(19);
               const solveCode = crossSolver(scramble);
               if (solveCode) {
@@ -70,6 +72,12 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
               const ollScramble = generateOLLScramble();
               if (ollScramble) {
                 setScramble(ollScramble);
+              }
+              break;
+            case "pll":
+              const pllScramble = generatePLLScramble();
+              if (pllScramble) {
+                setScramble(pllScramble);
               }
               break;
           }
