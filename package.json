@@ -40,7 +40,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "stop": "killall -q gan-scrambler",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

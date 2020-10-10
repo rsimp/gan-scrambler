@@ -24,6 +24,6 @@ export function getGANEncoding(scramble: string): Uint8Array {
       .split(" ")
       .map((move) => moveMap[move])
       .reduce(chunkReducer(2), [])
-      .map((moves) => moves[0] * 16 + moves[1])
+      .map((moves) => moves[0] * 16 + (moves[1] ?? 15))
   );
 }
