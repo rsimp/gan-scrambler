@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "62fb27a7dd657f5166e0d802a2514318",
+    "revision": "334176fdf689c01af8e69ab5fd6b13a8",
     "url": "/gan-scrambler/index.html"
   },
   {
-    "revision": "d3bc002e1386d87a20ed",
+    "revision": "d197d67405cffde4f165",
     "url": "/gan-scrambler/static/css/main.ceee8c32.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gan-scrambler/static/js/2.0c32be7a.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "d3bc002e1386d87a20ed",
-    "url": "/gan-scrambler/static/js/main.8fbb4c46.chunk.js"
+    "revision": "d197d67405cffde4f165",
+    "url": "/gan-scrambler/static/js/main.f8293568.chunk.js"
   },
   {
     "revision": "6811b40975c8ffaac4b6",
