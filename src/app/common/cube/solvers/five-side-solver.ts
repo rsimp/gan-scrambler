@@ -231,7 +231,7 @@ export const FiveSideSearch = new TwoPhaseSearch(() => {
   };
 }, fiveSideMoves);
 
-const FiveSideSolver = (
+export const fiveSideSolver = (
   scramble: string | number[],
   maxDepth = 40
 ): false | string => {
@@ -248,15 +248,13 @@ const FiveSideSolver = (
   });
 };
 
-export default FiveSideSolver;
-
 export const solveCoordinates = (
   eo: number[],
   ep: number[],
   co: number[],
   cp: number[]
-): ReturnType<typeof FiveSideSolver> =>
-  FiveSideSolver([
+): ReturnType<typeof fiveSideSolver> =>
+  fiveSideSolver([
     Math.floor(getIndexFromPermutation(ep, [8, 9, 10, 11], true) / 24),
     getIndexFromOrientation(co, 3),
     getIndexFromOrientation(eo, 2),

@@ -8,6 +8,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  TextField,
 } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
@@ -19,8 +20,13 @@ import { generateScramble } from "app/common/cube/scramblers/full";
 import { generateOLLScramble } from "app/common/cube/scramblers/oll";
 import { getGANEncoding } from "app/common/cube/libs/gan-encoder";
 import { crossSolver } from "app/common/cube/solvers/cross-solver";
+import { fiveSideSolver } from "app/common/cube/solvers/five-side-solver";
 import { CubePreview } from "app/cube-preview";
 import { generatePLLScramble } from "app/common/cube/scramblers/pll";
+import {
+  validateAlgorithm,
+  invertAlgorithm,
+} from "app/common/cube/libs/algorithms";
 
 const SCRAMBLE_SERVICE_UUID = 0xfff0;
 const SCRAMBLE_CHARACTERISTIC_UUID = 0xfff3;
@@ -29,11 +35,13 @@ interface ScrambleGeneratorProps {
   robotServer: BluetoothRemoteGATTServer | null;
 }
 
-type ScrambleType = "full" | "f2l" | "oll" | "pll";
+type ScrambleType = "full" | "f2l" | "oll" | "pll" | "manual";
 
 export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
   const [scrambleType, setScrambleType] = useState<ScrambleType>("full");
   const [scramble, setScramble] = useState<string | null>(null);
+  const [manualScramble, setManualScramble] = useState<string>("");
+  const [hasError, setHasError] = useState(false);
   return (
     <div className="flex-col items-start">
       <FormControl component="fieldset">
@@ -51,8 +59,34 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
           <FormControlLabel value="f2l" control={<Radio />} label="F2L" />
           <FormControlLabel value="oll" control={<Radio />} label="OLL" />
           <FormControlLabel value="pll" control={<Radio />} label="PLL" />
+          <FormControlLabel value="manual" control={<Radio />} label="Manual" />
         </RadioGroup>
       </FormControl>
+      {scrambleType === "manual" && (
+        <form noValidate autoComplete="off" className="container">
+          <TextField
+            id="manual-scramble"
+            label="Manual Scramble"
+            fullWidth
+            error={hasError}
+            helperText={hasError && "Invalid Scramble Code"}
+            onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+              const manualScrambleValue = event.target.value;
+              if (manualScrambleValue.length > 0) {
+                if (validateAlgorithm(manualScrambleValue)) {
+                  setManualScramble(manualScrambleValue);
+                } else {
+                  setManualScramble("");
+                  setHasError(true);
+                }
+              }
+            }}
+          />
+        </form>
+      )}
+      {scrambleType === "manual" && manualScramble && (
+        <CubePreview scrambleCode={manualScramble} />
+      )}
       <Button
         variant="contained"
         onClick={() => {
@@ -78,6 +112,15 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
               const pllScramble = generatePLLScramble();
               if (pllScramble) {
                 setScramble(pllScramble);
+              }
+              break;
+            case "manual":
+              if (manualScramble) {
+                const fiveSideSolve = fiveSideSolver(manualScramble);
+                if (fiveSideSolve) {
+                  const fiveSideScramble = invertAlgorithm(fiveSideSolve);
+                  setScramble(fiveSideScramble);
+                }
               }
               break;
           }

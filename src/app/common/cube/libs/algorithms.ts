@@ -8,7 +8,7 @@ const powers: Record<string, number> = {
 /**
  * Check whether or not we are able to parse the given algorithm string.
  */
-const validateAlgorithm = (algorithm: string): boolean =>
+export const validateAlgorithm = (algorithm: string): boolean =>
   /^([FRUBLDfrubldxyzMSE][2']?\s*)+$/.test(algorithm);
 
 // Map single-power wide moves to a rotation + moves.
