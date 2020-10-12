@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/gan-scrambler/static/css/main.ceee8c32.chunk.css",
-    "main.js": "/gan-scrambler/static/js/main.f8293568.chunk.js",
-    "main.js.map": "/gan-scrambler/static/js/main.f8293568.chunk.js.map",
+    "main.js": "/gan-scrambler/static/js/main.8d3a1a79.chunk.js",
+    "main.js.map": "/gan-scrambler/static/js/main.8d3a1a79.chunk.js.map",
     "runtime-main.js": "/gan-scrambler/static/js/runtime-main.0f2eb7fc.js",
     "runtime-main.js.map": "/gan-scrambler/static/js/runtime-main.0f2eb7fc.js.map",
-    "static/js/2.0c32be7a.chunk.js": "/gan-scrambler/static/js/2.0c32be7a.chunk.js",
-    "static/js/2.0c32be7a.chunk.js.map": "/gan-scrambler/static/js/2.0c32be7a.chunk.js.map",
+    "static/js/2.005b2f0a.chunk.js": "/gan-scrambler/static/js/2.005b2f0a.chunk.js",
+    "static/js/2.005b2f0a.chunk.js.map": "/gan-scrambler/static/js/2.005b2f0a.chunk.js.map",
     "index.html": "/gan-scrambler/index.html",
-    "precache-manifest.ed503c9d40ecae91ca90b4c33973915a.js": "/gan-scrambler/precache-manifest.ed503c9d40ecae91ca90b4c33973915a.js",
+    "precache-manifest.89d609316455e352bdd5610799539f07.js": "/gan-scrambler/precache-manifest.89d609316455e352bdd5610799539f07.js",
     "service-worker.js": "/gan-scrambler/service-worker.js",
     "static/css/main.ceee8c32.chunk.css.map": "/gan-scrambler/static/css/main.ceee8c32.chunk.css.map",
-    "static/js/2.0c32be7a.chunk.js.LICENSE.txt": "/gan-scrambler/static/js/2.0c32be7a.chunk.js.LICENSE.txt"
+    "static/js/2.005b2f0a.chunk.js.LICENSE.txt": "/gan-scrambler/static/js/2.005b2f0a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.0f2eb7fc.js",
-    "static/js/2.0c32be7a.chunk.js",
+    "static/js/2.005b2f0a.chunk.js",
     "static/css/main.ceee8c32.chunk.css",
-    "static/js/main.f8293568.chunk.js"
+    "static/js/main.8d3a1a79.chunk.js"
   ]
 }
