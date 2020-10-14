@@ -162,7 +162,7 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
   );
 }
 
-export const ScrambleGeneratorContainer = connect(
+export const ConnectedScrambleGenerator = connect(
   (state: ApplicationState) => ({
     robotServer: getRobotServer(state),
   })

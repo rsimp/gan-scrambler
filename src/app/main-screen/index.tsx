@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { RobotWidgetContainer } from "app/robot-widget";
-import { ScrambleGeneratorContainer } from "app/scramble-generator";
+import { ConnectedScrambleGenerator } from "app/scramble-generator";
+import { fiveSideSearch } from "app/common/cube/solvers/five-side-solver";
 
 export function MainScreen(): JSX.Element {
+  useEffect(() => {
+    fiveSideSearch.initialize();
+  }, []);
+
   return (
     <div className="flex-grow-1">
       <AppBar position="static">
@@ -19,7 +24,7 @@ export function MainScreen(): JSX.Element {
         </Toolbar>
       </AppBar>
 
-      <ScrambleGeneratorContainer />
+      <ConnectedScrambleGenerator />
     </div>
   );
 }

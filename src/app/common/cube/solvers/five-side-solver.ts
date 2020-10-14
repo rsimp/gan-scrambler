@@ -147,7 +147,7 @@ class TwoPhaseSearch extends Search {
   }
 }
 
-export const FiveSideSearch = new TwoPhaseSearch(() => {
+export const fiveSideSearch = new TwoPhaseSearch(() => {
   // The parity move table is so small that we inline it. It
   // describes the parity of both the edge and corner pieces,
   // which must be equal for the cube to be solvable. The
@@ -236,13 +236,13 @@ export const fiveSideSolver = (
   maxDepth = 40
 ): false | string => {
   if (Array.isArray(scramble)) {
-    return FiveSideSearch.solve({
+    return fiveSideSearch.solve({
       indexes: scramble,
       maxDepth,
     });
   }
 
-  return FiveSideSearch.solve({
+  return fiveSideSearch.solve({
     scramble,
     maxDepth,
   });
