@@ -1,5 +1,9 @@
 {
-    "appTitle": "GAN Scrambler",
-    "scrambleGenerator.actions.generate": "Generate",
-    "scrambleGenerator.actions.execute": "Execute"
+  "appTitle": "GAN Scrambler",
+  "scrambleGenerator": {
+    "actions":{
+      "generate": "Generate",
+      "execute": "Execute"
+    }
+  }
 }

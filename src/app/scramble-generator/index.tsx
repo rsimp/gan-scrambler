@@ -27,6 +27,7 @@ import {
   validateAlgorithm,
   invertAlgorithm,
 } from "app/common/cube/libs/algorithms";
+import styled from "styled-components/macro";
 
 const SCRAMBLE_SERVICE_UUID = 0xfff0;
 const SCRAMBLE_CHARACTERISTIC_UUID = 0xfff3;
@@ -37,99 +38,113 @@ interface ScrambleGeneratorProps {
 
 type ScrambleType = "full" | "f2l" | "oll" | "pll" | "manual";
 
+const ContentContainer = styled.div.attrs({
+  className: "flex flex-col m-med children:mt-lg children:first:mt-0",
+})``;
+
+const ContentGroup = styled.div.attrs({
+  className: "flex flex-col children:mt-sm children:first:mt-0",
+})``;
+
 export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
   const [scrambleType, setScrambleType] = useState<ScrambleType>("full");
   const [scramble, setScramble] = useState<string | null>(null);
   const [manualScramble, setManualScramble] = useState<string>("");
   const [hasError, setHasError] = useState(false);
   return (
-    <div className="flex-col items-start">
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Scramble Type</FormLabel>
-        <RadioGroup
-          row
-          aria-label="Scramble Type"
-          name="scrambleType"
-          value={scrambleType}
-          onChange={(e) =>
-            setScrambleType(e.currentTarget.value as ScrambleType)
-          }
+    <ContentContainer>
+      <ContentGroup>
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Scramble Type</FormLabel>
+          <RadioGroup
+            row
+            aria-label="Scramble Type"
+            name="scrambleType"
+            value={scrambleType}
+            onChange={(e) =>
+              setScrambleType(e.currentTarget.value as ScrambleType)
+            }
+          >
+            <FormControlLabel value="full" control={<Radio />} label="Full" />
+            <FormControlLabel value="f2l" control={<Radio />} label="F2L" />
+            <FormControlLabel value="oll" control={<Radio />} label="OLL" />
+            <FormControlLabel value="pll" control={<Radio />} label="PLL" />
+            <FormControlLabel
+              value="manual"
+              control={<Radio />}
+              label="Manual"
+            />
+          </RadioGroup>
+        </FormControl>
+        {scrambleType === "manual" && (
+          <form noValidate autoComplete="off" className="container">
+            <TextField
+              id="manual-scramble"
+              label="Manual Scramble"
+              fullWidth
+              error={hasError}
+              helperText={hasError && "Invalid Scramble Code"}
+              onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                const manualScrambleValue = event.target.value;
+                if (manualScrambleValue.length > 0) {
+                  if (validateAlgorithm(manualScrambleValue)) {
+                    setManualScramble(manualScrambleValue);
+                  } else {
+                    setManualScramble("");
+                    setHasError(true);
+                  }
+                }
+              }}
+            />
+          </form>
+        )}
+        {scrambleType === "manual" && manualScramble && (
+          <CubePreview scrambleCode={manualScramble} />
+        )}
+        <Button
+          variant="contained"
+          onClick={() => {
+            switch (scrambleType) {
+              case "full":
+                setScramble(generateScramble());
+                break;
+              case "f2l":
+                // faster to do a simple cross solve than a full solve
+                const scramble = generateScramble(19);
+                const solveCode = crossSolver(scramble);
+                if (solveCode) {
+                  setScramble(`${scramble} ${solveCode}`);
+                }
+                break;
+              case "oll":
+                const ollScramble = generateOLLScramble();
+                if (ollScramble) {
+                  setScramble(ollScramble);
+                }
+                break;
+              case "pll":
+                const pllScramble = generatePLLScramble();
+                if (pllScramble) {
+                  setScramble(pllScramble);
+                }
+                break;
+              case "manual":
+                if (manualScramble) {
+                  const fiveSideSolve = fiveSideSolver(manualScramble);
+                  if (fiveSideSolve) {
+                    const fiveSideScramble = invertAlgorithm(fiveSideSolve);
+                    setScramble(fiveSideScramble);
+                  }
+                }
+                break;
+            }
+          }}
         >
-          <FormControlLabel value="full" control={<Radio />} label="Full" />
-          <FormControlLabel value="f2l" control={<Radio />} label="F2L" />
-          <FormControlLabel value="oll" control={<Radio />} label="OLL" />
-          <FormControlLabel value="pll" control={<Radio />} label="PLL" />
-          <FormControlLabel value="manual" control={<Radio />} label="Manual" />
-        </RadioGroup>
-      </FormControl>
-      {scrambleType === "manual" && (
-        <form noValidate autoComplete="off" className="container">
-          <TextField
-            id="manual-scramble"
-            label="Manual Scramble"
-            fullWidth
-            error={hasError}
-            helperText={hasError && "Invalid Scramble Code"}
-            onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
-              const manualScrambleValue = event.target.value;
-              if (manualScrambleValue.length > 0) {
-                if (validateAlgorithm(manualScrambleValue)) {
-                  setManualScramble(manualScrambleValue);
-                } else {
-                  setManualScramble("");
-                  setHasError(true);
-                }
-              }
-            }}
-          />
-        </form>
-      )}
-      {scrambleType === "manual" && manualScramble && (
-        <CubePreview scrambleCode={manualScramble} />
-      )}
-      <Button
-        variant="contained"
-        onClick={() => {
-          switch (scrambleType) {
-            case "full":
-              setScramble(generateScramble());
-              break;
-            case "f2l":
-              // faster to do a simple cross solve than a full solve
-              const scramble = generateScramble(19);
-              const solveCode = crossSolver(scramble);
-              if (solveCode) {
-                setScramble(`${scramble} ${solveCode}`);
-              }
-              break;
-            case "oll":
-              const ollScramble = generateOLLScramble();
-              if (ollScramble) {
-                setScramble(ollScramble);
-              }
-              break;
-            case "pll":
-              const pllScramble = generatePLLScramble();
-              if (pllScramble) {
-                setScramble(pllScramble);
-              }
-              break;
-            case "manual":
-              if (manualScramble) {
-                const fiveSideSolve = fiveSideSolver(manualScramble);
-                if (fiveSideSolve) {
-                  const fiveSideScramble = invertAlgorithm(fiveSideSolve);
-                  setScramble(fiveSideScramble);
-                }
-              }
-              break;
-          }
-        }}
-      >
-        <FormattedMessage id="scrambleGenerator.actions.generate" />
-      </Button>
+          <FormattedMessage id="scrambleGenerator.actions.generate" />
+        </Button>
+      </ContentGroup>
       {scramble && (
-        <>
+        <ContentGroup>
           <Typography variant="body1">{scramble}</Typography>
           <CubePreview scrambleCode={scramble} />
           <Button
@@ -156,9 +171,9 @@ export function ScrambleGenerator(props: ScrambleGeneratorProps): JSX.Element {
           >
             <FormattedMessage id="scrambleGenerator.actions.execute" />
           </Button>
-        </>
+        </ContentGroup>
       )}
-    </div>
+    </ContentContainer>
   );
 }
 

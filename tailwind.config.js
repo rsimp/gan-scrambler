@@ -2,6 +2,11 @@ module.exports = {
   future: {},
   purge: [],
   theme: {
+    screens: {
+      phone: "360px",
+      tablet: "768px",
+      computer: "1100px",
+    },
     colors: {
       primary: {
         lt: "hsl(231, 50%, 65%)",
@@ -28,8 +33,16 @@ module.exports = {
         txt: "hsl(0, 0%, 100%)",
       },
     },
-    extend: {},
+    extend: {
+      spacing: {
+        sm: "0.5rem",
+        med: "1rem",
+        lg: "1.5rem",
+      },
+    },
   },
-  variants: [],
-  plugins: [],
+  variants: {
+    margin: ({ before }) => before(["children", "children-first", "default"]),
+  },
+  plugins: [require("tailwindcss-children")],
 };

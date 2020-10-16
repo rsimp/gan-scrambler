@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { IntlProvider } from "react-intl";
+import { StylesProvider } from "@material-ui/core/styles";
 
 import { MainScreen } from "app/main-screen";
 import { createStore } from "app/common/store";
@@ -22,7 +23,9 @@ const store = createStore();
 ReactDOM.render(
   <Provider store={store}>
     <IntlProvider locale={locale} messages={messages}>
-      <MainScreen />
+      <StylesProvider injectFirst>
+        <MainScreen />
+      </StylesProvider>
     </IntlProvider>
   </Provider>,
   document.getElementById("root")
