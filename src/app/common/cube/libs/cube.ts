@@ -27,6 +27,67 @@ export const Corners = {
   DBR: 7,
 };
 
+const _U = (x: number) => x - 1;
+const _R = (x: number) => _U(9) + x;
+const _F = (x: number) => _R(9) + x;
+const _D = (x: number) => _F(9) + x;
+const _L = (x: number) => _D(9) + x;
+const _B = (x: number) => _L(9) + x;
+
+const centerFacelets = ["U", "R", "F", "D", "L", "B"];
+
+const cornerFacelets = [
+  ["U", "R", "F"],
+  ["U", "F", "L"],
+  ["U", "L", "B"],
+  ["U", "B", "R"],
+  ["D", "F", "R"],
+  ["D", "L", "F"],
+  ["D", "B", "L"],
+  ["D", "R", "B"],
+];
+
+const cornerFaceletIndexes = [
+  [_U(9), _R(1), _F(3)],
+  [_U(7), _F(1), _L(3)],
+  [_U(1), _L(1), _B(3)],
+  [_U(3), _B(1), _R(3)],
+  [_D(3), _F(9), _R(7)],
+  [_D(1), _L(9), _F(7)],
+  [_D(7), _B(9), _L(7)],
+  [_D(9), _R(9), _B(7)],
+];
+
+const edgeFacelets = [
+  ["U", "R"],
+  ["U", "F"],
+  ["U", "L"],
+  ["U", "B"],
+  ["D", "R"],
+  ["D", "F"],
+  ["D", "L"],
+  ["D", "B"],
+  ["F", "R"],
+  ["F", "L"],
+  ["B", "L"],
+  ["B", "R"],
+];
+
+const edgeFaceletIndexes = [
+  [_U(6), _R(2)],
+  [_U(8), _F(2)],
+  [_U(4), _L(2)],
+  [_U(2), _B(2)],
+  [_D(6), _R(8)],
+  [_D(2), _F(8)],
+  [_D(4), _L(8)],
+  [_D(8), _B(8)],
+  [_F(6), _R(4)],
+  [_F(4), _L(6)],
+  [_B(6), _L(4)],
+  [_B(4), _R(6)],
+];
+
 /**
  * We define moves as the four pieces which are
  * rotated in a circular fashion.
@@ -137,7 +198,7 @@ export const cornerOrientationMove = (
 };
 
 // The identity cube.
-export const identity = {
+export const identity: CubeIndexes = {
   ep: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   eo: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   cp: [0, 1, 2, 3, 4, 5, 6, 7],
@@ -158,24 +219,73 @@ export const doAlgorithm = (
   algorithm: string,
   cube = identity
 ): CubeIndexes => {
-  let ep = cube.ep.slice();
-  let eo = cube.eo.slice();
-  let cp = cube.cp.slice();
-  let co = cube.co.slice();
+  const cubeCopy = {
+    ep: cube.ep.slice(),
+    eo: cube.eo.slice(),
+    cp: cube.cp.slice(),
+    co: cube.co.slice(),
+  };
+  return parseAlgorithm(algorithm).reduce(
+    (newCube: CubeIndexes, move) => ({
+      ep: edgePermutationMove(newCube.ep, move),
+      eo: edgeOrientationMove(newCube.eo, move),
+      cp: cornerPermutationMove(newCube.cp, move),
+      co: cornerOrientationMove(newCube.co, move),
+    }),
+    cubeCopy
+  );
+};
 
-  parseAlgorithm(algorithm).forEach((move) => {
-    ep = edgePermutationMove(ep, move);
-    eo = edgeOrientationMove(eo, move);
-    cp = cornerPermutationMove(cp, move);
-    co = cornerOrientationMove(co, move);
+export interface FaceletArrayFilter {
+  edges: number[];
+  corners: number[];
+  facelets: string[];
+}
+
+export const getFaceletArray = (
+  cube: CubeIndexes
+  // filter?: FaceletArrayFilter
+): string[] => {
+  const facelets: string[] = [];
+
+  // const _cornerFacelets = cornerFacelets.map((facelets, i) => {
+  //   if (!filter || filter.corners.includes(i)) {
+  //     return facelets;
+  //   }
+  //   return facelets.map((facelet) =>
+  //     !filter.facelets || filter.facelets.includes(facelet) ? facelet : "G"
+  //   );
+  // });
+
+  // const _edgeFacelets = edgeFacelets.map((facelets, i) => {
+  //   if (!filter || filter.edges.includes(i)) {
+  //     return facelets;
+  //   }
+  //   return facelets.map((facelet) =>
+  //     !filter.facelets || filter.facelets.includes(facelet) ? facelet : "G"
+  //   );
+  // });
+
+  // add center facelets to array
+  centerFacelets.forEach((facelet, i) => {
+    facelets[9 * i + 4] = facelet;
   });
 
-  return {
-    ep,
-    eo,
-    cp,
-    co,
-  };
+  // add corner cubie facelets
+  identity.cp.forEach((i) => {
+    cornerFacelets[cube.cp[i]].forEach((facelet, j) => {
+      facelets[cornerFaceletIndexes[i][(j + cube.co[i]) % 3]] = facelet;
+    });
+  });
+
+  // add edge cubie facelets
+  identity.ep.forEach((i) => {
+    edgeFacelets[cube.ep[i]].forEach((facelet, j) => {
+      facelets[edgeFaceletIndexes[i][(j + cube.eo[i]) % 2]] = facelet;
+    });
+  });
+
+  return facelets;
 };
 
 /**

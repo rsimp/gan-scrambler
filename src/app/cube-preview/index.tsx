@@ -1,18 +1,23 @@
 import React from "react";
-import Cube from "cubejs";
+
+import {
+  doAlgorithm,
+  getFaceletArray,
+  // Edges,
+  // Corners,
+  // FaceletArrayFilter,
+} from "app/common/cube/libs/cube";
 
 export function createScramblePreview(scrambleCode: string): string {
-  const cube = new Cube();
-  cube.move(scrambleCode);
-  return cube
-    .asString()
-    .split("")
+  const cubeIndexes = doAlgorithm(scrambleCode);
+  return getFaceletArray(cubeIndexes)
     .map((faceKey) => colorMap[faceKey])
     .reduce((acc, color) => acc.replace("{}", color), template);
 }
 
 interface CubePreviewProps {
   scrambleCode: string;
+  type?: "cross" | "f2l" | "oll";
 }
 
 export function CubePreview(props: CubePreviewProps): JSX.Element {
@@ -32,7 +37,41 @@ const colorMap: Record<string, string> = {
   D: "yellow",
   L: "orange",
   B: "blue",
+  G: "gray",
 };
+
+// const crossFilter = {
+//   edges: [Edges.UB, Edges.UF, Edges.UR, Edges.UL],
+// };
+
+// const f2lFilter = {
+//   edges: [
+//     Edges.UB,
+//     Edges.UF,
+//     Edges.UR,
+//     Edges.UL,
+//     Edges.BL,
+//     Edges.BR,
+//     Edges.FL,
+//     Edges.FR,
+//   ],
+//   corners: [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
+// };
+
+// const ollFilter = {
+//   edges: [
+//     Edges.UB,
+//     Edges.UF,
+//     Edges.UR,
+//     Edges.UL,
+//     Edges.BL,
+//     Edges.BR,
+//     Edges.FL,
+//     Edges.FR,
+//   ],
+//   corners: [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
+//   facelets: ["D"],
+// };
 
 const template = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 258 196" style="stroke-linejoin:round;">
   <g>
