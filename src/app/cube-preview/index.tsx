@@ -3,25 +3,23 @@ import React from "react";
 import {
   doAlgorithm,
   getFaceletArray,
-  // Edges,
-  // Corners,
-  // FaceletArrayFilter,
+  Edges,
+  Corners,
+  FaceletArrayFilter,
 } from "app/common/cube/libs/cube";
-
-export function createScramblePreview(scrambleCode: string): string {
-  const cubeIndexes = doAlgorithm(scrambleCode);
-  return getFaceletArray(cubeIndexes)
-    .map((faceKey) => colorMap[faceKey])
-    .reduce((acc, color) => acc.replace("{}", color), template);
-}
 
 interface CubePreviewProps {
   scrambleCode: string;
-  type?: "cross" | "f2l" | "oll";
+  type?: string;
 }
 
 export function CubePreview(props: CubePreviewProps): JSX.Element {
-  const svgString = createScramblePreview(props.scrambleCode);
+  const filter = props.type ? filters[props.type] : undefined;
+  const cubeIndexes = doAlgorithm(props.scrambleCode);
+  const svgString = getFaceletArray(cubeIndexes, filter)
+    .map((faceKey) => colorMap[faceKey])
+    .reduce((acc, color) => acc.replace("{}", color), template);
+
   return (
     <div
       className="w-3/4 self-center"
@@ -40,38 +38,44 @@ const colorMap: Record<string, string> = {
   G: "gray",
 };
 
-// const crossFilter = {
-//   edges: [Edges.UB, Edges.UF, Edges.UR, Edges.UL],
-// };
+const crossFilter = {
+  edges: [Edges.UB, Edges.UF, Edges.UR, Edges.UL],
+};
 
-// const f2lFilter = {
-//   edges: [
-//     Edges.UB,
-//     Edges.UF,
-//     Edges.UR,
-//     Edges.UL,
-//     Edges.BL,
-//     Edges.BR,
-//     Edges.FL,
-//     Edges.FR,
-//   ],
-//   corners: [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
-// };
+const f2lFilter = {
+  edges: [
+    Edges.UB,
+    Edges.UF,
+    Edges.UR,
+    Edges.UL,
+    Edges.BL,
+    Edges.BR,
+    Edges.FL,
+    Edges.FR,
+  ],
+  corners: [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
+};
 
-// const ollFilter = {
-//   edges: [
-//     Edges.UB,
-//     Edges.UF,
-//     Edges.UR,
-//     Edges.UL,
-//     Edges.BL,
-//     Edges.BR,
-//     Edges.FL,
-//     Edges.FR,
-//   ],
-//   corners: [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
-//   facelets: ["D"],
-// };
+const ollFilter = {
+  edges: [
+    Edges.UB,
+    Edges.UF,
+    Edges.UR,
+    Edges.UL,
+    Edges.BL,
+    Edges.BR,
+    Edges.FL,
+    Edges.FR,
+  ],
+  corners: [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
+  facelets: ["D"],
+};
+
+const filters: Record<string, FaceletArrayFilter> = {
+  cross: crossFilter,
+  f2l: f2lFilter,
+  oll: ollFilter,
+};
 
 const template = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 258 196" style="stroke-linejoin:round;">
   <g>

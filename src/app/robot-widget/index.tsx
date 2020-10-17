@@ -61,7 +61,7 @@ export function RobotWidget(props: RobotWidgetProps): JSX.Element {
   );
 }
 
-export const RobotWidgetContainer = connect(
+export const ConnectedRobotWidget = connect(
   (state: ApplicationState) => ({
     robotDevice: getRobotDevice(state),
   }),

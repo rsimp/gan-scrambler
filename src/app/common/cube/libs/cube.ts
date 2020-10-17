@@ -237,34 +237,34 @@ export const doAlgorithm = (
 };
 
 export interface FaceletArrayFilter {
-  edges: number[];
-  corners: number[];
-  facelets: string[];
+  edges?: number[];
+  corners?: number[];
+  facelets?: string[];
 }
 
 export const getFaceletArray = (
-  cube: CubeIndexes
-  // filter?: FaceletArrayFilter
+  cube: CubeIndexes,
+  filter?: FaceletArrayFilter
 ): string[] => {
   const facelets: string[] = [];
 
-  // const _cornerFacelets = cornerFacelets.map((facelets, i) => {
-  //   if (!filter || filter.corners.includes(i)) {
-  //     return facelets;
-  //   }
-  //   return facelets.map((facelet) =>
-  //     !filter.facelets || filter.facelets.includes(facelet) ? facelet : "G"
-  //   );
-  // });
+  const filteredCornerFacelets = cornerFacelets.map((facelets, i) => {
+    if (!filter || (filter.corners && filter.corners.includes(i))) {
+      return facelets;
+    }
+    return facelets.map((facelet) =>
+      filter.facelets && filter.facelets.includes(facelet) ? facelet : "G"
+    );
+  });
 
-  // const _edgeFacelets = edgeFacelets.map((facelets, i) => {
-  //   if (!filter || filter.edges.includes(i)) {
-  //     return facelets;
-  //   }
-  //   return facelets.map((facelet) =>
-  //     !filter.facelets || filter.facelets.includes(facelet) ? facelet : "G"
-  //   );
-  // });
+  const filteredEdgeFacelets = edgeFacelets.map((facelets, i) => {
+    if (!filter || (filter.edges && filter.edges.includes(i))) {
+      return facelets;
+    }
+    return facelets.map((facelet) =>
+      filter.facelets && filter.facelets.includes(facelet) ? facelet : "G"
+    );
+  });
 
   // add center facelets to array
   centerFacelets.forEach((facelet, i) => {
@@ -273,14 +273,14 @@ export const getFaceletArray = (
 
   // add corner cubie facelets
   identity.cp.forEach((i) => {
-    cornerFacelets[cube.cp[i]].forEach((facelet, j) => {
+    filteredCornerFacelets[cube.cp[i]].forEach((facelet, j) => {
       facelets[cornerFaceletIndexes[i][(j + cube.co[i]) % 3]] = facelet;
     });
   });
 
   // add edge cubie facelets
   identity.ep.forEach((i) => {
-    edgeFacelets[cube.ep[i]].forEach((facelet, j) => {
+    filteredEdgeFacelets[cube.ep[i]].forEach((facelet, j) => {
       facelets[edgeFaceletIndexes[i][(j + cube.eo[i]) % 2]] = facelet;
     });
   });

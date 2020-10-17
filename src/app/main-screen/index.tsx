@@ -8,11 +8,13 @@ import {
 } from "@material-ui/core";
 import { Shuffle, Layers, Edit } from "@material-ui/icons";
 import { FormattedMessage } from "react-intl";
-
-import { RobotWidgetContainer } from "app/robot-widget";
-import { ConnectedScrambleGenerator } from "app/scramble-generator";
-import { fiveSideSearch } from "app/common/cube/solvers/five-side-solver";
 import styled from "styled-components/macro";
+
+import { ConnectedRobotWidget } from "app/robot-widget";
+import { ConnectedCFOPScramble } from "app/cfop-scramble";
+import { fiveSideSearch } from "app/common/cube/solvers/five-side-solver";
+import { ConnectedRandomScramble } from "app/random-scramble";
+import { ConnectedManualScramble } from "app/manual-scramble";
 
 const Screen = styled.div.attrs({ className: "flex flex-col h-screen" })``;
 
@@ -20,20 +22,17 @@ const IconContainer = styled.div.attrs({
   className: "flex flex-row ml-auto",
 })``;
 
-const TabWrapper = styled.div.attrs({
-  className: "flex flex-column w-full mt-auto",
-})``;
-
 export function MainScreen(): JSX.Element {
-  const [navigationValue, setNavigation] = React.useState(0);
+  const [navigationValue, setNavigation] = React.useState("random");
   const handleChange = (
     event: React.ChangeEvent<unknown>,
-    newValue: number
+    newValue: string
   ) => {
     setNavigation(newValue);
   };
 
   useEffect(() => {
+    window.screen.orientation.lock("portrait");
     fiveSideSearch.initialize();
   }, []);
 
@@ -45,14 +44,17 @@ export function MainScreen(): JSX.Element {
             <FormattedMessage id="appTitle" />
           </Typography>
           <IconContainer>
-            <RobotWidgetContainer />
+            <ConnectedRobotWidget />
           </IconContainer>
         </Toolbar>
       </AppBar>
 
       <div className="flex flex-col h-full">
-        <ConnectedScrambleGenerator />
-        <TabWrapper>
+        {navigationValue === "random" && <ConnectedRandomScramble />}
+        {navigationValue === "cfop" && <ConnectedCFOPScramble />}
+        {navigationValue === "manual" && <ConnectedManualScramble />}
+
+        <div className="w-full mt-auto">
           <BottomNavigation
             showLabels
             value={navigationValue}
@@ -61,21 +63,24 @@ export function MainScreen(): JSX.Element {
           >
             <BottomNavigationAction
               icon={<Shuffle />}
+              value="random"
               label="RANDOM"
               aria-label="phone"
             />
             <BottomNavigationAction
               icon={<Layers />}
+              value="cfop"
               label="CFOP"
               aria-label="favorite"
             />
             <BottomNavigationAction
               icon={<Edit />}
+              value="manual"
               label="MANUAL"
               aria-label="person"
             />
           </BottomNavigation>
-        </TabWrapper>
+        </div>
       </div>
     </Screen>
   );
