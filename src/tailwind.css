@@ -3,3 +3,13 @@
 @tailwind components;
 
 @tailwind utilities;
+
+html {
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+}
