@@ -24,7 +24,7 @@ export function CubePreview(props: CubePreviewProps): JSX.Element {
   const svgString = createScramblePreview(props.scrambleCode);
   return (
     <div
-      style={{ width: "50%" }}
+      className="w-3/4 self-center"
       dangerouslySetInnerHTML={{ __html: svgString }}
     ></div>
   );
