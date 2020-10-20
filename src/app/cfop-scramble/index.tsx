@@ -38,7 +38,7 @@ const ContentGroup = styled.div.attrs({
 
 export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
   const [scrambleType, setScrambleType] = useState<ScrambleType>("cross");
-  const [scramble, setScramble] = useState<string | null>(null);
+  const [scramble, setScramble] = useState<string>("");
   return (
     <ContentContainer>
       <ContentGroup>
@@ -49,9 +49,12 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
             aria-label="Scramble Type"
             name="scrambleType"
             value={scrambleType}
-            onChange={(e) =>
-              setScrambleType(e.currentTarget.value as ScrambleType)
-            }
+            onChange={(e) => {
+              if (e.currentTarget.value !== scrambleType) {
+                setScramble("");
+              }
+              setScrambleType(e.currentTarget.value as ScrambleType);
+            }}
           >
             <FormControlLabel value="cross" control={<Radio />} label="Cross" />
             <FormControlLabel value="f2l" control={<Radio />} label="F2L" />
@@ -90,21 +93,20 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
             }
           }}
         >
-          <FormattedMessage id="scramble.actions.generate" />
+          <FormattedMessage id="scramble.actions.scramble" />
         </Button>
       </ContentGroup>
-      {scramble && (
-        <ContentGroup>
-          <CubePreview scrambleCode={scramble} type={scrambleType} />
-          <Button
-            variant="contained"
-            disabled={!Boolean(props.robotServer)}
-            onClick={() => executeScramble(props.robotServer, scramble)}
-          >
-            <FormattedMessage id="scramble.actions.execute" />
-          </Button>
-        </ContentGroup>
-      )}
+
+      <ContentGroup>
+        <CubePreview scrambleCode={scramble} type={scrambleType} />
+        <Button
+          variant="contained"
+          disabled={!Boolean(scramble) || !Boolean(props.robotServer)}
+          onClick={() => executeScramble(props.robotServer, scramble)}
+        >
+          <FormattedMessage id="scramble.actions.send" />
+        </Button>
+      </ContentGroup>
     </ContentContainer>
   );
 }

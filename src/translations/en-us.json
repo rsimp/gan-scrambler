@@ -2,8 +2,8 @@
   "appTitle": "GAN Scrambler",
   "scramble": {
     "actions":{
-      "generate": "Generate",
-      "execute": "Execute"
+      "scramble": "Scramble",
+      "send": "Send"
     }
   }
 }

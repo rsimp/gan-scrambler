@@ -219,6 +219,10 @@ export const doAlgorithm = (
   algorithm: string,
   cube = identity
 ): CubeIndexes => {
+  if (!algorithm) {
+    return cube;
+  }
+
   const cubeCopy = {
     ep: cube.ep.slice(),
     eo: cube.eo.slice(),

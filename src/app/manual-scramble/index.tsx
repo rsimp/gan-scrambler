@@ -29,8 +29,7 @@ const ContentGroup = styled.div.attrs({
 })``;
 
 export function ManualScramble(props: ManualScrambleProps): JSX.Element {
-  const [scramble, setScramble] = useState<string | null>(null);
-  const [manualScramble, setManualScramble] = useState<string>("");
+  const [scramble, setScramble] = useState<string>("");
   const [hasError, setHasError] = useState(false);
   return (
     <ContentContainer>
@@ -39,6 +38,8 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
           <TextField
             id="manual-scramble"
             label="Manual Scramble"
+            multiline
+            rowsMax={4}
             fullWidth
             error={hasError}
             helperText={hasError && "Invalid Scramble Code"}
@@ -46,42 +47,34 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
               const manualScrambleValue = event.target.value;
               if (manualScrambleValue.length > 0) {
                 if (validateAlgorithm(manualScrambleValue)) {
-                  setManualScramble(manualScrambleValue);
+                  const fiveSideSolve = fiveSideSolver(manualScrambleValue);
+                  if (fiveSideSolve) {
+                    const fiveSideScramble = invertAlgorithm(fiveSideSolve);
+                    setScramble(fiveSideScramble);
+                  }
                 } else {
-                  setManualScramble("");
                   setHasError(true);
+                  setScramble("");
                 }
+              } else {
+                setHasError(false);
+                setScramble("");
               }
             }}
           />
         </form>
+      </ContentGroup>
+
+      <ContentGroup>
+        <CubePreview scrambleCode={scramble} />
         <Button
           variant="contained"
-          onClick={() => {
-            if (manualScramble) {
-              const fiveSideSolve = fiveSideSolver(manualScramble);
-              if (fiveSideSolve) {
-                const fiveSideScramble = invertAlgorithm(fiveSideSolve);
-                setScramble(fiveSideScramble);
-              }
-            }
-          }}
+          disabled={!Boolean(props.robotServer)}
+          onClick={() => executeScramble(props.robotServer, scramble)}
         >
-          <FormattedMessage id="scramble.actions.generate" />
+          <FormattedMessage id="scramble.actions.send" />
         </Button>
       </ContentGroup>
-      {scramble && (
-        <ContentGroup>
-          <CubePreview scrambleCode={scramble} />
-          <Button
-            variant="contained"
-            disabled={!Boolean(props.robotServer)}
-            onClick={() => executeScramble(props.robotServer, scramble)}
-          >
-            <FormattedMessage id="scramble.actions.execute" />
-          </Button>
-        </ContentGroup>
-      )}
     </ContentContainer>
   );
 }

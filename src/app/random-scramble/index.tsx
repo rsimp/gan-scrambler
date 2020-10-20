@@ -25,7 +25,7 @@ const ContentGroup = styled.div.attrs({
 })``;
 
 export function RandomScramble(props: RandomScrambleProps): JSX.Element {
-  const [scramble, setScramble] = useState<string | null>(null);
+  const [scramble, setScramble] = useState<string>("");
   return (
     <ContentContainer>
       <ContentGroup>
@@ -35,22 +35,21 @@ export function RandomScramble(props: RandomScrambleProps): JSX.Element {
             setScramble(generateScramble());
           }}
         >
-          <FormattedMessage id="scramble.actions.generate" />
+          <FormattedMessage id="scramble.actions.scramble" />
         </Button>
       </ContentGroup>
-      {scramble && (
-        <ContentGroup>
-          <Typography variant="body1">{scramble}</Typography>
-          <CubePreview scrambleCode={scramble} />
-          <Button
-            variant="contained"
-            disabled={!Boolean(props.robotServer)}
-            onClick={() => executeScramble(props.robotServer, scramble)}
-          >
-            <FormattedMessage id="scramble.actions.execute" />
-          </Button>
-        </ContentGroup>
-      )}
+
+      <ContentGroup>
+        <Typography variant="body1">{scramble}</Typography>
+        <CubePreview scrambleCode={scramble} />
+        <Button
+          variant="contained"
+          disabled={!Boolean(props.robotServer)}
+          onClick={() => executeScramble(props.robotServer, scramble)}
+        >
+          <FormattedMessage id="scramble.actions.send" />
+        </Button>
+      </ContentGroup>
     </ContentContainer>
   );
 }
