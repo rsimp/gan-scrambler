@@ -69,7 +69,7 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
         <CubePreview scrambleCode={scramble} />
         <Button
           variant="contained"
-          disabled={!Boolean(props.robotServer)}
+          disabled={!Boolean(props.robotServer) && Boolean(scramble)}
           onClick={() => executeScramble(props.robotServer, scramble)}
         >
           <FormattedMessage id="scramble.actions.send" />
