@@ -6,11 +6,11 @@ import {
 } from "./coordinates";
 
 import {
-  edgePermutationMove,
-  cornerPermutationMove,
-  edgeOrientationMove,
-  cornerOrientationMove,
+  doEdgeMove,
+  doCornerMove,
+  moveHelper,
   allMoves,
+  identity,
 } from "./cube";
 
 import { factorial } from "./tools";
@@ -162,7 +162,8 @@ export const createCornerPermutationTable = (
         8,
         settings.reversed
       ),
-    cubieMove: cornerPermutationMove,
+    cubieMove: (pieces, moveIndex) =>
+      moveHelper({ cp: pieces, co: identity.co }, moveIndex, doCornerMove).cp,
     getIndex: (pieces) =>
       getIndexFromPermutation(pieces, settings.affected, settings.reversed),
   });
@@ -187,7 +188,8 @@ export const createEdgePermutationTable = (
         12,
         settings.reversed
       ),
-    cubieMove: edgePermutationMove,
+    cubieMove: (pieces, moveIndex) =>
+      moveHelper({ ep: pieces, eo: identity.eo }, moveIndex, doEdgeMove).ep,
     getIndex: (pieces) =>
       getIndexFromPermutation(pieces, settings.affected, settings.reversed),
   });
@@ -227,7 +229,8 @@ export const createEdgeOrientationTable = (
     size: 2048,
     solvedIndexes: getCorrectOrientations(settings.affected, 12, 2),
     getVector: (index) => getOrientationFromIndex(index, 12, 2),
-    cubieMove: edgeOrientationMove,
+    cubieMove: (pieces, moveIndex) =>
+      moveHelper({ ep: identity.ep, eo: pieces }, moveIndex, doEdgeMove).eo,
     getIndex: (pieces) => getIndexFromOrientation(pieces, 2),
   });
 
@@ -239,6 +242,7 @@ export const createCornerOrientationTable = (
     size: 2187,
     solvedIndexes: getCorrectOrientations(settings.affected, 8, 3),
     getVector: (index) => getOrientationFromIndex(index, 8, 3),
-    cubieMove: cornerOrientationMove,
+    cubieMove: (pieces, moveIndex) =>
+      moveHelper({ cp: identity.cp, co: pieces }, moveIndex, doCornerMove).co,
     getIndex: (pieces) => getIndexFromOrientation(pieces, 3),
   });

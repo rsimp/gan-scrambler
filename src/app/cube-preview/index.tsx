@@ -1,22 +1,24 @@
 import React from "react";
 
+import { doAlgorithm, Edges, Corners } from "app/common/cube/libs/cube";
 import {
-  doAlgorithm,
   getFaceletArray,
-  Edges,
-  Corners,
   FaceletArrayFilter,
-} from "app/common/cube/libs/cube";
+} from "app/common/cube/libs/cube-preview";
 
 interface CubePreviewProps {
   scrambleCode: string;
+  rotations?: string;
   type?: string;
 }
 
 export function CubePreview(props: CubePreviewProps): JSX.Element {
   const filter = props.type ? filters[props.type] : undefined;
   const cubeIndexes = doAlgorithm(props.scrambleCode);
-  const svgString = getFaceletArray(cubeIndexes, filter)
+  const svgString = getFaceletArray(cubeIndexes, {
+    filter,
+    rotations: props.rotations,
+  })
     .map((faceKey) => colorMap[faceKey])
     .reduce((acc, color) => acc.replace("{}", color), template);
 

@@ -98,7 +98,11 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
       </ContentGroup>
 
       <ContentGroup>
-        <CubePreview scrambleCode={scramble} type={scrambleType} />
+        <CubePreview
+          scrambleCode={scramble}
+          type={scrambleType}
+          rotations="x2"
+        />
         <Button
           variant="contained"
           disabled={!Boolean(scramble) || !Boolean(props.robotServer)}
