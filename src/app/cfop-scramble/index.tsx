@@ -28,6 +28,16 @@ interface CFOPScrambleProps {
 
 type ScrambleType = "cross" | "f2l" | "oll" | "pll";
 
+const invertedColorMap: Record<string, string> = {
+  U: "yellow",
+  R: "red",
+  F: "blue",
+  D: "white",
+  L: "orange",
+  B: "green",
+  G: "gray",
+};
+
 const ContentContainer = styled.div.attrs({
   className: "flex flex-col m-med children:mt-lg children:first:mt-0",
 })``;
@@ -101,7 +111,7 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
         <CubePreview
           scrambleCode={scramble}
           type={scrambleType}
-          rotations="x2"
+          colorMap={invertedColorMap}
         />
         <Button
           variant="contained"

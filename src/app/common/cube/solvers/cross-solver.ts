@@ -12,12 +12,12 @@ export const CrossSearch = new Search(
     moveTables: [
       createEdgePermutationTable({
         name: "EdgePermutation",
-        affected: [Edges.UB, Edges.UF, Edges.UL, Edges.UR],
+        affected: [Edges.DB, Edges.DF, Edges.DL, Edges.DR],
       }),
 
       createEdgeOrientationTable({
         name: "EdgeOrientation",
-        affected: [Edges.UB, Edges.UF, Edges.UL, Edges.UR],
+        affected: [Edges.DB, Edges.DF, Edges.DL, Edges.DR],
       }),
     ],
 

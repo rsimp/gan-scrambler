@@ -1,13 +1,14 @@
 import { getScrambleForPieces } from "app/common/cube/libs/scramble-pieces";
 import { Edges, Corners } from "app/common/cube/libs/cube";
 
-export const generatePLLScramble = (): string | false =>
+export const generatePLLScramble = (needsRotation = true): string | false =>
   getScrambleForPieces(
-    [Edges.DR, Edges.DF, Edges.DL, Edges.DB],
+    [Edges.UR, Edges.UF, Edges.UL, Edges.UB],
 
-    [Corners.DFR, Corners.DLF, Corners.DBL, Corners.DBR],
+    [Corners.URF, Corners.UFL, Corners.ULB, Corners.UBR],
 
     [],
 
-    []
+    [],
+    needsRotation
   );

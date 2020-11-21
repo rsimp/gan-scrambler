@@ -8,16 +8,16 @@ import {
 
 interface CubePreviewProps {
   scrambleCode: string;
-  rotations?: string;
   type?: string;
+  colorMap?: Record<string, string>;
 }
 
 export function CubePreview(props: CubePreviewProps): JSX.Element {
   const filter = props.type ? filters[props.type] : undefined;
   const cubeIndexes = doAlgorithm(props.scrambleCode);
+  const colorMap = props.colorMap ?? defaultColorMap;
   const svgString = getFaceletArray(cubeIndexes, {
     filter,
-    rotations: props.rotations,
   })
     .map((faceKey) => colorMap[faceKey])
     .reduce((acc, color) => acc.replace("{}", color), template);
@@ -30,7 +30,7 @@ export function CubePreview(props: CubePreviewProps): JSX.Element {
   );
 }
 
-const colorMap: Record<string, string> = {
+const defaultColorMap: Record<string, string> = {
   U: "white",
   R: "red",
   F: "green",
@@ -41,36 +41,36 @@ const colorMap: Record<string, string> = {
 };
 
 const crossFilter = {
-  edges: [Edges.UB, Edges.UF, Edges.UR, Edges.UL],
+  edges: [Edges.DB, Edges.DF, Edges.DR, Edges.DL],
 };
 
 const f2lFilter = {
   edges: [
-    Edges.UB,
-    Edges.UF,
-    Edges.UR,
-    Edges.UL,
+    Edges.DB,
+    Edges.DF,
+    Edges.DR,
+    Edges.DL,
     Edges.BL,
     Edges.BR,
     Edges.FL,
     Edges.FR,
   ],
-  corners: [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
+  corners: [Corners.DBR, Corners.DLF, Corners.DBL, Corners.DFR],
 };
 
 const ollFilter = {
   edges: [
-    Edges.UB,
-    Edges.UF,
-    Edges.UR,
-    Edges.UL,
+    Edges.DB,
+    Edges.DF,
+    Edges.DR,
+    Edges.DL,
     Edges.BL,
     Edges.BR,
     Edges.FL,
     Edges.FR,
   ],
-  corners: [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
-  facelets: ["D"],
+  corners: [Corners.DBR, Corners.DLF, Corners.DBL, Corners.DFR],
+  facelets: ["U"],
 };
 
 const filters: Record<string, FaceletArrayFilter> = {
