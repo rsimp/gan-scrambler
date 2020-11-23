@@ -21,6 +21,8 @@ import { crossSolver } from "app/common/cube/solvers/cross-solver";
 import { CubePreview } from "app/cube-preview";
 import { generatePLLScramble } from "app/common/cube/scramblers/pll";
 import { executeScramble } from "app/common/gan-robot";
+import { doAlgorithm } from "app/common/cube/libs/cube";
+import { isF2LSolved } from "app/common/cube/libs/cfop-criteria";
 
 interface CFOPScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;
@@ -81,11 +83,17 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
                 setScramble(generateScramble());
                 break;
               case "f2l":
-                // faster to do a simple cross solve than a full solve
-                const scramble = generateScramble(19);
-                const solveCode = crossSolver(scramble);
-                if (solveCode) {
-                  setScramble(`${scramble} ${solveCode}`);
+                // faster to do cross solve than scrambling all pieces but the cross
+                // and completing a full solve
+                while (true) {
+                  const scramble = generateScramble();
+                  const solveCode = crossSolver(scramble);
+                  if (solveCode) {
+                    if (!isF2LSolved(doAlgorithm(solveCode))) {
+                      setScramble(`${scramble} ${solveCode}`);
+                      break;
+                    }
+                  }
                 }
                 break;
               case "oll":
