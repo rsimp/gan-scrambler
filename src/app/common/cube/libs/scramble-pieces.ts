@@ -7,7 +7,7 @@ import {
 import { getRandomInt, factorial } from "app/common/cube/libs/tools";
 
 import { invertAlgorithm, formatAlgorithm, parseAlgorithm } from "./algorithms";
-import { identity, Corners } from "app/common/cube/libs/cube";
+import { identity, Corners, CubeIndexes } from "app/common/cube/libs/cube";
 import { doRotations } from "app/common/cube/libs/cube-preview";
 
 import { solveCoordinates } from "app/common/cube/solvers/five-side-solver";
@@ -121,12 +121,15 @@ export const getScrambleForPieces = (
   permutationCorners: number[],
   orientationEdges = permutationEdges,
   orientationCorners = permutationCorners,
+  isPhaseCompleted: (state: CubeIndexes) => boolean,
   needsRotation = false
 ): string | false => {
   let eo;
   let ep;
   let co;
   let cp;
+  let scrambleState;
+  const center = identity.center;
 
   // For the kociemba algorithm the U and D faces are special. For a five sided
   // solve you require both. If you orient the White or Yellow face up on the robot,
@@ -156,13 +159,11 @@ export const getScrambleForPieces = (
 
   do {
     ep = getPermutationFromEnabled(rotatedIndexes.ep, 12);
-
     eo = getEdgeOrientation(rotatedIndexes.eo, ep, needsRotation);
-
     cp = getPermutationFromEnabled(rotatedIndexes.cp, 8);
-
     co = getCornerOrientation(rotatedIndexes.co, cp, needsRotation);
-  } while (getParity(ep) !== getParity(cp));
+    scrambleState = { ep, eo, cp, co, center };
+  } while (getParity(ep) !== getParity(cp) && !isPhaseCompleted(scrambleState));
 
   const solution = solveCoordinates(eo, ep, co, cp);
   if (needsRotation) {

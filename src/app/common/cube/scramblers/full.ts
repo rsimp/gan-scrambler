@@ -2,7 +2,8 @@ import { doAlgorithm, identity, CubeIndexes } from "app/common/cube/libs/cube";
 import {
   getIndexFromOrientation,
   getIndexFromPermutation,
-} from "../libs/coordinates";
+} from "app/common/cube/libs/coordinates";
+import { isTopCrossSolved } from "app/common/cube/libs/cfop-criteria";
 
 const cubeFaces = ["D", "L", "B", "U", "R", "F"];
 const moveModifiers = ["", "2", "'"];
@@ -11,7 +12,7 @@ export function generateScramble(total = 26): string {
   return scramble(total).join(" ");
 }
 
-const scramble = (total = 26) => {
+const scramble = (total = 26): string[] => {
   const previousCubeStates = new Set();
   let currentState = identity;
   const moves = [];
@@ -41,6 +42,7 @@ const scramble = (total = 26) => {
       continue;
     }
 
+    // ensure state has not been repeated earlier in the scramble
     const newState = doAlgorithm(move, currentState);
     const stateHashCode = getStateHashCode(newState);
     if (!previousCubeStates.has(stateHashCode)) {
@@ -49,7 +51,7 @@ const scramble = (total = 26) => {
       currentState = newState;
     }
   }
-  return moves;
+  return isTopCrossSolved(currentState) ? scramble(total) : moves;
 };
 
 const getStateHashCode = (cubeState: CubeIndexes) => {
