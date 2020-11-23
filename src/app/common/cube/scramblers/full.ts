@@ -1,4 +1,4 @@
-import { doAlgorithm, identity } from "app/common/cube/libs/cube";
+import { doAlgorithm, identity, CubeIndexes } from "app/common/cube/libs/cube";
 import {
   getIndexFromOrientation,
   getIndexFromPermutation,
@@ -40,20 +40,22 @@ const scramble = (total = 26) => {
     ) {
       continue;
     }
+
     const newState = doAlgorithm(move, currentState);
-    const stateKey = `${getIndexFromPermutation(
-      newState.cp,
-      identity.cp
-    )}:${getIndexFromOrientation(newState.co, 3)}:${getIndexFromPermutation(
-      newState.ep,
-      identity.ep
-    )}:${getIndexFromOrientation(newState.eo, 2)}`;
-    if (!previousCubeStates.has(stateKey)) {
-      // If this state hasn't yet been encountered, save it and move on
+    const stateHashCode = getStateHashCode(newState);
+    if (!previousCubeStates.has(stateHashCode)) {
       moves.push(move);
-      previousCubeStates.add(stateKey);
+      previousCubeStates.add(stateHashCode);
       currentState = newState;
     }
   }
   return moves;
+};
+
+const getStateHashCode = (cubeState: CubeIndexes) => {
+  const cpIndex = getIndexFromPermutation(cubeState.cp, identity.cp);
+  const coIndex = getIndexFromOrientation(cubeState.co, 3);
+  const epIndex = getIndexFromPermutation(cubeState.ep, identity.ep);
+  const eoIndex = getIndexFromOrientation(cubeState.co, 2);
+  return `${cpIndex}:${coIndex}:${epIndex}:${eoIndex}`;
 };
