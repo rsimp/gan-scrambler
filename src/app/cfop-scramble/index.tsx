@@ -45,7 +45,8 @@ const ContentContainer = styled.div.attrs({
 })``;
 
 const ContentGroup = styled.div.attrs({
-  className: "flex flex-col children:mt-sm children:first:mt-0",
+  className:
+    "flex flex-col children:mt-sm children:first:mt-0 computer:items-start",
 })``;
 
 export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {

@@ -21,7 +21,8 @@ const ContentContainer = styled.div.attrs({
 })``;
 
 const ContentGroup = styled.div.attrs({
-  className: "flex flex-col children:mt-sm children:first:mt-0",
+  className:
+    "flex flex-col children:mt-sm children:first:mt-0 computer:items-start",
 })``;
 
 export function RandomScramble(props: RandomScrambleProps): JSX.Element {
@@ -44,6 +45,7 @@ export function RandomScramble(props: RandomScrambleProps): JSX.Element {
         <CubePreview scrambleCode={scramble} />
         <Button
           variant="contained"
+          size="large"
           disabled={!Boolean(props.robotServer)}
           onClick={() => executeScramble(props.robotServer, scramble)}
         >

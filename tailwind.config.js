@@ -42,7 +42,7 @@ module.exports = {
     },
   },
   variants: {
-    margin: ({ before }) => before(["children", "children-first", "default"]),
+    margin: ({ before }) => before(["children", "children-first", "DEFAULT"]),
   },
   plugins: [require("tailwindcss-children")],
 };

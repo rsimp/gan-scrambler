@@ -5,6 +5,11 @@ import {
   Typography,
   BottomNavigation,
   BottomNavigationAction,
+  Paper,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@material-ui/core";
 import { Shuffle, Layers, Edit } from "@material-ui/icons";
 import { FormattedMessage } from "react-intl";
@@ -49,37 +54,79 @@ export function MainScreen(): JSX.Element {
         </Toolbar>
       </AppBar>
 
-      <div className="flex flex-col h-full">
-        {navigationValue === "random" && <ConnectedRandomScramble />}
-        {navigationValue === "cfop" && <ConnectedCFOPScramble />}
-        {navigationValue === "manual" && <ConnectedManualScramble />}
+      <div className="flex flex-row h-full w-full">
+        <Paper className="w-48 hidden computer:block">
+          <List>
+            <ListItem
+              button
+              key="random"
+              selected={navigationValue === "random"}
+              onClick={() => setNavigation("random")}
+            >
+              <ListItemIcon>
+                <Shuffle />
+              </ListItemIcon>
+              <ListItemText primary="RANDOM" />
+            </ListItem>
 
-        <div className="w-full mt-auto">
-          <BottomNavigation
-            showLabels
-            value={navigationValue}
-            onChange={handleChange}
-            className="w-full"
-          >
-            <BottomNavigationAction
-              icon={<Shuffle />}
-              value="random"
-              label="RANDOM"
-              aria-label="phone"
-            />
-            <BottomNavigationAction
-              icon={<Layers />}
-              value="cfop"
-              label="CFOP"
-              aria-label="favorite"
-            />
-            <BottomNavigationAction
-              icon={<Edit />}
-              value="manual"
-              label="MANUAL"
-              aria-label="person"
-            />
-          </BottomNavigation>
+            <ListItem
+              button
+              key="cfop"
+              selected={navigationValue === "cfop"}
+              onClick={() => setNavigation("cfop")}
+            >
+              <ListItemIcon>
+                <Layers />
+              </ListItemIcon>
+              <ListItemText primary="CFOP" />
+            </ListItem>
+
+            <ListItem
+              button
+              key="manual"
+              selected={navigationValue === "manual"}
+              onClick={() => setNavigation("manual")}
+            >
+              <ListItemIcon>
+                <Edit />
+              </ListItemIcon>
+              <ListItemText primary="MANUAL" />
+            </ListItem>
+          </List>
+        </Paper>
+
+        <div className="flex flex-grow flex-col h-full">
+          {navigationValue === "random" && <ConnectedRandomScramble />}
+          {navigationValue === "cfop" && <ConnectedCFOPScramble />}
+          {navigationValue === "manual" && <ConnectedManualScramble />}
+
+          <div className="computer:hidden w-full mt-auto">
+            <BottomNavigation
+              showLabels
+              value={navigationValue}
+              onChange={handleChange}
+              className="w-full"
+            >
+              <BottomNavigationAction
+                icon={<Shuffle />}
+                value="random"
+                label="RANDOM"
+                aria-label="random"
+              />
+              <BottomNavigationAction
+                icon={<Layers />}
+                value="cfop"
+                label="CFOP"
+                aria-label="cfop"
+              />
+              <BottomNavigationAction
+                icon={<Edit />}
+                value="manual"
+                label="MANUAL"
+                aria-label="manual"
+              />
+            </BottomNavigation>
+          </div>
         </div>
       </div>
     </Screen>
