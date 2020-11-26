@@ -20,7 +20,7 @@ const mod = (n: number, m: number) => ((n % m) + m) % m;
 const getEdgeOrientation = (
   enabled: number[],
   permutation: number[],
-  needsRotationAjustment: boolean
+  orientLastLayer: boolean
 ) => {
   const pieces = getOrientationFromIndex(
     getRandomInt(0, 2 ** (enabled.length - 1)),
@@ -34,14 +34,9 @@ const getEdgeOrientation = (
     orientation[piece] = pieces[i];
   });
 
-  if (needsRotationAjustment) {
+  if (orientLastLayer) {
     // adjust front face corners so they're all oriented with F on top
-    // except when the piece is included in the enabled array to generate
-    // a random orientation
     FRONT_FACE_EDGES.forEach((piece, i) => {
-      if (enabled.includes(piece)) {
-        return;
-      }
       // if edge is in the correct or opposite side set orientation to 0
       // otherwise set orientation to 1
       orientation[piece] = mod(
@@ -57,7 +52,7 @@ const getEdgeOrientation = (
 const getCornerOrientation = (
   enabled: number[],
   permutation: number[],
-  needsRotationAjustment: boolean
+  orientLastLayer: boolean
 ) => {
   const pieces = getOrientationFromIndex(
     getRandomInt(0, 3 ** (enabled.length - 1)),
@@ -71,14 +66,9 @@ const getCornerOrientation = (
     orientation[piece] = pieces[i];
   });
 
-  if (needsRotationAjustment) {
+  if (orientLastLayer) {
     // adjust front face corners so they're all oriented with F on top
-    // except when the piece is included in the enabled array to generate
-    // a random oriention
     FRONT_FACE_CORNERS.forEach((piece, i) => {
-      if (enabled.includes(piece)) {
-        return;
-      }
       const frontCornerIndex = FRONT_FACE_CORNERS.indexOf(permutation[piece]);
       const displacement = frontCornerIndex - i;
       // if corner is in the correct or opposite corner then set orientation to 0
@@ -117,78 +107,49 @@ const getPermutationFromEnabled = (enabled: number[], size: number) => {
  * for the provided edges and corners, which will be scrambled randomly.
  */
 export const getScrambleForPieces = (
-  permutationEdges: number[],
-  permutationCorners: number[],
-  orientationEdges = permutationEdges,
-  orientationCorners = permutationCorners,
-  isPhaseCompleted: (state: CubeIndexes) => boolean,
-  needsRotation = false
+  scrambleEdges: number[],
+  scrambleCorners: number[],
+  isScrambleSolved: (state: CubeIndexes) => boolean,
+  orientLastLayer = false
 ): string | false => {
-  let eo;
-  let ep;
-  let co;
-  let cp;
-  let scrambleState;
+  // For the kociemba algorithm the U and D faces are special. For a five sided
+  // solve you require both. If you set White or Yellow as U or D, like in the cube
+  // previews, the solve is impossible. To work around this we assume the Whte/Yellow
+  // face is F, complete the solve and then translate the solution with an x' rotation
+  // afterwards. This allows us to not use the White/Yellow face (F) while solving,
+  // but end with a solution where White/Yellow is oriented as U again
+  let ep, eo, cp, co;
   const center = identity.center;
 
-  // For the kociemba algorithm the U and D faces are special. For a five sided
-  // solve you require both. If you orient the White or Yellow face up on the robot,
-  // like in the cube previews, the solve is impossible. To work around this we start
-  // by setting the Whte/Yellow face as F, even though it is U on the robot. Then we
-  // rotate the cube so that the F face is now is oriented on top. This allows us to
-  // not use the White/Yellow face (F) while solving, but to translate the solve
-  // afterwards so that the solution algorithm does not use any U moves
-
-  const rotations = "x";
-  const rotatedIndexes = needsRotation
-    ? rotateIndexes(
-        {
-          cp: permutationCorners,
-          co: orientationCorners,
-          ep: permutationEdges,
-          eo: orientationEdges,
-        },
-        rotations
-      )
-    : {
-        cp: permutationCorners,
-        co: orientationCorners,
-        ep: permutationEdges,
-        eo: orientationEdges,
-      };
-
+  // internally we consider White/Yellow to be F but externally it is U so first we
+  // rotate the inputs so that U becomes F and so on
+  const rotation = "x";
+  const rotatedPieces = rotatePieces(scrambleEdges, scrambleCorners, rotation);
   do {
-    ep = getPermutationFromEnabled(rotatedIndexes.ep, 12);
-    eo = getEdgeOrientation(rotatedIndexes.eo, ep, needsRotation);
-    cp = getPermutationFromEnabled(rotatedIndexes.cp, 8);
-    co = getCornerOrientation(rotatedIndexes.co, cp, needsRotation);
-    scrambleState = { ep, eo, cp, co, center };
-  } while (getParity(ep) !== getParity(cp) && !isPhaseCompleted(scrambleState));
+    ep = getPermutationFromEnabled(rotatedPieces.edges, 12);
+    eo = getEdgeOrientation(rotatedPieces.edges, ep, orientLastLayer);
+    cp = getPermutationFromEnabled(rotatedPieces.corners, 8);
+    co = getCornerOrientation(rotatedPieces.corners, cp, orientLastLayer);
+  } while (
+    getParity(ep) !== getParity(cp) ||
+    isScrambleSolved({ ep, eo, cp, co, center })
+  );
 
   const solution = solveCoordinates(eo, ep, co, cp);
-  if (needsRotation) {
-    const solutionRotations = invertAlgorithm(rotations);
+
+  if (solution) {
+    // now translate the solution so that White/Yellow is now U again
+    const solutionRotations = invertAlgorithm(rotation);
     return formatAlgorithm(parseAlgorithm(`${solutionRotations} ${solution}`));
-  } else {
-    return solution;
   }
+  return false;
 };
 
-const rotateIndexes = (
-  indexes: {
-    ep: number[];
-    cp: number[];
-    eo: number[];
-    co: number[];
-  },
-  rotations: string
-) => {
-  const rotationMap = doRotations(identity, rotations);
+const rotatePieces = (edges: number[], corners: number[], rotation: string) => {
+  const rotationMap = doRotations(identity, rotation);
   return {
-    ep: indexes.ep.map((edgeIdx) => rotationMap.ep[edgeIdx]),
-    eo: indexes.eo.map((edgeIdx) => rotationMap.ep[edgeIdx]),
-    cp: indexes.cp.map((cornerIdx) => rotationMap.cp[cornerIdx]),
-    co: indexes.co.map((cornerIdx) => rotationMap.cp[cornerIdx]),
+    edges: edges.map((edgeIdx) => rotationMap.ep[edgeIdx]),
+    corners: corners.map((cornerIdx) => rotationMap.cp[cornerIdx]),
   };
 };
 
