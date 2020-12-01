@@ -191,7 +191,7 @@ class Search {
 
     if (this.settings.scramble) {
       const [moves, totalRotation] = parseAlgorithm(
-        this.settings.scramble,
+        `x ${this.settings.scramble}`,
         true
       );
 

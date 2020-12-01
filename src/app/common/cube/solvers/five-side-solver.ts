@@ -243,7 +243,7 @@ export const fiveSideSolver = (
   }
 
   return fiveSideSearch.solve({
-    scramble: `x ${scramble}`,
+    scramble,
     maxDepth,
   });
 };
