@@ -3,7 +3,7 @@ import {
   getIndexFromOrientation,
   getIndexFromPermutation,
 } from "app/common/cube/libs/coordinates";
-import { isTopCrossSolved } from "app/common/cube/libs/cfop-criteria";
+import { isTopCrossSolved } from "app/common/cube/scramblers/solve-criteria";
 
 const cubeFaces = ["D", "L", "B", "U", "R", "F"];
 const moveModifiers = ["", "2", "'"];

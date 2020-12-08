@@ -1,6 +1,6 @@
 import React from "react";
 
-import { doAlgorithm, Edges, Corners } from "app/common/cube/libs/cube";
+import { doAlgorithm } from "app/common/cube/libs/cube";
 import {
   getFaceletArray,
   FaceletArrayFilter,
@@ -8,16 +8,15 @@ import {
 
 interface CubePreviewProps {
   scrambleCode: string;
-  type?: string;
+  filter?: FaceletArrayFilter;
   colorMap?: Record<string, string>;
 }
 
 export function CubePreview(props: CubePreviewProps): JSX.Element {
-  const filter = props.type ? filters[props.type] : undefined;
   const cubeIndexes = doAlgorithm(props.scrambleCode);
   const colorMap = props.colorMap ?? defaultColorMap;
   const svgString = getFaceletArray(cubeIndexes, {
-    filter,
+    filter: props.filter,
   })
     .map((faceKey) => colorMap[faceKey])
     .reduce((acc, color) => acc.replace("{}", color), template);
@@ -38,45 +37,6 @@ const defaultColorMap: Record<string, string> = {
   L: "orange",
   B: "blue",
   G: "gray",
-};
-
-const crossFilter = {
-  edges: [Edges.DB, Edges.DF, Edges.DR, Edges.DL],
-};
-
-const f2lFilter = {
-  edges: [
-    Edges.DB,
-    Edges.DF,
-    Edges.DR,
-    Edges.DL,
-    Edges.BL,
-    Edges.BR,
-    Edges.FL,
-    Edges.FR,
-  ],
-  corners: [Corners.DBR, Corners.DLF, Corners.DBL, Corners.DFR],
-};
-
-const ollFilter = {
-  edges: [
-    Edges.DB,
-    Edges.DF,
-    Edges.DR,
-    Edges.DL,
-    Edges.BL,
-    Edges.BR,
-    Edges.FL,
-    Edges.FR,
-  ],
-  corners: [Corners.DBR, Corners.DLF, Corners.DBL, Corners.DFR],
-  facelets: ["U"],
-};
-
-const filters: Record<string, FaceletArrayFilter> = {
-  cross: crossFilter,
-  f2l: f2lFilter,
-  oll: ollFilter,
 };
 
 const template = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 258 196" style="stroke-linejoin:round;">

@@ -1,4 +1,9 @@
-import { CubeIndexes, Corners, Edges } from "app/common/cube/libs/cube";
+import {
+  CubeIndexes,
+  Corners,
+  Edges,
+  doAlgorithm,
+} from "app/common/cube/libs/cube";
 
 const arePiecesPermutated = (
   cubeState: CubeIndexes,
@@ -53,18 +58,40 @@ export const isF2LSolved = (cubeState: CubeIndexes): boolean =>
     [Corners.DBL, Corners.DBR, Corners.DFR, Corners.DLF]
   );
 
+export const isFirstLookOLLSolved = (cubeState: CubeIndexes): boolean =>
+  isF2LSolved(cubeState) &&
+  arePiecesOriented(cubeState, [Edges.UB, Edges.UF, Edges.UL, Edges.UR], []);
+
 export const isOLLSolved = (cubeState: CubeIndexes): boolean =>
-  isF2LSolved &&
+  isF2LSolved(cubeState) &&
   arePiecesOriented(
     cubeState,
-    [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
-    [Edges.UB, Edges.UF, Edges.UL, Edges.UR]
+    [Edges.UB, Edges.UF, Edges.UL, Edges.UR],
+    [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF]
   );
 
+export const isFirstLookPLLSolved = (cubeState: CubeIndexes): boolean => {
+  let rotation = 0;
+  do {
+    if (
+      isOLLSolved(cubeState) &&
+      arePiecesPermutated(
+        cubeState,
+        [],
+        [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF]
+      )
+    )
+      return true;
+    cubeState = doAlgorithm("U", cubeState);
+    rotation += 90;
+  } while (rotation < 360);
+  return false;
+};
+
 export const isCubeSolved = (cubeState: CubeIndexes): boolean =>
-  isF2LSolved &&
+  isF2LSolved(cubeState) &&
   arePiecesPermutatedAndOriented(
     cubeState,
-    [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF],
-    [Edges.UB, Edges.UF, Edges.UL, Edges.UR]
+    [Edges.UB, Edges.UF, Edges.UL, Edges.UR],
+    [Corners.UBR, Corners.UFL, Corners.ULB, Corners.URF]
   );

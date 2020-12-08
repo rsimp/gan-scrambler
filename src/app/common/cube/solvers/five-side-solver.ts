@@ -15,7 +15,7 @@ import {
 
 import Search, { SearchSolution } from "app/common/cube/libs/search";
 
-import { fiveSideMoves } from "app/common/cube/libs/cube";
+import { fiveSideMoves, CubeIndexes } from "app/common/cube/libs/cube";
 
 // In phase two, only quarter moves of U and D and double turns of
 // all the other faces are allowed, in order to keep the cube in
@@ -248,19 +248,18 @@ export const fiveSideSolver = (
   });
 };
 
-export const solveCoordinates = (
-  eo: number[],
-  ep: number[],
-  co: number[],
-  cp: number[]
+export const solveCube = (
+  cubeState: CubeIndexes
 ): ReturnType<typeof fiveSideSolver> =>
   fiveSideSolver([
-    Math.floor(getIndexFromPermutation(ep, [8, 9, 10, 11], true) / 24),
-    getIndexFromOrientation(co, 3),
-    getIndexFromOrientation(eo, 2),
-    getIndexFromPermutation(ep, [8, 9, 10, 11], true),
-    getParity(cp),
-    getIndexFromPermutation(cp, [0, 1, 2, 3, 4, 5]),
-    getIndexFromPermutation(ep, [0, 1, 2]),
-    getIndexFromPermutation(ep, [3, 4, 5]),
+    Math.floor(
+      getIndexFromPermutation(cubeState.ep, [8, 9, 10, 11], true) / 24
+    ),
+    getIndexFromOrientation(cubeState.co, 3),
+    getIndexFromOrientation(cubeState.eo, 2),
+    getIndexFromPermutation(cubeState.ep, [8, 9, 10, 11], true),
+    getParity(cubeState.cp),
+    getIndexFromPermutation(cubeState.cp, [0, 1, 2, 3, 4, 5]),
+    getIndexFromPermutation(cubeState.ep, [0, 1, 2]),
+    getIndexFromPermutation(cubeState.ep, [3, 4, 5]),
   ]);
