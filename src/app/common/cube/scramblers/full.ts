@@ -8,11 +8,17 @@ import { isTopCrossSolved } from "app/common/cube/scramblers/solve-criteria";
 const cubeFaces = ["D", "L", "B", "U", "R", "F"];
 const moveModifiers = ["", "2", "'"];
 
-export function generateScramble(total = 26): string {
-  return scramble(total).join(" ");
+export function generateScramble(
+  total = 26,
+  isSolved: (state: CubeIndexes) => boolean = isTopCrossSolved
+): string {
+  return scramble(total, isSolved).join(" ");
 }
 
-const scramble = (total = 26): string[] => {
+const scramble = (
+  total: number,
+  isSolved: (state: CubeIndexes) => boolean
+): string[] => {
   const previousCubeStates = new Set();
   let currentState = identity;
   const moves = [];
@@ -51,7 +57,7 @@ const scramble = (total = 26): string[] => {
       currentState = newState;
     }
   }
-  return isTopCrossSolved(currentState) ? scramble(total) : moves;
+  return isSolved(currentState) ? scramble(total, isSolved) : moves;
 };
 
 const getStateHashCode = (cubeState: CubeIndexes) => {
