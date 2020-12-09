@@ -30,7 +30,10 @@ import { CubePreview } from "app/cube-preview";
 import { executeScramble } from "app/common/gan-robot";
 import { doAlgorithm, Edges, Corners } from "app/common/cube/libs/cube";
 import { FaceletArrayFilter } from "app/common/cube/libs/cube-preview";
-import { isF2LSolved } from "app/common/cube/scramblers/solve-criteria";
+import {
+  isF2LSolved,
+  isCrossSolved,
+} from "app/common/cube/scramblers/solve-criteria";
 
 interface CFOPScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;
@@ -56,7 +59,7 @@ const invertedColorMap: Record<string, string> = {
   G: "gray",
 };
 
-type CFOPLevelType = "beginner" | "intermediate" | "advanced";
+type CFOPLevelType = "beginner" | "advanced";
 
 const crossFilter = {
   edges: [Edges.DB, Edges.DF, Edges.DR, Edges.DL],
@@ -77,32 +80,16 @@ const f2lFilter = {
 };
 
 const ollFilter = {
-  edges: [
-    Edges.DB,
-    Edges.DF,
-    Edges.DR,
-    Edges.DL,
-    Edges.BL,
-    Edges.BR,
-    Edges.FL,
-    Edges.FR,
-  ],
-  corners: [Corners.DBR, Corners.DLF, Corners.DBL, Corners.DFR],
+  ...f2lFilter,
   facelets: ["U"],
 };
 
-const filters: Record<string, Record<string, FaceletArrayFilter>> = {
-  intermediate: {
-    cross: crossFilter,
-    f2l: f2lFilter,
-    firstLookOll: ollFilter,
-    secondLookOll: ollFilter,
-  },
-  advanced: {
-    cross: crossFilter,
-    f2l: f2lFilter,
-    oll: ollFilter,
-  },
+const filters: Record<string, FaceletArrayFilter> = {
+  cross: crossFilter,
+  f2l: f2lFilter,
+  firstLookOll: ollFilter,
+  secondLookOll: ollFilter,
+  oll: ollFilter,
 };
 
 const ContentContainer = styled.div.attrs({
@@ -115,23 +102,26 @@ const ContentGroup = styled.div.attrs({
 })``;
 
 export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
-  const [cfopLevel, setCFOPLevel] = useState<CFOPLevelType>("intermediate");
+  const [cfopLevel, setCFOPLevel] = useState<CFOPLevelType>("beginner");
   const [cfopPhase, setCFOPPhase] = useState<CFOPPhaseType>("cross");
   const [scramble, setScramble] = useState<string>("");
+
   return (
     <ContentContainer>
       <ContentGroup>
         <FormControl component="fieldset">
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
             value={cfopLevel}
             onChange={(e) => {
+              const level = e.target.value as CFOPLevelType;
+              if (level !== cfopLevel) {
+                setScramble("");
+              }
+              setCFOPLevel(level);
               setCFOPPhase("cross");
-              setCFOPLevel(e.target.value as CFOPLevelType);
             }}
           >
-            <MenuItem value="intermediate">Intermediate</MenuItem>
+            <MenuItem value="beginner">Beginner</MenuItem>
             <MenuItem value="advanced">Advanced</MenuItem>
           </Select>
           <RadioGroup
@@ -146,7 +136,7 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
               setCFOPPhase(e.currentTarget.value as CFOPPhaseType);
             }}
           >
-            {cfopLevel === "intermediate" && (
+            {cfopLevel === "beginner" && (
               <>
                 <FormControlLabel
                   value="cross"
@@ -194,15 +184,16 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
         <Button
           variant="contained"
           onClick={() => {
+            let scramble: string | false;
             switch (cfopPhase) {
               case "cross":
-                setScramble(generateScramble());
+                setScramble(generateScramble(26, isCrossSolved));
                 break;
               case "f2l":
                 // faster to do cross solve than scrambling all pieces but the cross
                 // and completing a full solve
                 while (true) {
-                  const scramble = generateScramble();
+                  scramble = generateScramble();
                   const solveCode = crossSolver(scramble);
                   if (solveCode) {
                     if (!isF2LSolved(doAlgorithm(solveCode))) {
@@ -213,39 +204,39 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
                 }
                 break;
               case "oll":
-                const ollScramble = generateOLLScramble();
-                if (ollScramble) {
-                  setScramble(ollScramble);
+                scramble = generateOLLScramble();
+                if (scramble) {
+                  setScramble(scramble);
                 }
                 break;
               case "firstLookOll":
-                const firstLookOllScramble = generateFirstLookOLLScramble();
-                if (firstLookOllScramble) {
-                  setScramble(firstLookOllScramble);
+                scramble = generateFirstLookOLLScramble();
+                if (scramble) {
+                  setScramble(scramble);
                 }
                 break;
               case "secondLookOll":
-                const secondLookOllScramble = generateSecondLookOLLScramble();
-                if (secondLookOllScramble) {
-                  setScramble(secondLookOllScramble);
+                scramble = generateSecondLookOLLScramble();
+                if (scramble) {
+                  setScramble(scramble);
                 }
                 break;
               case "pll":
-                const pllScramble = generatePLLScramble();
-                if (pllScramble) {
-                  setScramble(pllScramble);
+                scramble = generatePLLScramble();
+                if (scramble) {
+                  setScramble(scramble);
                 }
                 break;
               case "firstLookPll":
-                const firstLookPllScramble = generateFirstLookPLLScramble();
-                if (firstLookPllScramble) {
-                  setScramble(firstLookPllScramble);
+                scramble = generateFirstLookPLLScramble();
+                if (scramble) {
+                  setScramble(scramble);
                 }
                 break;
               case "secondLookPll":
-                const secondLookPllScramble = generateSecondLookPLLScramble();
-                if (secondLookPllScramble) {
-                  setScramble(secondLookPllScramble);
+                scramble = generateSecondLookPLLScramble();
+                if (scramble) {
+                  setScramble(scramble);
                 }
                 break;
             }
@@ -258,7 +249,7 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
       <ContentGroup>
         <CubePreview
           scrambleCode={scramble}
-          filter={filters[cfopLevel][cfopPhase]}
+          filter={filters[cfopPhase]}
           colorMap={invertedColorMap}
         />
         <Button
