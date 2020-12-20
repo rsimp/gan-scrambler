@@ -21,14 +21,15 @@ const moveMap: Record<string, number> = {
   "B'": 14,
 };
 
-export function getGANEncoding(scramble: string): Uint8Array {
-  return new Uint8Array(
-    scramble
-      .split(" ")
-      .map((move) => moveMap[move])
-      .reduce(chunkReducer(2), [])
-      .map((moves) => moves[0] * 16 + (moves[1] ?? 15))
-  );
+export function getGANEncoding(scramble: string): Uint8Array[] {
+  return scramble
+    .replace(/(\w)2/gi, "$1 $1") // for some reason the gan robot sometimes fails on double turns, just convert to singles
+    .split(" ")
+    .map((move) => moveMap[move])
+    .reduce(chunkReducer(2), [])
+    .map((moves) => moves[0] * 16 + (moves[1] ?? 15)) // encode every 2 moves to decimal representation of a hex value
+    .reduce(chunkReducer(16), []) // robot can only take in 18 hex characters, so chunk on this value and do multiple writes if necessary
+    .map((chunkedArr) => new Uint8Array(chunkedArr));
 }
 
 export const executeScramble = async (
@@ -44,7 +45,17 @@ export const executeScramble = async (
         SCRAMBLE_CHARACTERISTIC_UUID
       );
 
-      await scrambleExecuteCharacteristic.writeValue(getGANEncoding(scramble));
+      const chunkedValues = getGANEncoding(scramble);
+      console.log(chunkedValues);
+      await scrambleExecuteCharacteristic.writeValue(chunkedValues[0]);
+      if (chunkedValues[1]) {
+        // FIXME this is a dirty hack, really we need to be polling robot
+        // every 50 ms to see if the last chunk has finished
+        setTimeout(
+          () => scrambleExecuteCharacteristic.writeValue(chunkedValues[1]),
+          5000
+        );
+      }
     }
   } catch (error) {
     console.log(error);
