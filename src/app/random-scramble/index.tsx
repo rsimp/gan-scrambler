@@ -41,7 +41,7 @@ export function RandomScramble(props: RandomScrambleProps): JSX.Element {
         <Button
           variant="contained"
           size="large"
-          disabled={!Boolean(props.robotServer)}
+          disabled={!scramble || !Boolean(props.robotServer)}
           onClick={() => executeScramble(props.robotServer, scramble)}
         >
           <FormattedMessage id="scramble.actions.send" />
