@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import {
-  Button,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Select,
-  MenuItem,
-} from "@material-ui/core";
+import { Button, FormControl, Select, MenuItem } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
-import styled from "styled-components/macro";
 
 import { ApplicationState } from "app/common/store";
 
@@ -34,6 +25,7 @@ import {
   isF2LSolved,
   isCrossSolved,
 } from "app/common/cube/scramblers/solve-criteria";
+import { ButtonRow, ContentContainer } from "app/common/styled-components";
 
 interface CFOPScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;
@@ -58,8 +50,6 @@ const invertedColorMap: Record<string, string> = {
   B: "green",
   G: "gray",
 };
-
-type CFOPLevelType = "beginner" | "advanced";
 
 const crossFilter = {
   edges: [Edges.DB, Edges.DF, Edges.DR, Edges.DL],
@@ -92,166 +82,102 @@ const filters: Record<string, FaceletArrayFilter> = {
   oll: ollFilter,
 };
 
-const ContentContainer = styled.div.attrs({
-  className: "flex flex-col m-med children:mt-lg children:first:mt-0",
-})``;
-
-const ContentGroup = styled.div.attrs({
-  className:
-    "flex flex-col children:mt-sm children:first:mt-0 computer:items-start",
-})``;
-
 export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
-  const [cfopLevel, setCFOPLevel] = useState<CFOPLevelType>("beginner");
   const [cfopPhase, setCFOPPhase] = useState<CFOPPhaseType>("cross");
   const [scramble, setScramble] = useState<string>("");
 
+  const onSendBtnClick = () => {
+    let scramble: string | false;
+    switch (cfopPhase) {
+      case "cross":
+        setScramble(generateScramble(26, isCrossSolved));
+        break;
+      case "f2l":
+        // faster to do cross solve than scrambling all pieces but the cross
+        // and completing a full solve
+        while (true) {
+          scramble = generateScramble();
+          const solveCode = crossSolver(scramble);
+          if (solveCode) {
+            if (!isF2LSolved(doAlgorithm(solveCode))) {
+              setScramble(`${scramble} ${solveCode}`);
+              break;
+            }
+          }
+        }
+        break;
+      case "oll":
+        scramble = generateOLLScramble();
+        if (scramble) {
+          setScramble(scramble);
+        }
+        break;
+      case "firstLookOll":
+        scramble = generateFirstLookOLLScramble();
+        if (scramble) {
+          setScramble(scramble);
+        }
+        break;
+      case "secondLookOll":
+        scramble = generateSecondLookOLLScramble();
+        if (scramble) {
+          setScramble(scramble);
+        }
+        break;
+      case "pll":
+        scramble = generatePLLScramble();
+        if (scramble) {
+          setScramble(scramble);
+        }
+        break;
+      case "firstLookPll":
+        scramble = generateFirstLookPLLScramble();
+        if (scramble) {
+          setScramble(scramble);
+        }
+        break;
+      case "secondLookPll":
+        scramble = generateSecondLookPLLScramble();
+        if (scramble) {
+          setScramble(scramble);
+        }
+        break;
+    }
+  };
+
   return (
     <ContentContainer>
-      <ContentGroup>
-        <FormControl component="fieldset">
-          <Select
-            value={cfopLevel}
-            onChange={(e) => {
-              const level = e.target.value as CFOPLevelType;
-              if (level !== cfopLevel) {
-                setScramble("");
-              }
-              setCFOPLevel(level);
-              setCFOPPhase("cross");
-            }}
-          >
-            <MenuItem value="beginner">Beginner</MenuItem>
-            <MenuItem value="advanced">Advanced</MenuItem>
-          </Select>
-          <RadioGroup
-            row
-            aria-label="Scramble Type"
-            name="scrambleType"
-            value={cfopPhase}
-            onChange={(e) => {
-              if (e.currentTarget.value !== cfopPhase) {
-                setScramble("");
-              }
-              setCFOPPhase(e.currentTarget.value as CFOPPhaseType);
-            }}
-          >
-            {cfopLevel === "beginner" && (
-              <>
-                <FormControlLabel
-                  value="cross"
-                  control={<Radio />}
-                  label="Cross"
-                />
-                <FormControlLabel value="f2l" control={<Radio />} label="F2L" />
-                <FormControlLabel
-                  value="firstLookOll"
-                  control={<Radio />}
-                  label="First-look OLL"
-                />
-                <FormControlLabel
-                  value="secondLookOll"
-                  control={<Radio />}
-                  label="Second-look OLL"
-                />
-                <FormControlLabel
-                  value="firstLookPll"
-                  control={<Radio />}
-                  label="First-Look PLL"
-                />
-                <FormControlLabel
-                  value="secondLookPll"
-                  control={<Radio />}
-                  label="Second-Look PLL"
-                />
-              </>
-            )}
-            {cfopLevel === "advanced" && (
-              <>
-                <FormControlLabel
-                  value="cross"
-                  control={<Radio />}
-                  label="Cross"
-                />
-                <FormControlLabel value="f2l" control={<Radio />} label="F2L" />
-                <FormControlLabel value="oll" control={<Radio />} label="OLL" />
-                <FormControlLabel value="pll" control={<Radio />} label="PLL" />
-              </>
-            )}
-          </RadioGroup>
-        </FormControl>
-
-        <Button
-          variant="contained"
-          onClick={() => {
-            let scramble: string | false;
-            switch (cfopPhase) {
-              case "cross":
-                setScramble(generateScramble(26, isCrossSolved));
-                break;
-              case "f2l":
-                // faster to do cross solve than scrambling all pieces but the cross
-                // and completing a full solve
-                while (true) {
-                  scramble = generateScramble();
-                  const solveCode = crossSolver(scramble);
-                  if (solveCode) {
-                    if (!isF2LSolved(doAlgorithm(solveCode))) {
-                      setScramble(`${scramble} ${solveCode}`);
-                      break;
-                    }
-                  }
-                }
-                break;
-              case "oll":
-                scramble = generateOLLScramble();
-                if (scramble) {
-                  setScramble(scramble);
-                }
-                break;
-              case "firstLookOll":
-                scramble = generateFirstLookOLLScramble();
-                if (scramble) {
-                  setScramble(scramble);
-                }
-                break;
-              case "secondLookOll":
-                scramble = generateSecondLookOLLScramble();
-                if (scramble) {
-                  setScramble(scramble);
-                }
-                break;
-              case "pll":
-                scramble = generatePLLScramble();
-                if (scramble) {
-                  setScramble(scramble);
-                }
-                break;
-              case "firstLookPll":
-                scramble = generateFirstLookPLLScramble();
-                if (scramble) {
-                  setScramble(scramble);
-                }
-                break;
-              case "secondLookPll":
-                scramble = generateSecondLookPLLScramble();
-                if (scramble) {
-                  setScramble(scramble);
-                }
-                break;
+      <FormControl component="fieldset">
+        <Select
+          className="computer:w-96"
+          value={cfopPhase}
+          onChange={(e) => {
+            const phase = e.target.value as CFOPPhaseType;
+            if (phase !== cfopPhase) {
+              setScramble("");
             }
+            setCFOPPhase(phase);
           }}
         >
+          <MenuItem value="cross">Cross</MenuItem>
+          <MenuItem value="f2l">F2L</MenuItem>
+          <MenuItem value="firstLookOll">First look OLL</MenuItem>
+          <MenuItem value="secondLookOll">Second look OLL</MenuItem>
+          <MenuItem value="oll">Full OLL</MenuItem>
+          <MenuItem value="firstLookPll">First look PLL</MenuItem>
+          <MenuItem value="secondLookPll">Second look PLL</MenuItem>
+          <MenuItem value="pll">Full PLL</MenuItem>
+        </Select>
+      </FormControl>
+      <CubePreview
+        scrambleCode={scramble}
+        filter={filters[cfopPhase]}
+        colorMap={invertedColorMap}
+      />
+      <ButtonRow>
+        <Button variant="contained" onClick={onSendBtnClick}>
           <FormattedMessage id="scramble.actions.scramble" />
         </Button>
-      </ContentGroup>
-
-      <ContentGroup>
-        <CubePreview
-          scrambleCode={scramble}
-          filter={filters[cfopPhase]}
-          colorMap={invertedColorMap}
-        />
         <Button
           variant="contained"
           disabled={!Boolean(scramble) || !Boolean(props.robotServer)}
@@ -259,7 +185,7 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
         >
           <FormattedMessage id="scramble.actions.send" />
         </Button>
-      </ContentGroup>
+      </ButtonRow>
     </ContentContainer>
   );
 }

@@ -3,9 +3,8 @@ module.exports = {
   purge: [],
   theme: {
     screens: {
-      phone: "360px",
-      tablet: "768px",
-      computer: "1100px",
+      landscape: { raw: "(orientation: landscape) and (max-height: 600px)" },
+      computer: { raw: "(min-width: 600px) and (min-height: 600px)" },
     },
     colors: {
       primary: {
@@ -20,13 +19,14 @@ module.exports = {
         dk: "hsl(4, 90%, 35%)",
         txt: "hsl(0, 0%, 100%)",
       },
-      background: {
+      bg: {
         default: "hsl(0, 0%, 100%)",
-        txt: "hsl(0, 0%, 0%)",
+        txt: "hsla(0, 0%, 0%, 0.87)",
+        icon: "hsla(0, 0%, 0%, 0.54)",
       },
       surface: {
         default: "hsl(0, 0%, 100%)",
-        txt: "hsl(0, 0%, 0%)",
+        txt: "hsla(0, 0%, 0%, 0.87)",
       },
       error: {
         default: "hsl(349, 85%, 40%)",
@@ -37,12 +37,14 @@ module.exports = {
       spacing: {
         sm: "0.5rem",
         med: "1rem",
-        lg: "1.5rem",
+        lg: "2rem",
       },
     },
   },
   variants: {
     margin: ({ before }) => before(["children", "children-first", "DEFAULT"]),
+    flex: ({ before }) => before(["children", "DEFAULT"]),
+    width: ({ before }) => before(["children", "DEFAULT"]),
   },
   plugins: [require("tailwindcss-children")],
 };

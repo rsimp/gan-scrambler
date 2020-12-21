@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, Typography } from "@material-ui/core";
+import { Button, InputLabel, Input } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
-import styled from "styled-components/macro";
 
 import { ApplicationState } from "app/common/store";
 
@@ -11,25 +10,26 @@ import { getRobotServer } from "app/robot-widget/store/selectors";
 import { generateScramble } from "app/common/cube/scramblers/full";
 import { CubePreview } from "app/cube-preview";
 import { executeScramble } from "app/common/gan-robot";
+import { ButtonRow, ContentContainer } from "app/common/styled-components";
 
 interface RandomScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;
 }
 
-const ContentContainer = styled.div.attrs({
-  className: "flex flex-col m-med children:mt-lg children:first:mt-0",
-})``;
-
-const ContentGroup = styled.div.attrs({
-  className:
-    "flex flex-col children:mt-sm children:first:mt-0 computer:items-start",
-})``;
-
 export function RandomScramble(props: RandomScrambleProps): JSX.Element {
   const [scramble, setScramble] = useState<string>("");
   return (
     <ContentContainer>
-      <ContentGroup>
+      <div className="flex flex-col w-full">
+        <InputLabel htmlFor="scramble" className="text-xs">
+          Scramble
+        </InputLabel>
+        <Input id="scramble" value={scramble} readOnly multiline fullWidth />
+      </div>
+
+      <CubePreview scrambleCode={scramble} />
+
+      <ButtonRow>
         <Button
           variant="contained"
           onClick={() => {
@@ -38,11 +38,6 @@ export function RandomScramble(props: RandomScrambleProps): JSX.Element {
         >
           <FormattedMessage id="scramble.actions.scramble" />
         </Button>
-      </ContentGroup>
-
-      <ContentGroup>
-        <Typography variant="body1">{scramble}</Typography>
-        <CubePreview scrambleCode={scramble} />
         <Button
           variant="contained"
           size="large"
@@ -51,7 +46,7 @@ export function RandomScramble(props: RandomScrambleProps): JSX.Element {
         >
           <FormattedMessage id="scramble.actions.send" />
         </Button>
-      </ContentGroup>
+      </ButtonRow>
     </ContentContainer>
   );
 }

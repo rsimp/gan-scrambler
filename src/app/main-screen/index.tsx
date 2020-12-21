@@ -23,8 +23,21 @@ import { ConnectedManualScramble } from "app/manual-scramble";
 
 const Screen = styled.div.attrs({ className: "flex flex-col h-screen" })``;
 
+const MenuItemContent = styled.div.attrs({
+  className: "computer:flex hidden flex-row items-center",
+})``;
+
+const CompactMenuItemContent = styled.div.attrs({
+  className:
+    "hidden landscape:inline-flex flex-col items-center justify-center text-bg-txt w-full",
+})``;
+
 const IconContainer = styled.div.attrs({
   className: "flex flex-row ml-auto",
+})``;
+
+const IconWrapper = styled.div.attrs({
+  className: "text-bg-icon",
 })``;
 
 export function MainScreen(): JSX.Element {
@@ -37,7 +50,6 @@ export function MainScreen(): JSX.Element {
   };
 
   useEffect(() => {
-    window.screen.orientation.lock("portrait");
     fiveSideSearch.initialize();
   }, []);
 
@@ -55,7 +67,7 @@ export function MainScreen(): JSX.Element {
       </AppBar>
 
       <div className="flex flex-row h-full w-full">
-        <Paper className="w-48 hidden computer:block">
+        <Paper className="hidden landscape:block computer:block w-24 computer:w-48">
           <List>
             <ListItem
               button
@@ -63,10 +75,19 @@ export function MainScreen(): JSX.Element {
               selected={navigationValue === "random"}
               onClick={() => setNavigation("random")}
             >
-              <ListItemIcon>
-                <Shuffle />
-              </ListItemIcon>
-              <ListItemText primary="RANDOM" />
+              <MenuItemContent>
+                <ListItemIcon>
+                  <Shuffle />
+                </ListItemIcon>
+                <ListItemText primary="RANDOM" />
+              </MenuItemContent>
+
+              <CompactMenuItemContent>
+                <IconWrapper>
+                  <Shuffle />
+                </IconWrapper>
+                <span>RANDOM</span>
+              </CompactMenuItemContent>
             </ListItem>
 
             <ListItem
@@ -75,10 +96,19 @@ export function MainScreen(): JSX.Element {
               selected={navigationValue === "cfop"}
               onClick={() => setNavigation("cfop")}
             >
-              <ListItemIcon>
-                <Layers />
-              </ListItemIcon>
-              <ListItemText primary="CFOP" />
+              <MenuItemContent>
+                <ListItemIcon>
+                  <Layers />
+                </ListItemIcon>
+                <ListItemText primary="CFOP" />
+              </MenuItemContent>
+
+              <CompactMenuItemContent>
+                <IconWrapper>
+                  <Layers />
+                </IconWrapper>
+                <span>CFOP</span>
+              </CompactMenuItemContent>
             </ListItem>
 
             <ListItem
@@ -87,10 +117,19 @@ export function MainScreen(): JSX.Element {
               selected={navigationValue === "manual"}
               onClick={() => setNavigation("manual")}
             >
-              <ListItemIcon>
-                <Edit />
-              </ListItemIcon>
-              <ListItemText primary="MANUAL" />
+              <MenuItemContent>
+                <ListItemIcon>
+                  <Edit />
+                </ListItemIcon>
+                <ListItemText primary="MANUAL" />
+              </MenuItemContent>
+
+              <CompactMenuItemContent>
+                <IconWrapper>
+                  <Edit />
+                </IconWrapper>
+                <span>MANUAL</span>
+              </CompactMenuItemContent>
             </ListItem>
           </List>
         </Paper>
@@ -100,7 +139,7 @@ export function MainScreen(): JSX.Element {
           {navigationValue === "cfop" && <ConnectedCFOPScramble />}
           {navigationValue === "manual" && <ConnectedManualScramble />}
 
-          <div className="computer:hidden w-full mt-auto">
+          <div className="landscape:hidden computer:hidden w-full mt-auto">
             <BottomNavigation
               showLabels
               value={navigationValue}

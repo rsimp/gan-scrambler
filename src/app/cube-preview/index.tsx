@@ -23,7 +23,7 @@ export function CubePreview(props: CubePreviewProps): JSX.Element {
 
   return (
     <div
-      className="computer:w-96 computer:self-start phone:w-3/4 phone:self-center"
+      className="computer:w-96 landscape:w-1/3 computer:self-start w-80 self-center"
       dangerouslySetInnerHTML={{ __html: svgString }}
     ></div>
   );
