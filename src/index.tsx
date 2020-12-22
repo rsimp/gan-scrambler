@@ -11,6 +11,12 @@ import { importAll } from "app/common/webpack";
 
 import * as serviceWorker from "./serviceWorker";
 
+// import fonts
+import "fontsource-roboto/300.css";
+import "fontsource-roboto/400.css";
+import "fontsource-roboto/500.css";
+import "fontsource-roboto/700.css";
+
 // execute any init scripts
 importAll(require.context("./", true, /\/on-startup\.(ts|tsx)$/));
 
