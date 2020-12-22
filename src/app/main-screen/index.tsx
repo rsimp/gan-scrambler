@@ -15,7 +15,7 @@ import { Shuffle, Layers, Edit } from "@material-ui/icons";
 import { FormattedMessage } from "react-intl";
 import styled from "styled-components/macro";
 
-import { ConnectedRobotWidget } from "app/robot-widget";
+import { ConnectedRobotWidget } from "app/robot/widget";
 import { ConnectedCFOPScramble } from "app/cfop-scramble";
 import { fiveSideSearch } from "app/common/cube/solvers/five-side-solver";
 import { ConnectedRandomScramble } from "app/random-scramble";

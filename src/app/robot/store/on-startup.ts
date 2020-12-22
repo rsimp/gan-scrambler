@@ -1,7 +1,7 @@
 import { registerReducer } from "app/common/store";
 
-import { RobotState } from "app/robot-widget/store/types";
-import reducer from "app/robot-widget/store/reducer";
+import { RobotState } from "app/robot/store/types";
+import reducer from "app/robot/store/reducer";
 
 declare module "app/common/store" {
   interface ApplicationState {

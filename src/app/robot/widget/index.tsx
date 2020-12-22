@@ -5,9 +5,9 @@ import { BluetoothConnected, Bluetooth } from "@material-ui/icons";
 
 import { ApplicationState } from "app/common/store";
 
-import { unregisterRobot, registerRobot } from "app/robot-widget/store/actions";
-import { getRobotDevice } from "app/robot-widget/store/selectors";
-import { RobotState } from "app/robot-widget/store/types";
+import { unregisterRobot, registerRobot } from "app/robot/store/actions";
+import { getRobotDevice } from "app/robot/store/selectors";
+import { RobotState } from "app/robot/store/types";
 
 const DEVICE_INFO_SERVICE_UUID = 0x180a;
 const MODEL_NUMBER_SERVICE_UUID = 0x2a24;

@@ -5,7 +5,7 @@ import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "app/common/store";
 
-import { getRobotServer } from "app/robot-widget/store/selectors";
+import { getRobotServer } from "app/robot/store/selectors";
 
 import { fiveSideSolver } from "app/common/cube/solvers/five-side-solver";
 import { CubePreview } from "app/cube-preview";

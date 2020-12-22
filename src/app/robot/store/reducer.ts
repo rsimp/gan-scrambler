@@ -1,6 +1,6 @@
 import { createReducer, combineReducers } from "@reduxjs/toolkit";
-import { registerRobot, unregisterRobot } from "app/robot-widget/store/actions";
-import { RobotState } from "app/robot-widget/store/types";
+import { registerRobot, unregisterRobot } from "app/robot/store/actions";
+import { RobotState } from "app/robot/store/types";
 import { payloadReducer, valueReducer } from "app/common/store-reducers";
 
 export default combineReducers<RobotState>({
