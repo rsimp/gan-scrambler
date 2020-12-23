@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/gan-scrambler/static/css/main.7c4d5be6.chunk.css",
-    "main.js": "/gan-scrambler/static/js/main.52174587.chunk.js",
-    "main.js.map": "/gan-scrambler/static/js/main.52174587.chunk.js.map",
+    "main.js": "/gan-scrambler/static/js/main.df295d8e.chunk.js",
+    "main.js.map": "/gan-scrambler/static/js/main.df295d8e.chunk.js.map",
     "runtime-main.js": "/gan-scrambler/static/js/runtime-main.6baab05e.js",
     "runtime-main.js.map": "/gan-scrambler/static/js/runtime-main.6baab05e.js.map",
     "static/css/2.a7ce03c5.chunk.css": "/gan-scrambler/static/css/2.a7ce03c5.chunk.css",
@@ -24,6 +24,6 @@
     "static/css/2.a7ce03c5.chunk.css",
     "static/js/2.68d9d49e.chunk.js",
     "static/css/main.7c4d5be6.chunk.css",
-    "static/js/main.52174587.chunk.js"
+    "static/js/main.df295d8e.chunk.js"
   ]
 }
