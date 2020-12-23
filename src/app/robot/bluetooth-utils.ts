@@ -123,12 +123,11 @@ export const connectToKnownGANRobots = (): Promise<BluetoothDevice> => {
     const devices = await experimentalBluetooth.getDevices();
     for (const device of devices) {
       const abortController = new AbortController();
-      console.log("trying to connect to device " + device.name);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (device as any).addEventListener(
         "advertisementreceived",
         async () => {
           abortController.abort();
-          console.log("connecting to " + device.name);
           await connectToGANRobot(device);
           resolve(device);
         },
