@@ -18,7 +18,7 @@ import {
 } from "app/common/cube/scramblers/cfop";
 import { crossSolver } from "app/common/cube/solvers/cross-solver";
 import { CubePreview } from "app/cube-preview";
-import { executeScramble } from "app/common/gan-robot";
+import { executeScramble } from "app/robot/bluetooth-utils";
 import { doAlgorithm, Edges, Corners } from "app/common/cube/libs/cube";
 import { FaceletArrayFilter } from "app/common/cube/libs/cube-preview";
 import {

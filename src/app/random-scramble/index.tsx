@@ -9,7 +9,7 @@ import { getRobotServer } from "app/robot/store/selectors";
 
 import { generateScramble } from "app/common/cube/scramblers/full";
 import { CubePreview } from "app/cube-preview";
-import { executeScramble } from "app/common/gan-robot";
+import { executeScramble } from "app/robot/bluetooth-utils";
 import { ButtonRow, ContentContainer } from "app/common/styled-components";
 
 interface RandomScrambleProps {

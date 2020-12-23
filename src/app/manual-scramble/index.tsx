@@ -13,7 +13,7 @@ import {
   validateAlgorithm,
   invertAlgorithm,
 } from "app/common/cube/libs/algorithms";
-import { executeScramble } from "app/common/gan-robot";
+import { executeScramble } from "app/robot/bluetooth-utils";
 import { ButtonRow, ContentContainer } from "app/common/styled-components";
 
 interface ManualScrambleProps {
