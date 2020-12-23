@@ -44,7 +44,12 @@
     "tailwind.macro": "^0.5.10",
     "tailwindcss": "^2.0.1",
     "tailwindcss-children": "^2.1.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "workbox-core": "^6.0.2",
+    "workbox-expiration": "^6.0.2",
+    "workbox-precaching": "^6.0.2",
+    "workbox-routing": "^6.0.2",
+    "workbox-strategies": "^6.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
