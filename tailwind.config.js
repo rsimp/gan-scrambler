@@ -3,7 +3,7 @@ module.exports = {
   purge: [],
   theme: {
     screens: {
-      landscape: { raw: "(orientation: landscape) and (max-height: 600px)" },
+      landscape: { raw: "(min-width: 600px) and (max-height: 600px)" },
       computer: { raw: "(min-width: 600px) and (min-height: 600px)" },
     },
     colors: {

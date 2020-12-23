@@ -53,12 +53,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm run build-css && react-scripts build",
+    "build": "npm run buildcss && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "build-css": "postcss src/tailwind.css -o src/assets/styles/main.css"
+    "buildcss": "postcss src/tailwind.css -o src/assets/styles/main.css"
   },
   "eslintConfig": {
     "extends": "react-app"
