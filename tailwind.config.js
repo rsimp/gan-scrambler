@@ -9,27 +9,27 @@ module.exports = {
     colors: {
       primary: {
         lt: "hsl(231, 50%, 65%)",
-        default: "hsl(231, 50%, 50%)",
+        DEFAULT: "hsl(231, 50%, 50%)",
         dk: "hsl(231, 50%, 35%)",
         txt: "hsl(0, 0%, 100%)",
       },
       secondary: {
         lt: "hsl(4, 90%, 65%)",
-        default: "hsl(4, 90%, 50%)",
+        DEFAULT: "hsl(4, 90%, 50%)",
         dk: "hsl(4, 90%, 35%)",
         txt: "hsl(0, 0%, 100%)",
       },
       bg: {
-        default: "hsl(0, 0%, 100%)",
+        DEFAULT: "hsl(0, 0%, 100%)",
         txt: "hsla(0, 0%, 0%, 0.87)",
         icon: "hsla(0, 0%, 0%, 0.54)",
       },
       surface: {
-        default: "hsl(0, 0%, 100%)",
+        DEFAULT: "hsl(0, 0%, 100%)",
         txt: "hsla(0, 0%, 0%, 0.87)",
       },
       error: {
-        default: "hsl(349, 85%, 40%)",
+        DEFAULT: "hsl(349, 85%, 40%)",
         txt: "hsl(0, 0%, 100%)",
       },
     },
