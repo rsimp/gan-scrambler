@@ -81,7 +81,9 @@ export const requestBluetoothDevice = async (): Promise<BluetoothDevice> => {
   return device;
 };
 
-const connectToGANRobot = async (device: BluetoothDevice): Promise<void> => {
+const connectToGANRobot = async (
+  device: ExperimentalBluetoothDevice
+): Promise<void> => {
   const server = await device.gatt?.connect();
   if (!server) {
     throw new Error("Could not connect to Bluetooth Server");
@@ -99,8 +101,14 @@ const connectToGANRobot = async (device: BluetoothDevice): Promise<void> => {
   }
 };
 
-interface ExperimentalBluetoothDevice extends BluetoothDevice {
+interface ExperimentalBluetoothDevice
+  extends Omit<BluetoothDevice, "addEventListener"> {
   watchAdvertisements: (options?: { signal: AbortSignal }) => Promise<void>;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    useCapture?: boolean | { once: boolean }
+  ): void;
 }
 
 interface ExperimentalBluetooth extends Bluetooth {
@@ -114,7 +122,9 @@ export class ExperimentalFeatureNotSupported extends Error {
   }
 }
 
-export const connectToKnownGANRobots = (): Promise<BluetoothDevice> => {
+export const connectToKnownGANRobots = (): Promise<
+  ExperimentalBluetoothDevice
+> => {
   return new Promise(async (resolve) => {
     const experimentalBluetooth = navigator.bluetooth as ExperimentalBluetooth;
     if (!experimentalBluetooth.getDevices) {
@@ -123,8 +133,7 @@ export const connectToKnownGANRobots = (): Promise<BluetoothDevice> => {
     const devices = await experimentalBluetooth.getDevices();
     for (const device of devices) {
       const abortController = new AbortController();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (device as any).addEventListener(
+      device.addEventListener(
         "advertisementreceived",
         async () => {
           abortController.abort();
