@@ -30,5 +30,27 @@ const messageMap = Object.keys(translations).reduce((acc, filepath) => {
   return acc;
 }, {} as Record<string, Record<string, string>>);
 
-export const locale = navigator.language;
-export const messages = messageMap[locale.toLowerCase()];
+const setLanguageDefault = (languageCode: string, preferredLocale: string) => {
+  const languageMessages = Object.keys(messageMap).filter((locale) =>
+    locale.toLocaleLowerCase().startsWith(languageCode)
+  );
+  if (languageMessages.length > 0 && !messageMap[languageCode]) {
+    if (languageMessages.includes(preferredLocale)) {
+      messageMap[languageCode] = messageMap[preferredLocale];
+    } else {
+      messageMap[languageCode] = messageMap[languageMessages[0]];
+    }
+  }
+};
+
+setLanguageDefault("en", "en-us");
+setLanguageDefault("es", "es-mx");
+
+let locale = navigator.language;
+let messages = messageMap[locale.toLowerCase()];
+if (!messages) {
+  locale = "en-US";
+  messages = messageMap[locale.toLowerCase()];
+}
+
+export { locale, messages };
