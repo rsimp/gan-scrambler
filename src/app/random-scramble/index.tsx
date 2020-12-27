@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, InputLabel, Input } from "@material-ui/core";
+import { Button, InputLabel, OutlinedInput } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "app/common/store";
@@ -24,7 +24,14 @@ export function RandomScramble(props: RandomScrambleProps): JSX.Element {
         <InputLabel htmlFor="scramble" className="text-xs">
           Scramble
         </InputLabel>
-        <Input id="scramble" value={scramble} readOnly multiline fullWidth />
+        <OutlinedInput
+          id="scramble"
+          value={scramble}
+          className="text-surface-txt children:cursor-text"
+          multiline
+          fullWidth
+          disabled
+        />
       </div>
 
       <CubePreview scrambleCode={scramble} />

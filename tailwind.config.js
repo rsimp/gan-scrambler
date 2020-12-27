@@ -1,4 +1,5 @@
 module.exports = {
+  important: "#root",
   future: {},
   purge: [],
   theme: {
@@ -45,6 +46,7 @@ module.exports = {
     margin: ({ before }) => before(["children", "children-first", "DEFAULT"]),
     flex: ({ before }) => before(["children", "DEFAULT"]),
     width: ({ before }) => before(["children", "DEFAULT"]),
+    cursor: ({ before }) => before(["children", "DEFAULT"]),
   },
   plugins: [require("tailwindcss-children")],
 };
