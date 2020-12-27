@@ -6,7 +6,7 @@ import {
 
 import { getRandomInt, factorial } from "app/common/cube/libs/tools";
 
-import { identity, CubeIndexes } from "app/common/cube/libs/cube";
+import { CubeIndexes } from "app/common/cube/libs/cube";
 
 import {
   solveCube,
@@ -80,11 +80,9 @@ export const getScrambleForPieces = (
   orientLastLayer = false
 ): string | false => {
   let scrambleState;
-  const center = identity.center;
 
   do {
     scrambleState = {
-      center,
       ep: getPermutationFromEnabled(scrambleEdges, 12),
       eo: getEdgeOrientation(scrambleEdges, orientLastLayer),
       cp: getPermutationFromEnabled(scrambleCorners, 8),
@@ -95,6 +93,9 @@ export const getScrambleForPieces = (
     isScrambleSolved(scrambleState)
   );
 
+  // The first solve gets a set of moves to solve the current cube state
+  // We resolve the cube because this set of moves will contain U turns the
+  // robot isn't capable of. The resolve won't use U turns
   const solution = solveCube(scrambleState);
   if (solution) {
     return fiveSideSolver(solution);

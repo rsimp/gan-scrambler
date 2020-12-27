@@ -1,13 +1,4 @@
-import {
-  CubeIndexes,
-  Centers,
-  Edges,
-  Corners,
-  identity,
-  doEdgeMove,
-  doCornerMove,
-  doCenterMove,
-} from "./cube";
+import { CubeIndexes } from "./cube";
 
 const centerFacelets = ["U", "R", "F", "D", "L", "B"];
 
@@ -36,34 +27,6 @@ const edgeFacelets = [
   ["B5", "L3"],
   ["B3", "R5"],
 ];
-
-const { F, R, U, B, L, D } = Centers;
-const { UR, UF, UL, UB, DR, DF, DL, DB, FR, FL, BL, BR } = Edges;
-const { URF, UFL, ULB, UBR, DFR, DLF, DBL, DBR } = Corners;
-
-export const rotations: Record<string, CubeIndexes> = {
-  x: {
-    center: [F, 1, D, B, 4, U],
-    cp: [DFR, DLF, UFL, URF, DBR, DBL, ULB, UBR],
-    co: [2, 1, 2, 1, 1, 2, 1, 2],
-    ep: [FR, DF, FL, UF, BR, DB, BL, UB, DR, DL, UL, UR],
-    eo: [0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0],
-  },
-  y: {
-    center: [0, B, R, 3, F, L],
-    cp: [UBR, URF, UFL, ULB, DBR, DFR, DLF, DBL],
-    co: identity.co,
-    ep: [3, 0, 1, 2, 7, 4, 5, 6, 11, 8, 9, 10],
-    eo: [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-  },
-  z: {
-    center: [L, U, 2, R, D, 5],
-    cp: [UFL, DLF, DBL, ULB, URF, DFR, DBR, UBR],
-    co: [1, 2, 1, 2, 2, 1, 2, 1],
-    ep: [UL, FL, DF, BL, UR, FR, DR, BR, UF, DL, DB, UB],
-    eo: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  },
-};
 
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 
@@ -96,7 +59,6 @@ export interface FaceletArrayFilter {
 
 export interface FaceletArrayOptions {
   filter?: FaceletArrayFilter;
-  rotations?: string;
 }
 
 export const getFaceletArray = (
@@ -105,13 +67,9 @@ export const getFaceletArray = (
 ): string[] => {
   const facelets: string[] = [];
 
-  if (options.rotations) {
-    cube = doRotations(cube, options.rotations);
-  }
-
   // add center facelets to array
   centerFacelets.forEach((facelet, centerIndex) => {
-    facelets[9 * cube.center[centerIndex] + 4] = facelet;
+    facelets[9 * centerIndex + 4] = facelet;
   });
 
   // add corner cubie facelets
@@ -145,32 +103,4 @@ export const getFaceletArray = (
   });
 
   return facelets;
-};
-
-const powers: Record<string, number> = {
-  "": 1,
-  2: 2,
-  "'": 3,
-};
-
-export const doRotations = (
-  cube: CubeIndexes,
-  rotationAlg: string
-): CubeIndexes => {
-  return rotationAlg
-    .split(" ")
-    .map((rotation: string) => ({
-      move: rotations[rotation.charAt(0)],
-      pow: powers[rotation.charAt(1)],
-    }))
-    .reduce((newCube, { move, pow }) => {
-      for (let i = 0; i < pow; i++) {
-        newCube = {
-          center: doCenterMove(newCube.center, move),
-          ...doEdgeMove(newCube, move),
-          ...doCornerMove(newCube, move),
-        };
-      }
-      return newCube;
-    }, cube);
 };

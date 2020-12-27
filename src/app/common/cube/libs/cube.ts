@@ -35,12 +35,10 @@ export const Corners = {
   DBR: 7,
 };
 
-const { F, R, U, B, L, D } = Centers;
 const { UR, UF, UL, UB, DR, DF, DL, DB, FR, FL, BL, BR } = Edges;
 const { URF, UFL, ULB, UBR, DFR, DLF, DBL, DBR } = Corners;
 
 export interface CubeIndexes {
-  center: number[];
   ep: number[];
   eo: number[];
   cp: number[];
@@ -49,7 +47,6 @@ export interface CubeIndexes {
 
 // The identity cube.
 export const identity: CubeIndexes = {
-  center: [0, 1, 2, 3, 4, 5],
   ep: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   eo: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   cp: [0, 1, 2, 3, 4, 5, 6, 7],
@@ -59,7 +56,6 @@ export const identity: CubeIndexes = {
 export const moves = [
   // F
   {
-    center: identity.center,
     cp: [UFL, DLF, 2, 3, URF, DFR, 6, 7],
     co: [1, 2, 0, 0, 2, 1, 0, 0],
     ep: [0, FL, 2, 3, 4, FR, 6, 7, UF, DF, 10, 11],
@@ -68,7 +64,6 @@ export const moves = [
 
   // R
   {
-    center: identity.center,
     cp: [DFR, 1, 2, URF, DBR, 5, 6, UBR],
     co: [2, 0, 0, 1, 1, 0, 0, 2],
     ep: [FR, 1, 2, 3, BR, 5, 6, 7, DR, 9, 10, UR],
@@ -77,7 +72,6 @@ export const moves = [
 
   // U
   {
-    center: identity.center,
     cp: [UBR, URF, UFL, ULB, 4, 5, 6, 7],
     co: identity.co,
     ep: [UB, UR, UF, UL, 4, 5, 6, 7, 8, 9, 10, 11],
@@ -86,7 +80,6 @@ export const moves = [
 
   // B
   {
-    center: identity.center,
     cp: [0, 1, UBR, DBR, 4, 5, ULB, DBL],
     co: [0, 0, 1, 2, 0, 0, 2, 1],
     ep: [0, 1, 2, BR, 4, 5, 6, BL, 8, 9, UB, DB],
@@ -95,7 +88,6 @@ export const moves = [
 
   // L
   {
-    center: identity.center,
     cp: [0, ULB, DBL, 3, 4, UFL, DLF, 7],
     co: [0, 1, 2, 0, 0, 2, 1, 0],
     ep: [0, 1, BL, 3, 4, 5, FL, 7, 8, UL, DL, 11],
@@ -104,38 +96,10 @@ export const moves = [
 
   // D
   {
-    center: identity.center,
     cp: [0, 1, 2, 3, DLF, DBL, DBR, DFR],
     co: identity.co,
     ep: [0, 1, 2, 3, DF, DL, DB, DR, 8, 9, 10, 11],
     eo: identity.eo,
-  },
-
-  // E
-  {
-    center: [0, F, L, 3, B, R],
-    cp: identity.cp,
-    co: identity.co,
-    ep: [0, 1, 2, 3, 4, 5, 6, 7, FL, BL, BR, FR],
-    eo: [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-  },
-
-  // M
-  {
-    center: [B, 1, U, F, 4, D],
-    cp: identity.cp,
-    co: identity.co,
-    ep: [0, UB, 2, DB, 4, UF, 6, DF, 8, 9, 10, 11],
-    eo: [0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0],
-  },
-
-  // S
-  {
-    center: [L, U, 2, R, D, 5],
-    cp: identity.cp,
-    co: identity.co,
-    ep: [UL, 1, DL, 3, UR, 5, DR, 7, 8, 9, 10, 11],
-    eo: [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0],
   },
 ];
 
@@ -191,14 +155,6 @@ export const moveHelper = <T>(
   return cube;
 };
 
-export const doCenterMove = (center: number[], move: CubeIndexes): number[] =>
-  move.center === identity.center
-    ? move.center
-    : move.center.reduce((newCenter, fromIndex, toIndex) => {
-        newCenter[toIndex] = center[fromIndex];
-        return newCenter;
-      }, new Array(6));
-
 export const doEdgeMove = (
   cube: Pick<CubeIndexes, "eo" | "ep">,
   move: CubeIndexes
@@ -235,7 +191,6 @@ export const doMove = (cube: CubeIndexes, moveIndex: number): CubeIndexes => {
   return {
     ...moveHelper(cube, moveIndex, doCornerMove),
     ...moveHelper(cube, moveIndex, doEdgeMove),
-    center: moveHelper(cube.center, moveIndex, doCenterMove),
   };
 };
 
