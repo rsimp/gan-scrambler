@@ -1,7 +1,8 @@
 import { chunkReducer } from "app/common/array-reducers";
 
-const SCRAMBLE_SERVICE_UUID = 0xfff0;
+const PRIMARY_SERVICE_UUID = 0xfff0;
 const SCRAMBLE_CHARACTERISTIC_UUID = 0xfff3;
+const ROBOT_STATUS_CHARACTERISTIC_UUID = 0xfff2;
 
 const DEVICE_INFO_SERVICE_UUID = 0x180a;
 const MODEL_NUMBER_SERVICE_UUID = 0x2a24;
@@ -41,28 +42,50 @@ export const executeScramble = async (
 ): Promise<void> => {
   try {
     if (robotServer) {
-      const scrambleService = await robotServer.getPrimaryService(
-        SCRAMBLE_SERVICE_UUID
-      );
-      const scrambleExecuteCharacteristic = await scrambleService.getCharacteristic(
-        SCRAMBLE_CHARACTERISTIC_UUID
-      );
-
-      const chunkedValues = getGANEncoding(scramble);
-      console.log(chunkedValues);
-      await scrambleExecuteCharacteristic.writeValue(chunkedValues[0]);
-      if (chunkedValues[1]) {
-        // FIXME this is a dirty hack, really we need to be polling robot
-        // every 50 ms to see if the last chunk has finished
-        setTimeout(
-          () => scrambleExecuteCharacteristic.writeValue(chunkedValues[1]),
-          5000
-        );
+      for (const scrambleChunk of getGANEncoding(scramble)) {
+        await executeChunk(robotServer, scrambleChunk);
       }
     }
   } catch (error) {
     console.log(error);
   }
+};
+
+const executeChunk = (
+  robotServer: BluetoothRemoteGATTServer,
+  chunk: Uint8Array
+): Promise<void> => {
+  return new Promise(async (resolve) => {
+    const primaryService = await robotServer.getPrimaryService(
+      PRIMARY_SERVICE_UUID
+    );
+    const scrambleExecuteCharacteristic = await primaryService.getCharacteristic(
+      SCRAMBLE_CHARACTERISTIC_UUID
+    );
+    await scrambleExecuteCharacteristic.writeValue(chunk);
+    const statusCharacteristic = await primaryService.getCharacteristic(
+      ROBOT_STATUS_CHARACTERISTIC_UUID
+    );
+
+    const waitUntilSequenceFinished = async (hasHadNonZeroValue = false) => {
+      setTimeout(async () => {
+        const robotStatus = (await statusCharacteristic.readValue()).getUint8(
+          0
+        );
+        if (hasHadNonZeroValue && robotStatus === 0) {
+          resolve();
+          return;
+        }
+
+        if (!hasHadNonZeroValue && robotStatus !== 0) {
+          hasHadNonZeroValue = true;
+        }
+
+        waitUntilSequenceFinished(hasHadNonZeroValue);
+      }, 10);
+    };
+    waitUntilSequenceFinished(false);
+  });
 };
 
 export class GANDeviceTypeError extends Error {
@@ -75,7 +98,7 @@ export class GANDeviceTypeError extends Error {
 export const requestBluetoothDevice = async (): Promise<BluetoothDevice> => {
   const device = await navigator.bluetooth.requestDevice({
     filters: [{ namePrefix: "GAN-" }],
-    optionalServices: [SCRAMBLE_SERVICE_UUID, DEVICE_INFO_SERVICE_UUID],
+    optionalServices: [PRIMARY_SERVICE_UUID, DEVICE_INFO_SERVICE_UUID],
   });
   await connectToGANRobot(device);
   return device;
