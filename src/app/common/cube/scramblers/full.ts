@@ -9,7 +9,7 @@ const cubeFaces = ["D", "L", "B", "U", "R", "F"];
 const moveModifiers = ["", "2", "'"];
 
 export function generateScramble(
-  total = 26,
+  total = 24,
   isSolved: (state: CubeIndexes) => boolean = isTopCrossSolved
 ): string {
   return scramble(total, isSolved).join(" ");

@@ -27,7 +27,7 @@ export function RandomScramble(props: RandomScrambleProps): JSX.Element {
         <OutlinedInput
           id="scramble"
           value={scramble}
-          className="text-surface-txt children:cursor-text"
+          className="text-surface-txt py-4 children:cursor-text"
           multiline
           fullWidth
           disabled
