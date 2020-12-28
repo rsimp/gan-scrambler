@@ -12,7 +12,7 @@ import { clientsClaim } from "workbox-core";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate, NetworkFirst } from "workbox-strategies";
+import { StaleWhileRevalidate } from "workbox-strategies";
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -27,7 +27,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 registerRoute(
   ({ url }) =>
     url.pathname.startsWith("/") || url.pathname.startsWith("/index.html"),
-  new NetworkFirst()
+  new StaleWhileRevalidate({})
 );
 
 // An example runtime caching route for requests that aren't handled by the
