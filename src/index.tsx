@@ -8,6 +8,8 @@ import { MainScreen } from "app/main-screen";
 import { createStore } from "app/common/store";
 import { messages, locale } from "translations";
 import { importAll } from "app/common/webpack";
+import { SnackbarProvider } from "notistack";
+import { RegisterServices } from "app/services";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -30,14 +32,15 @@ ReactDOM.render(
   <Provider store={store}>
     <IntlProvider locale={locale} messages={messages}>
       <StylesProvider injectFirst>
-        <MainScreen />
+        <SnackbarProvider>
+          <MainScreen />
+          <RegisterServices />
+        </SnackbarProvider>
       </StylesProvider>
     </IntlProvider>
   </Provider>,
   document.getElementById("root")
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+//register service worker
 serviceWorker.register();
