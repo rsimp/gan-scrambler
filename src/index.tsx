@@ -3,12 +3,15 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { IntlProvider } from "react-intl";
 import { StylesProvider } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
+import { SnackbarProvider } from "notistack";
+import { messages, locale } from "translations";
 
+import { watchSnackbarActions } from "app/common/snackbar/sagas";
 import { MainScreen } from "app/main-screen";
 import { createStore } from "app/common/store";
-import { messages, locale } from "translations";
+
 import { importAll } from "app/common/webpack";
-import { SnackbarProvider } from "notistack";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -18,27 +21,41 @@ import "fontsource-roboto/400.css";
 import "fontsource-roboto/500.css";
 import "fontsource-roboto/700.css";
 
-// execute any init scripts
-importAll(require.context("./", true, /\/on-startup\.(ts|tsx)$/));
-
-// include all global stylesheets
+// inject any css files
 importAll(require.context("./", true, /\.css$/));
 
-// create store
-const store = createStore();
+// import store init scripts
+importAll(require.context("./", true, /\/init-store\.(ts|tsx)$/));
 
-ReactDOM.render(
-  <Provider store={store}>
-    <IntlProvider locale={locale} messages={messages}>
-      <StylesProvider injectFirst>
-        <SnackbarProvider>
-          <MainScreen />
-        </SnackbarProvider>
-      </StylesProvider>
-    </IntlProvider>
-  </Provider>,
-  document.getElementById("root")
-);
+function renderApp() {
+  const snackbar = React.createRef<SnackbarProvider>();
+  const store = createStore();
+  store.runSaga(watchSnackbarActions, snackbar);
+
+  const onClickDismiss = (key: React.ReactText) => () => {
+    snackbar.current?.closeSnackbar(key);
+  };
+  ReactDOM.render(
+    <Provider store={store}>
+      <IntlProvider locale={locale} messages={messages}>
+        <StylesProvider injectFirst>
+          <SnackbarProvider
+            ref={snackbar}
+            action={(key) => (
+              <Button color="inherit" onClick={onClickDismiss(key)}>
+                Dismiss
+              </Button>
+            )}
+          >
+            <MainScreen />
+          </SnackbarProvider>
+        </StylesProvider>
+      </IntlProvider>
+    </Provider>,
+    document.getElementById("root")
+  );
+}
+renderApp();
 
 //register service worker
 serviceWorker.register();

@@ -16,16 +16,12 @@ import { FormattedMessage } from "react-intl";
 import styled from "styled-components/macro";
 import { useDispatch } from "react-redux";
 
-import { ConnectedRobotWidget } from "app/robot/widget";
+import { RobotWidget } from "app/robot/widget";
 import { ConnectedCFOPScramble } from "app/cfop-scramble";
 import { fiveSideSearch } from "app/common/cube/solvers/five-side-solver";
 import { ConnectedRandomScramble } from "app/random-scramble";
 import { ConnectedManualScramble } from "app/manual-scramble";
-import {
-  connectToKnownGANRobots,
-  ExperimentalFeatureNotSupported,
-} from "app/robot/bluetooth-utils";
-import { registerRobot, unregisterRobot } from "app/robot/store/actions";
+import { appInitialized } from "app/main-screen/store/actions";
 
 const Screen = styled.div.attrs({ className: "flex flex-col h-screen" })``;
 
@@ -49,28 +45,13 @@ const IconWrapper = styled.div.attrs({
 export const MainScreen = (): JSX.Element => {
   const [navigationValue, setNavigation] = React.useState("random");
   const dispatch = useDispatch();
-  const handleChange = (
-    event: React.ChangeEvent<unknown>,
-    newValue: string
-  ) => {
+  const handleChange = (_: React.ChangeEvent<unknown>, newValue: string) => {
     setNavigation(newValue);
   };
 
   useEffect(() => {
     fiveSideSearch.initialize();
-    (async () => {
-      try {
-        const device = await connectToKnownGANRobots();
-        dispatch(registerRobot(device));
-        device.addEventListener("gattserverdisconnected", () => {
-          dispatch(unregisterRobot());
-        });
-      } catch (e) {
-        if (!(e instanceof ExperimentalFeatureNotSupported)) {
-          console.error(e);
-        }
-      }
-    })();
+    dispatch(appInitialized());
   }, []);
 
   return (
@@ -81,7 +62,7 @@ export const MainScreen = (): JSX.Element => {
             <FormattedMessage id="appTitle" />
           </Typography>
           <IconContainer>
-            <ConnectedRobotWidget />
+            <RobotWidget />
           </IconContainer>
         </Toolbar>
       </AppBar>

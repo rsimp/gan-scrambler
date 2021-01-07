@@ -5,5 +5,8 @@
       "scramble": "Scramble",
       "send": "Send"
     }
+  },
+  "robot": {
+    "automaticConnection": "Automatically connected to bonded GAN Robot: {deviceName}"
   }
 }

@@ -1,58 +1,34 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { IconButton } from "@material-ui/core";
 import { BluetoothConnected, Bluetooth } from "@material-ui/icons";
 
-import { ApplicationState } from "app/common/store";
-
-import { unregisterRobot, registerRobot } from "app/robot/store/actions";
+import { bluetoothDeviceSelected } from "app/robot/store/actions";
 import { getRobotDevice } from "app/robot/store/selectors";
-import { RobotState } from "app/robot/store/types";
 import {
-  requestBluetoothDevice,
-  GANDeviceTypeError,
+  PRIMARY_SERVICE,
+  DEVICE_INFO_SERVICE,
 } from "app/robot/bluetooth-utils";
 
-interface RobotWidgetProps {
-  registerRobot: typeof registerRobot;
-  unregisterRobot: typeof unregisterRobot;
-  robotDevice?: RobotState["device"];
-}
+export function RobotWidget(): JSX.Element {
+  const dispatch = useDispatch();
+  const robotDevice = useSelector(getRobotDevice);
 
-export function RobotWidget(props: RobotWidgetProps): JSX.Element {
-  // TODO pull callback into useCallback hook
-  // TODO pull async with dispatch into a saga
+  const handleBluetoothClick = useCallback(async () => {
+    try {
+      const device = await navigator.bluetooth.requestDevice({
+        filters: [{ namePrefix: "GAN-" }],
+        optionalServices: [PRIMARY_SERVICE, DEVICE_INFO_SERVICE],
+      });
+      dispatch(bluetoothDeviceSelected(device));
+    } catch (e) {
+      // throws DOMException if user cancels device request
+      if (!(e instanceof DOMException)) console.error(e);
+    }
+  }, []);
   return (
-    <IconButton
-      color="inherit"
-      onClick={async () => {
-        try {
-          const device = await requestBluetoothDevice();
-          props.registerRobot(device);
-          device.addEventListener("gattserverdisconnected", () =>
-            props.unregisterRobot()
-          );
-        } catch (error) {
-          if (error instanceof GANDeviceTypeError) {
-            // TODO show toast for trying to connect to incorrect GAN device
-          } else {
-            // TODO show toast for other errors
-          }
-          console.log(error);
-        }
-      }}
-    >
-      {props.robotDevice ? <BluetoothConnected /> : <Bluetooth />}
+    <IconButton color="inherit" onClick={handleBluetoothClick}>
+      {robotDevice ? <BluetoothConnected /> : <Bluetooth />}
     </IconButton>
   );
 }
-
-export const ConnectedRobotWidget = connect(
-  (state: ApplicationState) => ({
-    robotDevice: getRobotDevice(state),
-  }),
-  {
-    registerRobot,
-    unregisterRobot,
-  }
-)(RobotWidget);

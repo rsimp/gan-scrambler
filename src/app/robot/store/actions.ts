@@ -7,3 +7,7 @@ export const registerRobot = createAction<BluetoothDevice>(
 );
 
 export const unregisterRobot = createAction(`${actionPrefix}/unregister_robot`);
+
+export const bluetoothDeviceSelected = createAction<BluetoothDevice>(
+  `${actionPrefix}/bluetooth_device_selected`
+);

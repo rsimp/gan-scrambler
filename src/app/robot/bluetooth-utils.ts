@@ -1,11 +1,11 @@
 import { chunkReducer } from "app/common/array-reducers";
 
-const PRIMARY_SERVICE_UUID = 0xfff0;
-const SCRAMBLE_CHARACTERISTIC_UUID = 0xfff3;
-const ROBOT_STATUS_CHARACTERISTIC_UUID = 0xfff2;
+export const PRIMARY_SERVICE = 0xfff0;
+const SCRAMBLE_CHARACTERISTIC = 0xfff3;
+const ROBOT_STATUS_CHARACTERISTIC = 0xfff2;
 
-const DEVICE_INFO_SERVICE_UUID = 0x180a;
-const MODEL_NUMBER_SERVICE_UUID = 0x2a24;
+export const DEVICE_INFO_SERVICE = 0x180a;
+const MODEL_NUMBER_SERVICE = 0x2a24;
 
 const moveMap: Record<string, number> = {
   R: 0,
@@ -56,15 +56,13 @@ const executeChunk = (
   chunk: Uint8Array
 ): Promise<void> => {
   return new Promise(async (resolve) => {
-    const primaryService = await robotServer.getPrimaryService(
-      PRIMARY_SERVICE_UUID
-    );
+    const primaryService = await robotServer.getPrimaryService(PRIMARY_SERVICE);
     const scrambleExecuteCharacteristic = await primaryService.getCharacteristic(
-      SCRAMBLE_CHARACTERISTIC_UUID
+      SCRAMBLE_CHARACTERISTIC
     );
     await scrambleExecuteCharacteristic.writeValue(chunk);
     const statusCharacteristic = await primaryService.getCharacteristic(
-      ROBOT_STATUS_CHARACTERISTIC_UUID
+      ROBOT_STATUS_CHARACTERISTIC
     );
 
     const waitUntilSequenceFinished = async (hasHadNonZeroValue = false) => {
@@ -98,24 +96,22 @@ export class GANDeviceTypeError extends Error {
 export const requestBluetoothDevice = async (): Promise<BluetoothDevice> => {
   const device = await navigator.bluetooth.requestDevice({
     filters: [{ namePrefix: "GAN-" }],
-    optionalServices: [PRIMARY_SERVICE_UUID, DEVICE_INFO_SERVICE_UUID],
+    optionalServices: [PRIMARY_SERVICE, DEVICE_INFO_SERVICE],
   });
   await connectToGANRobot(device);
   return device;
 };
 
-const connectToGANRobot = async (
+export const connectToGANRobot = async (
   device: ExperimentalBluetoothDevice
 ): Promise<void> => {
   const server = await device.gatt?.connect();
   if (!server) {
     throw new Error("Could not connect to Bluetooth Server");
   }
-  const deviceInfoService = await server.getPrimaryService(
-    DEVICE_INFO_SERVICE_UUID
-  );
+  const deviceInfoService = await server.getPrimaryService(DEVICE_INFO_SERVICE);
   const modelCharacteristic = await deviceInfoService.getCharacteristic(
-    MODEL_NUMBER_SERVICE_UUID
+    MODEL_NUMBER_SERVICE
   );
   const modelNumberValue = await modelCharacteristic.readValue();
   const modelNumber = new TextDecoder().decode(modelNumberValue);
@@ -138,20 +134,14 @@ interface ExperimentalBluetooth extends Bluetooth {
   getDevices?: () => ExperimentalBluetoothDevice[];
 }
 
-export class ExperimentalFeatureNotSupported extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "ExperimentalFeatureNotSupported";
-  }
-}
-
 export const connectToKnownGANRobots = (): Promise<
-  ExperimentalBluetoothDevice
+  ExperimentalBluetoothDevice | false
 > => {
   return new Promise(async (resolve) => {
     const experimentalBluetooth = navigator.bluetooth as ExperimentalBluetooth;
     if (!experimentalBluetooth.getDevices) {
-      throw new ExperimentalFeatureNotSupported("getDevices not supported");
+      resolve(false);
+      return;
     }
     const devices = await experimentalBluetooth.getDevices();
     for (const device of devices) {
