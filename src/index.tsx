@@ -9,7 +9,6 @@ import { createStore } from "app/common/store";
 import { messages, locale } from "translations";
 import { importAll } from "app/common/webpack";
 import { SnackbarProvider } from "notistack";
-import { RegisterServices } from "app/services";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -34,7 +33,6 @@ ReactDOM.render(
       <StylesProvider injectFirst>
         <SnackbarProvider>
           <MainScreen />
-          <RegisterServices />
         </SnackbarProvider>
       </StylesProvider>
     </IntlProvider>
