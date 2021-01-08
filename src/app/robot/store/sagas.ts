@@ -23,15 +23,21 @@ function* bluetoothDeviceSelectedHandler({
     yield* call(connectToGANRobot, device);
     yield* put(registerRobot(device));
     yield* put(
-      enqueueSnackbar(`GAN Robot ${device.name} has been connected`, {
-        variant: "success",
-      })
+      enqueueSnackbar(
+        translate("robot.snackbar.connected", {
+          deviceName: device.name as string,
+        }),
+        { variant: "success" }
+      )
     );
   } catch (e) {
     if (e instanceof GANDeviceTypeError) {
       yield* put(
         enqueueSnackbar(
-          `${device.name} is a ${e.modelNumber} cube, not a GAN Robot`,
+          translate("robot.snackbar.wrongDevice", {
+            deviceName: device.name as string,
+            modelNumber: e.modelNumber,
+          }),
           {
             variant: "error",
           }
@@ -66,9 +72,14 @@ function* listenForDisconnect({
   if (result.disconnectEvent) {
     yield* put(unregisterRobot());
     yield* put(
-      enqueueSnackbar(`GAN Robot ${device.name} has disconnected`, {
-        variant: "error",
-      })
+      enqueueSnackbar(
+        translate("robot.snackbar.disconnected", {
+          deviceName: device.name as string,
+        }),
+        {
+          variant: "error",
+        }
+      )
     );
   }
   disconnectChannel.close();
@@ -85,7 +96,7 @@ function* appInitializedHandler() {
       yield* put(registerRobot(device));
       yield* put(
         enqueueSnackbar(
-          translate("robot.automaticConnection", {
+          translate("robot.snackbar.connected", {
             deviceName: device.name as string,
           }),
           { variant: "success" }

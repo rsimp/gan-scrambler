@@ -3,7 +3,8 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { IntlProvider } from "react-intl";
 import { StylesProvider } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 import { SnackbarProvider } from "notistack";
 import { messages, locale } from "translations";
 
@@ -41,10 +42,15 @@ function renderApp() {
         <StylesProvider injectFirst>
           <SnackbarProvider
             ref={snackbar}
+            maxSnack={1}
             action={(key) => (
-              <Button color="inherit" onClick={onClickDismiss(key)}>
-                Dismiss
-              </Button>
+              <IconButton
+                size="small"
+                color="inherit"
+                onClick={onClickDismiss(key)}
+              >
+                <Close fontSize="small" />
+              </IconButton>
             )}
           >
             <MainScreen />

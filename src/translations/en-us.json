@@ -7,6 +7,10 @@
     }
   },
   "robot": {
-    "automaticConnection": "Automatically connected to GAN Robot: {deviceName}"
+    "snackbar": {
+      "disconnected": "GAN Robot {deviceName} has disconnected",
+      "connected": "GAN Robot {deviceName} has been connected",
+      "wrongDevice": "{deviceName} is a {modelNumber} not a GAN Robot"
+    }
   }
 }
