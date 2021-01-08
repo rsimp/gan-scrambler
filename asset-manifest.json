@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/gan-scrambler/static/css/main.e77b0b85.chunk.css",
-    "main.js": "/gan-scrambler/static/js/main.c2715091.chunk.js",
-    "main.js.map": "/gan-scrambler/static/js/main.c2715091.chunk.js.map",
+    "main.css": "/gan-scrambler/static/css/main.e76dafe6.chunk.css",
+    "main.js": "/gan-scrambler/static/js/main.3d922380.chunk.js",
+    "main.js.map": "/gan-scrambler/static/js/main.3d922380.chunk.js.map",
     "runtime-main.js": "/gan-scrambler/static/js/runtime-main.6baab05e.js",
     "runtime-main.js.map": "/gan-scrambler/static/js/runtime-main.6baab05e.js.map",
     "static/css/2.a7ce03c5.chunk.css": "/gan-scrambler/static/css/2.a7ce03c5.chunk.css",
-    "static/js/2.dba79a89.chunk.js": "/gan-scrambler/static/js/2.dba79a89.chunk.js",
-    "static/js/2.dba79a89.chunk.js.map": "/gan-scrambler/static/js/2.dba79a89.chunk.js.map",
+    "static/js/2.5a98e4f4.chunk.js": "/gan-scrambler/static/js/2.5a98e4f4.chunk.js",
+    "static/js/2.5a98e4f4.chunk.js.map": "/gan-scrambler/static/js/2.5a98e4f4.chunk.js.map",
     "index.html": "/gan-scrambler/index.html",
     "service-worker.js": "/gan-scrambler/service-worker.js",
     "service-worker.js.map": "/gan-scrambler/service-worker.js.map",
     "static/css/2.a7ce03c5.chunk.css.map": "/gan-scrambler/static/css/2.a7ce03c5.chunk.css.map",
-    "static/css/main.e77b0b85.chunk.css.map": "/gan-scrambler/static/css/main.e77b0b85.chunk.css.map",
-    "static/js/2.dba79a89.chunk.js.LICENSE.txt": "/gan-scrambler/static/js/2.dba79a89.chunk.js.LICENSE.txt",
+    "static/css/main.e76dafe6.chunk.css.map": "/gan-scrambler/static/css/main.e76dafe6.chunk.css.map",
+    "static/js/2.5a98e4f4.chunk.js.LICENSE.txt": "/gan-scrambler/static/js/2.5a98e4f4.chunk.js.LICENSE.txt",
     "static/media/300.css": "/gan-scrambler/static/media/roboto-vietnamese-300-normal.54344cce.woff2",
     "static/media/400.css": "/gan-scrambler/static/media/roboto-vietnamese-400-normal.52cebac0.woff2",
     "static/media/500.css": "/gan-scrambler/static/media/roboto-vietnamese-500-normal.a46e5fcd.woff2",
@@ -22,8 +22,8 @@
   "entrypoints": [
     "static/js/runtime-main.6baab05e.js",
     "static/css/2.a7ce03c5.chunk.css",
-    "static/js/2.dba79a89.chunk.js",
-    "static/css/main.e77b0b85.chunk.css",
-    "static/js/main.c2715091.chunk.js"
+    "static/js/2.5a98e4f4.chunk.js",
+    "static/css/main.e76dafe6.chunk.css",
+    "static/js/main.3d922380.chunk.js"
   ]
 }
