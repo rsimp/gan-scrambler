@@ -1,6 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 
-const actionPrefix = "setup";
+const actionPrefix = "robot";
 
 export const registerRobot = createAction<BluetoothDevice>(
   `${actionPrefix}/register_robot`

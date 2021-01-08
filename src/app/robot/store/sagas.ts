@@ -9,30 +9,37 @@ import {
   registerRobot,
   bluetoothDeviceSelected,
 } from "app/robot/store/actions";
-import { appInitialized } from "app/main-screen/store/actions";
+import { appInitialized } from "app/main-screen/actions";
 import {
   connectToGANRobot,
   connectToKnownGANRobots,
+  GANDeviceTypeError,
 } from "app/robot/bluetooth-utils";
 
 function* bluetoothDeviceSelectedHandler({
   payload: device,
 }: PayloadAction<BluetoothDevice>) {
   try {
-    try {
-      yield* call(connectToGANRobot, device);
-      yield* put(registerRobot(device));
-    } catch (e) {
-      console.log("couldn't connect");
-    }
-
+    yield* call(connectToGANRobot, device);
+    yield* put(registerRobot(device));
     yield* put(
       enqueueSnackbar(`GAN Robot ${device.name} has been connected`, {
         variant: "success",
       })
     );
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    if (e instanceof GANDeviceTypeError) {
+      yield* put(
+        enqueueSnackbar(
+          `${device.name} is a ${e.modelNumber} cube, not a GAN Robot`,
+          {
+            variant: "error",
+          }
+        )
+      );
+    } else {
+      console.log("couldn't connect");
+    }
   }
 }
 

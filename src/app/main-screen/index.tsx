@@ -21,7 +21,7 @@ import { ConnectedCFOPScramble } from "app/cfop-scramble";
 import { fiveSideSearch } from "app/common/cube/solvers/five-side-solver";
 import { ConnectedRandomScramble } from "app/random-scramble";
 import { ConnectedManualScramble } from "app/manual-scramble";
-import { appInitialized } from "app/main-screen/store/actions";
+import { appInitialized } from "app/main-screen/actions";
 
 const Screen = styled.div.attrs({ className: "flex flex-col h-screen" })``;
 

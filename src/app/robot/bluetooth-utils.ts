@@ -87,9 +87,11 @@ const executeChunk = (
 };
 
 export class GANDeviceTypeError extends Error {
-  constructor(message: string) {
+  modelNumber: string;
+  constructor(message: string, modelNumber: string) {
     super(message);
     this.name = "GANDeviceTypeError";
+    this.modelNumber = modelNumber;
   }
 }
 
@@ -116,7 +118,10 @@ export const connectToGANRobot = async (
   const modelNumberValue = await modelCharacteristic.readValue();
   const modelNumber = new TextDecoder().decode(modelNumberValue);
   if (modelNumber.toUpperCase() !== "GAN ROBOTCUBE") {
-    throw new GANDeviceTypeError("Requested device is not a GAN Robot");
+    throw new GANDeviceTypeError(
+      "Requested device is not a GAN Robot",
+      modelNumber
+    );
   }
 };
 
@@ -150,8 +155,10 @@ export const connectToKnownGANRobots = (): Promise<
         "advertisementreceived",
         async () => {
           abortController.abort();
-          await connectToGANRobot(device);
-          resolve(device);
+          try {
+            await connectToGANRobot(device);
+            resolve(device);
+          } catch (e) {}
         },
         { once: true }
       );

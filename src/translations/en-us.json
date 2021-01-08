@@ -7,6 +7,6 @@
     }
   },
   "robot": {
-    "automaticConnection": "Automatically connected to bonded GAN Robot: {deviceName}"
+    "automaticConnection": "Automatically connected to GAN Robot: {deviceName}"
   }
 }
