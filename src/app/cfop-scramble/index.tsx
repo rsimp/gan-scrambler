@@ -149,7 +149,7 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
     <ContentContainer>
       <FormControl component="fieldset">
         <Select
-          className="computer:w-96"
+          className="computer:w-24"
           value={cfopPhase}
           onChange={(e) => {
             const phase = e.target.value as CFOPPhaseType;

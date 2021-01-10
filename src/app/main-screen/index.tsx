@@ -31,7 +31,7 @@ const MenuItemContent = styled.div.attrs({
 
 const CompactMenuItemContent = styled.div.attrs({
   className:
-    "hidden landscape:inline-flex flex-col items-center justify-center text-on-bg w-full",
+    "hidden landscape:inline-flex flex-col items-center justify-center text-on-background w-full",
 })``;
 
 const IconContainer = styled.div.attrs({
@@ -39,7 +39,7 @@ const IconContainer = styled.div.attrs({
 })``;
 
 const IconWrapper = styled.div.attrs({
-  className: "text-background-icon",
+  className: "text-icon-on-background",
 })``;
 
 export const MainScreen = (): JSX.Element => {
@@ -68,7 +68,7 @@ export const MainScreen = (): JSX.Element => {
       </AppBar>
 
       <div className="flex flex-row h-full w-full">
-        <Paper className="hidden landscape:block computer:block w-24 computer:w-48">
+        <Paper className="hidden landscape:block computer:block w-6 computer:w-12">
           <List>
             <ListItem
               button

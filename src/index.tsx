@@ -43,7 +43,7 @@ function renderApp() {
           <SnackbarProvider
             ref={snackbar}
             maxSnack={1}
-            className="mb-12 landscape:mb-0 computer:mb-0"
+            className="mb-3 landscape:mb-0 computer:mb-0"
             action={(key) => (
               <IconButton
                 size="small"
