@@ -31,7 +31,7 @@ const MenuItemContent = styled.div.attrs({
 
 const CompactMenuItemContent = styled.div.attrs({
   className:
-    "hidden landscape:inline-flex flex-col items-center justify-center text-bg-txt w-full",
+    "hidden landscape:inline-flex flex-col items-center justify-center text-on-bg w-full",
 })``;
 
 const IconContainer = styled.div.attrs({
@@ -39,7 +39,7 @@ const IconContainer = styled.div.attrs({
 })``;
 
 const IconWrapper = styled.div.attrs({
-  className: "text-bg-icon",
+  className: "text-background-icon",
 })``;
 
 export const MainScreen = (): JSX.Element => {
