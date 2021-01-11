@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { connect } from "react-redux";
 import { Button, TextField } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "app/common/store";
-
 import { getRobotServer } from "app/robot/store/selectors";
-
 import { fiveSideSolver } from "app/common/cube/solvers/five-side-solver";
 import { CubePreview } from "app/cube-preview";
 import {
@@ -23,6 +21,40 @@ interface ManualScrambleProps {
 export function ManualScramble(props: ManualScrambleProps): JSX.Element {
   const [scramble, setScramble] = useState<string>("");
   const [hasError, setHasError] = useState(false);
+
+  const processScrambleInput = useCallback((scramble: string) => {
+    if (scramble.length > 0) {
+      if (validateAlgorithm(scramble)) {
+        const fiveSideSolve = fiveSideSolver(scramble);
+        if (fiveSideSolve) {
+          const fiveSideScramble = invertAlgorithm(fiveSideSolve);
+          setScramble(fiveSideScramble);
+        }
+      } else {
+        setHasError(true);
+        setScramble("");
+      }
+    } else {
+      setHasError(false);
+      setScramble("");
+    }
+  }, []);
+
+  const manualScrambleBlurHandler = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) =>
+      processScrambleInput(event.currentTarget.value),
+    []
+  );
+  const manualScrambleKeyDownHandler = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      processScrambleInput((e.target as HTMLInputElement).value);
+    }
+  }, []);
+  const sendClickHandler = useCallback(
+    () => executeScramble(props.robotServer, scramble),
+    [scramble, props.robotServer]
+  );
   return (
     <ContentContainer>
       <form noValidate autoComplete="off" className="container">
@@ -37,32 +69,16 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
           }}
           error={hasError}
           helperText={hasError && "Invalid Scramble Code"}
-          onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
-            const manualScrambleValue = event.target.value;
-            if (manualScrambleValue.length > 0) {
-              if (validateAlgorithm(manualScrambleValue)) {
-                const fiveSideSolve = fiveSideSolver(manualScrambleValue);
-                if (fiveSideSolve) {
-                  const fiveSideScramble = invertAlgorithm(fiveSideSolve);
-                  setScramble(fiveSideScramble);
-                }
-              } else {
-                setHasError(true);
-                setScramble("");
-              }
-            } else {
-              setHasError(false);
-              setScramble("");
-            }
-          }}
+          onBlur={manualScrambleBlurHandler}
+          onKeyDown={manualScrambleKeyDownHandler}
         />
       </form>
       <CubePreview scrambleCode={scramble} />
       <ButtonRow>
         <Button
           variant="contained"
-          disabled={!Boolean(props.robotServer) && Boolean(scramble)}
-          onClick={() => executeScramble(props.robotServer, scramble)}
+          disabled={!Boolean(props.robotServer) || !Boolean(scramble)}
+          onClick={sendClickHandler}
         >
           <FormattedMessage id="scramble.actions.send" />
         </Button>
