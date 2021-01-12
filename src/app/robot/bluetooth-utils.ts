@@ -143,8 +143,8 @@ export const connectToKnownGANRobots = (): Promise<
   ExperimentalBluetoothDevice | false
 > => {
   return new Promise(async (resolve) => {
-    const experimentalBluetooth = navigator.bluetooth as ExperimentalBluetooth;
-    if (!experimentalBluetooth.getDevices) {
+    const experimentalBluetooth = navigator?.bluetooth as ExperimentalBluetooth;
+    if (!experimentalBluetooth || !experimentalBluetooth.getDevices) {
       resolve(false);
       return;
     }

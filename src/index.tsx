@@ -11,6 +11,7 @@ import { messages, locale } from "translations";
 import { watchSnackbarActions } from "app/common/snackbar/sagas";
 import { MainScreen } from "app/main-screen";
 import { createStore } from "app/common/store";
+import { enableFeature } from "app/feature-detection/actions";
 
 import { importAll } from "app/common/webpack";
 
@@ -32,6 +33,9 @@ function renderApp() {
   const snackbar = React.createRef<SnackbarProvider>();
   const store = createStore();
   store.runSaga(watchSnackbarActions, snackbar);
+  if (navigator.bluetooth && navigator.bluetooth.requestDevice) {
+    store.dispatch(enableFeature("bluetooth"));
+  }
 
   const onClickDismiss = (key: React.ReactText) => () => {
     snackbar.current?.closeSnackbar(key);

@@ -11,15 +11,15 @@ export const mergeReducer = <S, P extends Partial<S>>(
   return { ...state, ...action.payload };
 };
 
-interface RegistryEntry<T, Tkey extends keyof T> {
-  key: Tkey;
-  value: T[Tkey];
+interface SetEntry<T> {
+  key: string;
+  value: T;
 }
 
-export const registryReducer = <S>(
-  state: S,
-  action: PayloadAction<RegistryEntry<S, keyof S>>
-): S => {
+export const setReducer = <T>(
+  state: Record<string, T>,
+  action: PayloadAction<SetEntry<T>>
+): Record<string, T> => {
   state[action.payload.key] = action.payload.value;
   return state;
 };
