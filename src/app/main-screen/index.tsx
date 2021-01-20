@@ -13,8 +13,8 @@ import {
 } from "@material-ui/core";
 import { Shuffle, Layers, Edit } from "@material-ui/icons";
 import { FormattedMessage } from "react-intl";
-import styled from "styled-components/macro";
 import { useDispatch } from "react-redux";
+import tag from "classed.macro";
 
 import { RobotWidget } from "app/robot/widget";
 import { ConnectedCFOPScramble } from "app/cfop-scramble";
@@ -23,24 +23,17 @@ import { ConnectedRandomScramble } from "app/random-scramble";
 import { ConnectedManualScramble } from "app/manual-scramble";
 import { appInitialized } from "app/main-screen/actions";
 
-const Screen = styled.div.attrs({ className: "flex flex-col h-screen" })``;
+const Screen = tag.div`flex flex-col h-screen`;
 
-const MenuItemContent = styled.div.attrs({
-  className: "computer:flex hidden flex-row items-center",
-})``;
+const MenuItemContent = tag.div`computer:flex hidden flex-row items-center`;
 
-const CompactMenuItemContent = styled.div.attrs({
-  className:
-    "hidden landscape:inline-flex flex-col items-center justify-center text-on-background w-full",
-})``;
+const CompactMenuItemContent = tag.div`
+  hidden landscape:inline-flex flex-col items-center justify-center text-on-background w-full
+`;
 
-const IconContainer = styled.div.attrs({
-  className: "flex flex-row ml-auto",
-})``;
+const IconContainer = tag.div`flex flex-row ml-auto`;
 
-const IconWrapper = styled.div.attrs({
-  className: "text-icon-on-background",
-})``;
+const IconWrapper = tag.div`text-icon-on-background`;
 
 export const MainScreen = (): JSX.Element => {
   const [navigationValue, setNavigation] = React.useState("random");

@@ -25,7 +25,7 @@ import {
   isF2LSolved,
   isCrossSolved,
 } from "app/common/cube/scramblers/solve-criteria";
-import { ButtonRow, ContentContainer } from "app/common/styled-components";
+import { ButtonRow, ContentContainer } from "app/common/style-components";
 
 interface CFOPScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;

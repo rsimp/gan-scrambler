@@ -12,7 +12,7 @@ import {
   invertAlgorithm,
 } from "app/common/cube/libs/algorithms";
 import { executeScramble } from "app/robot/bluetooth-utils";
-import { ButtonRow, ContentContainer } from "app/common/styled-components";
+import { ButtonRow, ContentContainer } from "app/common/style-components";
 
 interface ManualScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;
