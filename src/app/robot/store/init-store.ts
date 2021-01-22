@@ -4,7 +4,7 @@ import { RobotState } from "app/robot/store/types";
 import reducer from "app/robot/store/reducer";
 import sagas from "app/robot/store/sagas";
 
-declare module "app/common/store" {
+declare module "app/libs/store" {
   interface ApplicationState {
     robot: RobotState;
   }

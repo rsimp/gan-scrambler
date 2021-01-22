@@ -8,10 +8,11 @@ import { Close } from "@material-ui/icons";
 import { SnackbarProvider } from "notistack";
 
 import { watchSnackbarActions } from "app/libs/snackbar/sagas";
-import { MainScreen } from "app/main-screen";
 import { createStore } from "app/libs/store";
-import { enableFeature } from "app/feature-detection/actions";
 import { importAll } from "app/libs/webpack";
+
+import { MainScreen } from "app/main-screen";
+import { enableFeature } from "app/feature-detection/actions";
 
 import { messages, locale } from "./translations";
 
