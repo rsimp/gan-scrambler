@@ -1,4 +1,4 @@
-import { ApplicationState } from "app/common/store";
+import { ApplicationState } from "app/libs/store";
 import { RobotState } from "app/robot/store/types";
 
 export const getRobotDevice = (state: ApplicationState): RobotState["device"] =>

@@ -1,4 +1,4 @@
-import { ApplicationState } from "app/common/store";
+import { ApplicationState } from "app/libs/store";
 
 const isFeatureEnabled = (feature: string) => (
   state: ApplicationState

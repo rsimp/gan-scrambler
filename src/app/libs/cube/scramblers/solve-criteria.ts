@@ -3,7 +3,7 @@ import {
   Corners,
   Edges,
   doAlgorithm,
-} from "app/common/cube/libs/cube";
+} from "app/libs/cube/libs/cube";
 
 const arePiecesPermutated = (
   cubeState: CubeIndexes,

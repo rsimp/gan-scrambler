@@ -1,11 +1,11 @@
 import {
   createEdgePermutationTable,
   createEdgeOrientationTable,
-} from "app/common/cube/libs/move-table";
+} from "app/libs/cube/libs/move-table";
 
-import Search from "app/common/cube/libs/search";
+import Search from "app/libs/cube/libs/search";
 
-import { fiveSideMoves, Edges } from "app/common/cube/libs/cube";
+import { fiveSideMoves, Edges } from "app/libs/cube/libs/cube";
 
 export const CrossSearch = new Search(
   () => ({

@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { Button, FormControl, Select, MenuItem } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
-import { ApplicationState } from "app/common/store";
+import { ApplicationState } from "app/libs/store";
 
 import { getRobotServer } from "app/robot/store/selectors";
 
-import { generateScramble } from "app/common/cube/scramblers/full";
+import { generateScramble } from "app/libs/cube/scramblers/full";
 import {
   generateOLLScramble,
   generateFirstLookOLLScramble,
@@ -15,17 +15,17 @@ import {
   generatePLLScramble,
   generateFirstLookPLLScramble,
   generateSecondLookPLLScramble,
-} from "app/common/cube/scramblers/cfop";
-import { crossSolver } from "app/common/cube/solvers/cross-solver";
+} from "app/libs/cube/scramblers/cfop";
+import { crossSolver } from "app/libs/cube/solvers/cross-solver";
 import { CubePreview } from "app/cube-preview";
 import { executeScramble } from "app/robot/bluetooth-utils";
-import { doAlgorithm, Edges, Corners } from "app/common/cube/libs/cube";
-import { FaceletArrayFilter } from "app/common/cube/libs/cube-preview";
+import { doAlgorithm, Edges, Corners } from "app/libs/cube/libs/cube";
+import { FaceletArrayFilter } from "app/libs/cube/libs/cube-preview";
 import {
   isF2LSolved,
   isCrossSolved,
-} from "app/common/cube/scramblers/solve-criteria";
-import { ButtonRow, ContentContainer } from "app/common/style-components";
+} from "app/libs/cube/scramblers/solve-criteria";
+import { ButtonRow, ContentContainer } from "app/libs/style-components";
 
 interface CFOPScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;

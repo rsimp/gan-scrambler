@@ -1,4 +1,4 @@
-import { registerReducer, registerSagas } from "app/common/store";
+import { registerReducer, registerSagas } from "app/libs/store";
 import { RobotState } from "app/robot/store/types";
 
 import reducer from "app/robot/store/reducer";

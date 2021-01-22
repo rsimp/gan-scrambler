@@ -1,4 +1,4 @@
-import { registerReducer } from "app/common/store";
+import { registerReducer } from "app/libs/store";
 
 import reducer from "app/feature-detection/reducer";
 

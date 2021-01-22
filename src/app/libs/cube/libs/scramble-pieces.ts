@@ -2,16 +2,16 @@ import {
   getPermutationFromIndex,
   getOrientationFromIndex,
   getParity,
-} from "app/common/cube/libs/coordinates";
+} from "app/libs/cube/libs/coordinates";
 
-import { getRandomInt, factorial } from "app/common/cube/libs/tools";
+import { getRandomInt, factorial } from "app/libs/cube/libs/tools";
 
-import { CubeIndexes } from "app/common/cube/libs/cube";
+import { CubeIndexes } from "app/libs/cube/libs/cube";
 
 import {
   solveCube,
   fiveSideSolver,
-} from "app/common/cube/solvers/five-side-solver";
+} from "app/libs/cube/solvers/five-side-solver";
 
 const getEdgeOrientation = (enabled: number[], orientLastLayer: boolean) => {
   const pieces = getOrientationFromIndex(

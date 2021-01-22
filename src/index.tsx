@@ -6,14 +6,14 @@ import { StylesProvider } from "@material-ui/core/styles";
 import { IconButton } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import { SnackbarProvider } from "notistack";
-import { messages, locale } from "translations";
 
-import { watchSnackbarActions } from "app/common/snackbar/sagas";
+import { watchSnackbarActions } from "app/libs/snackbar/sagas";
 import { MainScreen } from "app/main-screen";
-import { createStore } from "app/common/store";
+import { createStore } from "app/libs/store";
 import { enableFeature } from "app/feature-detection/actions";
+import { importAll } from "app/libs/webpack";
 
-import { importAll } from "app/common/webpack";
+import { messages, locale } from "./translations";
 
 import * as serviceWorker from "./serviceWorker";
 

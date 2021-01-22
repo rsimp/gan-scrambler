@@ -1,10 +1,10 @@
 import React from "react";
 
-import { doAlgorithm } from "app/common/cube/libs/cube";
+import { doAlgorithm } from "app/libs/cube/libs/cube";
 import {
   getFaceletArray,
   FaceletArrayFilter,
-} from "app/common/cube/libs/cube-preview";
+} from "app/libs/cube/libs/cube-preview";
 
 interface CubePreviewProps {
   scrambleCode: string;
