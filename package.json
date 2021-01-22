@@ -6,48 +6,18 @@
     "@material-ui/core": "^4.10.2",
     "@material-ui/icons": "^4.9.1",
     "@reduxjs/toolkit": "^1.5.0",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "@types/jest": "^24.9.1",
-    "@types/node": "^12.12.43",
-    "@types/path-parse": "^1.0.19",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-redux": "^7.1.9",
-    "@types/react-router-dom": "^5.1.5",
-    "@types/styled-components": "^5.1.4",
-    "@types/web-bluetooth": "0.0.8",
-    "@types/webpack-env": "^1.15.2",
-    "@typescript-eslint/eslint-plugin": "^4.0.0",
-    "@typescript-eslint/parser": "^4.0.0",
-    "autoprefixer": "^10.0.2",
     "classed-components": "^1.0.1",
-    "classed.macro": "^1.0.1",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.3",
-    "eslint-plugin-react": "^7.20.3",
     "fontsource-roboto": "^3.1.5",
-    "gh-pages": "^3.1.0",
     "notistack": "^1.0.3",
     "path-parse": "^1.0.6",
-    "postcss": "^8.1.1",
-    "postcss-cli": "^8.1.0",
-    "prettier": "2.0.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-intl": "^5.10.9",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.0",
     "redux": "^4.0.5",
     "redux-saga": "^1.1.3",
-    "tailwind.macro": "^0.5.10",
-    "tailwindcss": "^2.0.1",
-    "tailwindcss-children": "^2.1.0",
     "typed-redux-saga": "^1.3.1",
-    "typescript": "^3.7.5",
-    "webpack-bundle-analyzer": "^4.3.0",
     "workbox-core": "^6.0.2",
     "workbox-expiration": "^6.0.2",
     "workbox-precaching": "^6.0.2",
@@ -56,16 +26,38 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm run buildcss && react-scripts build",
+    "build": "react-scripts build",
     "analyze": "react-scripts build --stats && webpack-bundle-analyzer build/bundle-stats.json -m static -r build/bundle-stats.html -O && open build/bundle-stats.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "buildcss": "postcss src/tailwind.css -o src/assets/styles/main.css"
+    "buildcss": "tailwindcss build --no-autoprefixer -o src/styles/tailwind.css"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": ["react", "prettier", "@typescript-eslint"],
+    "rules": {
+      "prettier/prettier": "error"
+    },
+    "overrides": [
+      {
+        "files": ["**/*.tsx"],
+        "rules": {
+          "react/prop-types": "off"
+        }
+      }
+    ]
   },
   "homepage": "https://rsimp.io/gan-scrambler/",
   "browserslist": {
@@ -80,5 +72,31 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.19.15",
+    "@types/path-parse": "^1.0.19",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-redux": "^7.1.15",
+    "@types/web-bluetooth": "0.0.8",
+    "@types/webpack-env": "^1.16.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.0",
+    "@typescript-eslint/parser": "^4.14.0",
+    "autoprefixer": "^10.2.3",
+    "classed.macro": "^1.0.2",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "gh-pages": "^3.1.0",
+    "prettier": "^2.0.5",
+    "react-scripts": "^4.0.0",
+    "tailwindcss": "^2.0.2",
+    "tailwindcss-children": "^2.1.0",
+    "typescript": "^3.9.7",
+    "webpack-bundle-analyzer": "^4.4.0"
+  }
 }

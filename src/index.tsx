@@ -23,8 +23,9 @@ import "fontsource-roboto/400.css";
 import "fontsource-roboto/500.css";
 import "fontsource-roboto/700.css";
 
-// inject any css files
-importAll(require.context("./", true, /\.css$/));
+// global css
+import "./styles/tailwind.css";
+import "./styles/main.css";
 
 // import store init scripts
 importAll(require.context("./", true, /\/init-store\.(ts|tsx)$/));

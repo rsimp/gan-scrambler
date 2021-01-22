@@ -1,31 +1,40 @@
 module.exports = {
   important: "#root",
   future: {},
-  purge: [],
+  purge: false,
   theme: {
     screens: {
       landscape: { raw: "(min-width: 600px) and (max-height: 600px)" },
       computer: { raw: "(min-width: 600px) and (min-height: 600px)" },
     },
     colors: {
-      "on-primary": "hsl(0, 0%, 100%)", //for text color only
-      primary: "hsl(231, 50%, 50%)",
-      "primary-highlight": "hsl(231, 50%, 65%)",
-
-      "on-secondary": "hsl(0, 0%, 100%)", //for text color only
-      secondary: "hsl(4, 90%, 50%)",
-      "secondary-highlight": "hsl(4, 90%, 65%)",
-
-      "on-background": "hsla(0, 0%, 0%, 0.87)", //for text color only
-      "icon-on-background": "hsla(0, 0%, 0%, 0.54)", //for text color only
+      transparent: "transparent",
+      current: "currentColor",
+      primary: {
+        DEFAULT: "hsl(231, 50%, 50%)",
+        light: "hsl(231, 50%, 65%)",
+        dark: "hsl(231, 50%, 35%)",
+        disabled: "hsl(231, 25%, 50%)",
+      },
+      secondary: {
+        DEFAULT: "hsl(4, 90%, 60%)",
+        light: "hsl(4, 90%, 70%)",
+        dark: "hsl(4, 90%, 40%)",
+        disabled: "hsl(4, 33%, 60%)",
+      },
       background: "hsl(0, 0%, 100%)",
-
-      "on-surface": "hsla(0, 0%, 0%, 0.87)", //for text color only
       surface: "hsl(0, 0%, 100%)",
-
-      "on-error": "hsl(0, 0%, 100%)", //for text color only
       error: "hsl(349, 85%, 40%)",
     },
+    textColor: (theme) => ({
+      ...theme,
+      "on-primary": "hsl(0, 0%, 100%)",
+      "on-secondary": "hsl(0, 0%, 100%)",
+      "on-background": "hsla(0, 0%, 0%, 0.87)",
+      "icon-on-background": "hsla(0, 0%, 0%, 0.54)",
+      "on-surface": "hsla(0, 0%, 0%, 0.87)",
+      "on-error": "hsl(0, 0%, 100%)",
+    }),
     spacing: {
       0: 0,
       xs: ".125rem", //2px
@@ -55,19 +64,15 @@ module.exports = {
       16: "16rem",
       20: "20rem",
       24: "24rem",
-      "1/10": "10%",
-      "2/10": "20%",
-      "3/10": "30%",
-      "4/10": "40%",
-      "5/10": "50%",
-      "6/10": "60%",
-      "7/10": "70%",
-      "8/10": "80%",
-      "9/10": "90%",
       "1/4": "25%",
+      "1/2": "50%",
       "3/4": "75",
       "1/3": "33.333333%",
       "2/3": "66.666666%",
+      "1/5": "20%",
+      "2/5": "40%",
+      "3/5": "60%",
+      "4/5": "80%",
     },
     height: {
       auto: "auto",
@@ -125,12 +130,32 @@ module.exports = {
     "width",
     "zIndex",
   ],
-  //TODO modify to use variant order and extend variants
+  variantOrder: [
+    "children",
+    "children-first",
+    "DEFAULT",
+    "first",
+    "last",
+    "odd",
+    "even",
+    "visited",
+    "checked",
+    "group-hover",
+    "group-focus",
+    "focus-within",
+    "hover",
+    "focus",
+    "focus-visible",
+    "active",
+    "disabled",
+  ],
   variants: {
-    margin: ({ before }) => before(["children", "children-first", "DEFAULT"]),
-    flex: ({ before }) => before(["children", "DEFAULT"]),
-    width: ({ before }) => before(["children", "DEFAULT"]),
-    cursor: ({ before }) => before(["children", "DEFAULT"]),
+    extend: {
+      margin: ["children", "children-first"],
+      flex: ["children"],
+      width: ["children"],
+      cursor: ["children"],
+    },
   },
   plugins: [require("tailwindcss-children")],
 };
