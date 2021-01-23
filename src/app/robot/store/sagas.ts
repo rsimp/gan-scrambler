@@ -2,8 +2,8 @@ import { call, put, take, race, takeEvery } from "typed-redux-saga/macro";
 import { eventChannel, SagaIterator } from "redux-saga";
 import { PayloadAction } from "@reduxjs/toolkit";
 
-import { enqueueSnackbar } from "app/libs/snackbar/actions";
-import { translate } from "app/libs/translation-helpers";
+import { enqueueSnackbar } from "core/snackbar/actions";
+import { translate } from "core/translation-helpers";
 import {
   unregisterRobot,
   registerRobot,

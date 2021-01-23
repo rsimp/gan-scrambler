@@ -3,16 +3,14 @@ import { connect } from "react-redux";
 import { Button, TextField } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
-import { ApplicationState } from "app/libs/store";
+import { ApplicationState } from "core/redux/store";
+import { fiveSideSolver } from "core/cube/solvers/five-side-solver";
+import { validateAlgorithm, invertAlgorithm } from "core/cube/libs/algorithms";
+import { ButtonRow, ContentContainer } from "core/style-components";
+
 import { getRobotServer } from "app/robot/store/selectors";
-import { fiveSideSolver } from "app/libs/cube/solvers/five-side-solver";
 import { CubePreview } from "app/cube-preview";
-import {
-  validateAlgorithm,
-  invertAlgorithm,
-} from "app/libs/cube/libs/algorithms";
 import { executeScramble } from "app/robot/bluetooth-utils";
-import { ButtonRow, ContentContainer } from "app/libs/style-components";
 
 interface ManualScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;

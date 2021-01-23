@@ -1,4 +1,4 @@
-import { ApplicationState } from "app/libs/store";
+import { ApplicationState } from "core/redux/store";
 
 const isFeatureEnabled = (feature: string) => (
   state: ApplicationState

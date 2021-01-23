@@ -1,4 +1,4 @@
-import { factorial, choose } from "app/libs/cube/libs/tools";
+import { factorial, choose } from "core/cube/libs/tools";
 
 /**
  * In-place rotation of the subarray determined by the two

@@ -3,7 +3,7 @@ import {
   getPermutationFromIndex,
   getIndexFromOrientation,
   getParity,
-} from "app/libs/cube/libs/coordinates";
+} from "core/cube/libs/coordinates";
 
 import {
   MoveTable,
@@ -11,11 +11,11 @@ import {
   createCornerPermutationTable,
   createEdgeOrientationTable,
   createCornerOrientationTable,
-} from "app/libs/cube/libs/move-table";
+} from "core/cube/libs/move-table";
 
-import Search, { SearchSolution } from "app/libs/cube/libs/search";
+import Search, { SearchSolution } from "core/cube/libs/search";
 
-import { fiveSideMoves, CubeIndexes } from "app/libs/cube/libs/cube";
+import { fiveSideMoves, CubeIndexes } from "core/cube/libs/cube";
 
 // In phase two, only quarter moves of U and D and double turns of
 // all the other faces are allowed, in order to keep the cube in

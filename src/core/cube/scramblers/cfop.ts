@@ -1,11 +1,11 @@
-import getScrambleForPieces from "app/libs/cube/libs/scramble-pieces";
-import { Edges, Corners } from "app/libs/cube/libs/cube";
+import getScrambleForPieces from "core/cube/libs/scramble-pieces";
+import { Edges, Corners } from "core/cube/libs/cube";
 import {
   isOLLSolved,
   isFirstLookOLLSolved,
   isFirstLookPLLSolved,
   isCubeSolved,
-} from "app/libs/cube/scramblers/solve-criteria";
+} from "core/cube/scramblers/solve-criteria";
 
 export const generateOLLScramble = (): string | false =>
   getScrambleForPieces(

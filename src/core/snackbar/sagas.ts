@@ -3,7 +3,7 @@ import { takeEvery } from "typed-redux-saga";
 import { SagaIterator } from "redux-saga";
 import { Action } from "@reduxjs/toolkit";
 
-import { enqueueSnackbar, closeSnackbar } from "app/libs/snackbar/actions";
+import { enqueueSnackbar, closeSnackbar } from "core/snackbar/actions";
 
 function* processSnackbarActions(
   snackbar: React.RefObject<ProviderContext>,

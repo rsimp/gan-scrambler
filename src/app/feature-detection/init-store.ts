@@ -1,8 +1,8 @@
-import { registerReducer } from "app/libs/store";
+import { registerReducer } from "core/redux/store";
 
 import reducer from "app/feature-detection/reducer";
 
-declare module "app/libs/store" {
+declare module "core/redux/store" {
   interface ApplicationState {
     featureDetection: Record<string, boolean>;
   }

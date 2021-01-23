@@ -1,9 +1,4 @@
-import {
-  CubeIndexes,
-  Corners,
-  Edges,
-  doAlgorithm,
-} from "app/libs/cube/libs/cube";
+import { CubeIndexes, Corners, Edges, doAlgorithm } from "core/cube/libs/cube";
 
 const arePiecesPermutated = (
   cubeState: CubeIndexes,

@@ -1,9 +1,9 @@
-import { doAlgorithm, identity, CubeIndexes } from "app/libs/cube/libs/cube";
+import { doAlgorithm, identity, CubeIndexes } from "core/cube/libs/cube";
 import {
   getIndexFromOrientation,
   getIndexFromPermutation,
-} from "app/libs/cube/libs/coordinates";
-import { isTopCrossSolved } from "app/libs/cube/scramblers/solve-criteria";
+} from "core/cube/libs/coordinates";
+import { isTopCrossSolved } from "core/cube/scramblers/solve-criteria";
 
 const cubeFaces = ["D", "L", "B", "U", "R", "F"];
 const moveModifiers = ["", "2", "'"];

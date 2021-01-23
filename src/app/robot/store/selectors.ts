@@ -1,4 +1,4 @@
-import { ApplicationState } from "app/libs/store";
+import { ApplicationState } from "core/redux/store";
 import { RobotState } from "app/robot/store/types";
 
 export const getRobotDevice = (state: ApplicationState): RobotState["device"] =>

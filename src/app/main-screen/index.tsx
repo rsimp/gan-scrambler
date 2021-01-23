@@ -18,7 +18,7 @@ import tag from "classed.macro";
 
 import { RobotWidget } from "app/robot/widget";
 import { ConnectedCFOPScramble } from "app/cfop-scramble";
-import { fiveSideSearch } from "app/libs/cube/solvers/five-side-solver";
+import { fiveSideSearch } from "core/cube/solvers/five-side-solver";
 import { ConnectedRandomScramble } from "app/random-scramble";
 import { ConnectedManualScramble } from "app/manual-scramble";
 import { appInitialized } from "app/main-screen/actions";

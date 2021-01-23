@@ -3,14 +3,13 @@ import { connect } from "react-redux";
 import { Button, InputLabel, OutlinedInput } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
-import { ApplicationState } from "app/libs/store";
+import { ApplicationState } from "core/redux/store";
+import { generateScramble } from "core/cube/scramblers/full";
+import { ButtonRow, ContentContainer } from "core/style-components";
 
 import { getRobotServer } from "app/robot/store/selectors";
-
-import { generateScramble } from "app/libs/cube/scramblers/full";
 import { CubePreview } from "app/cube-preview";
 import { executeScramble } from "app/robot/bluetooth-utils";
-import { ButtonRow, ContentContainer } from "app/libs/style-components";
 
 interface RandomScrambleProps {
   robotServer: BluetoothRemoteGATTServer | null;

@@ -7,9 +7,9 @@ import { IconButton } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import { SnackbarProvider } from "notistack";
 
-import { watchSnackbarActions } from "app/libs/snackbar/sagas";
-import { createStore } from "app/libs/store";
-import { importAll } from "app/libs/webpack";
+import { watchSnackbarActions } from "core/snackbar/sagas";
+import { createStore } from "core/redux/store";
+import { importAll } from "core/webpack";
 
 import { MainScreen } from "app/main-screen";
 import { enableFeature } from "app/feature-detection/actions";
