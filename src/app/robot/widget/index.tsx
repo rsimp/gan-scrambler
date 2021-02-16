@@ -15,7 +15,7 @@ import {
   PRIMARY_SERVICE,
   DEVICE_INFO_SERVICE,
 } from "app/robot/bluetooth-utils";
-import { IncompatibleBrowserDialog } from "app/robot/incopatible-browser-dialoag";
+import { IncompatibleBrowserDialog } from "app/incompatible-browser-dialoag";
 
 export function RobotWidget(): JSX.Element {
   const dispatch = useDispatch();

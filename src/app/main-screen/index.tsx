@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import {
   AppBar,
   Toolbar,
@@ -16,12 +16,15 @@ import { FormattedMessage } from "react-intl";
 import { useDispatch } from "react-redux";
 import tag from "classed.macro";
 
+import { detectBluetoothSupport } from "core/utils/feature-detection";
+import { useSessionStorage } from "core/hooks/useSessionStorage";
+
 import { RobotWidget } from "app/robot/widget";
 import { ConnectedCFOPScramble } from "app/cfop-scramble";
-import { fiveSideSearch } from "core/cube/solvers/five-side-solver";
 import { ConnectedRandomScramble } from "app/random-scramble";
 import { ConnectedManualScramble } from "app/manual-scramble";
 import { appInitialized } from "app/main-screen/actions";
+import { IncompatibleBrowserDialog } from "app/incompatible-browser-dialoag";
 
 const Screen = tag.div`flex flex-col h-screen`;
 
@@ -42,8 +45,16 @@ export const MainScreen = (): JSX.Element => {
     setNavigation(newValue);
   };
 
+  const [showIncompatibleDialog, setShowIncompatibleDialog] = useSessionStorage(
+    "showIncompatibleBrowserDialog",
+    true
+  );
+  const isBluetoothSupported = detectBluetoothSupport();
+  const handleIncompatibleDialogClose = useCallback(() => {
+    setShowIncompatibleDialog(false);
+  }, []);
+
   useEffect(() => {
-    fiveSideSearch.initialize();
     dispatch(appInitialized());
   }, []);
 
@@ -162,6 +173,12 @@ export const MainScreen = (): JSX.Element => {
           </div>
         </div>
       </div>
+      {!isBluetoothSupported && showIncompatibleDialog && (
+        <IncompatibleBrowserDialog
+          isOpen={true}
+          onClose={handleIncompatibleDialogClose}
+        />
+      )}
     </Screen>
   );
 };
