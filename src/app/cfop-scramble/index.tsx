@@ -20,7 +20,7 @@ import {
   isF2LSolved,
   isCrossSolved,
 } from "core/cube/scramblers/solve-criteria";
-import { ButtonRow, ContentContainer } from "core/style-components";
+import { ButtonRow, ContentContainer } from "core/components/presentation";
 
 import { getRobotServer } from "app/robot/store/selectors";
 import { CubePreview } from "app/cube-preview";

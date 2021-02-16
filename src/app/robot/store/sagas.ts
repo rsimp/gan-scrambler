@@ -3,7 +3,7 @@ import { eventChannel, SagaIterator } from "redux-saga";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 import { enqueueSnackbar } from "core/snackbar/actions";
-import { translate } from "core/translation-helpers";
+import { translate } from "core/utils/translation";
 import {
   unregisterRobot,
   registerRobot,

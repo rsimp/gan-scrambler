@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton } from "@material-ui/core";
 import {
@@ -7,18 +7,21 @@ import {
   BluetoothDisabled,
 } from "@material-ui/icons";
 
+import { detectBluetoothSupport } from "core/utils/feature-detection";
+
 import { bluetoothDeviceSelected } from "app/robot/store/actions";
 import { getRobotDevice } from "app/robot/store/selectors";
-import { isBluetoothEnabledSelector } from "app/feature-detection/selectors";
 import {
   PRIMARY_SERVICE,
   DEVICE_INFO_SERVICE,
 } from "app/robot/bluetooth-utils";
+import { IncompatibleBrowserDialog } from "app/robot/incopatible-browser-dialoag";
 
 export function RobotWidget(): JSX.Element {
   const dispatch = useDispatch();
   const robotDevice = useSelector(getRobotDevice);
-  const isBluetoothEnabled = useSelector(isBluetoothEnabledSelector);
+  const isBluetoothSupported = detectBluetoothSupport();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleBluetoothClick = useCallback(async () => {
     try {
@@ -33,13 +36,21 @@ export function RobotWidget(): JSX.Element {
     }
   }, []);
 
-  return isBluetoothEnabled ? (
-    <IconButton color="inherit" onClick={handleBluetoothClick}>
-      {robotDevice ? <BluetoothConnected /> : <Bluetooth />}
-    </IconButton>
-  ) : (
-    <IconButton className="text-error">
-      <BluetoothDisabled />
-    </IconButton>
+  const openDialog = useCallback(() => setIsDialogOpen(true), []);
+  const closeDialog = useCallback(() => setIsDialogOpen(false), []);
+
+  return (
+    <>
+      {isBluetoothSupported ? (
+        <IconButton color="inherit" onClick={handleBluetoothClick}>
+          {robotDevice ? <BluetoothConnected /> : <Bluetooth />}
+        </IconButton>
+      ) : (
+        <IconButton className="text-error" onClick={openDialog}>
+          <BluetoothDisabled />
+        </IconButton>
+      )}
+      <IncompatibleBrowserDialog isOpen={isDialogOpen} onClose={closeDialog} />
+    </>
   );
 }

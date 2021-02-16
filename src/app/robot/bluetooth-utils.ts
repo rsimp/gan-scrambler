@@ -1,4 +1,4 @@
-import { chunkReducer } from "core/array-helpers";
+import { chunkReducer } from "core/utils/arrays";
 
 export const PRIMARY_SERVICE = 0xfff0;
 const SCRAMBLE_CHARACTERISTIC = 0xfff3;

@@ -9,10 +9,9 @@ import { SnackbarProvider } from "notistack";
 
 import { watchSnackbarActions } from "core/snackbar/sagas";
 import { createStore } from "core/redux/store";
-import { importAll } from "core/webpack";
+import { importAll } from "core/utils/webpack";
 
 import { MainScreen } from "app/main-screen";
-import { enableFeature } from "app/feature-detection/actions";
 
 import { messages, locale } from "./translations";
 
@@ -35,9 +34,6 @@ function renderApp() {
   const snackbar = React.createRef<SnackbarProvider>();
   const store = createStore();
   store.runSaga(watchSnackbarActions, snackbar);
-  if (navigator.bluetooth && navigator.bluetooth.requestDevice) {
-    store.dispatch(enableFeature("bluetooth"));
-  }
 
   const onClickDismiss = (key: React.ReactText) => () => {
     snackbar.current?.closeSnackbar(key);

@@ -1,5 +1,5 @@
 module.exports = {
-  important: "#root",
+  important: "",
   future: {},
   purge: false,
   theme: {
@@ -27,7 +27,7 @@ module.exports = {
       error: "hsl(349, 85%, 40%)",
     },
     textColor: (theme) => ({
-      ...theme,
+      ...theme("colors"),
       "on-primary": "hsl(0, 0%, 100%)",
       "on-secondary": "hsl(0, 0%, 100%)",
       "on-background": "hsla(0, 0%, 0%, 0.87)",
@@ -41,7 +41,7 @@ module.exports = {
       sm: ".25rem", //4px
       med: ".5rem", //8px
       lg: "1rem", //16px
-      xl: "2rem", //32px
+      "2": "2rem", //32px
       "3": "3rem",
       "4": "4rem",
       "6": "6rem",

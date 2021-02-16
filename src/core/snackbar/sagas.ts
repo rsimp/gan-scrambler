@@ -1,5 +1,5 @@
 import { ProviderContext } from "notistack";
-import { takeEvery } from "typed-redux-saga";
+import { takeEvery } from "typed-redux-saga/macro";
 import { SagaIterator } from "redux-saga";
 import { Action } from "@reduxjs/toolkit";
 

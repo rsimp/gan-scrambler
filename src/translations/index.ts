@@ -1,5 +1,5 @@
 import pathParse from "path-parse";
-import { importAll } from "core/webpack";
+import { importAll } from "core/utils/webpack";
 
 interface Translations {
   [key: string]: string | Translations;

@@ -5,7 +5,7 @@ import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "core/redux/store";
 import { generateScramble } from "core/cube/scramblers/full";
-import { ButtonRow, ContentContainer } from "core/style-components";
+import { ButtonRow, ContentContainer } from "core/components/presentation";
 
 import { getRobotServer } from "app/robot/store/selectors";
 import { CubePreview } from "app/cube-preview";

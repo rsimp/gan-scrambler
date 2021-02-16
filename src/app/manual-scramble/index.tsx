@@ -6,7 +6,7 @@ import { FormattedMessage } from "react-intl";
 import { ApplicationState } from "core/redux/store";
 import { fiveSideSolver } from "core/cube/solvers/five-side-solver";
 import { validateAlgorithm, invertAlgorithm } from "core/cube/libs/algorithms";
-import { ButtonRow, ContentContainer } from "core/style-components";
+import { ButtonRow, ContentContainer } from "core/components/presentation";
 
 import { getRobotServer } from "app/robot/store/selectors";
 import { CubePreview } from "app/cube-preview";
