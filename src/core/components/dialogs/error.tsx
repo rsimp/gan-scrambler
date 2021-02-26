@@ -24,7 +24,7 @@ export const ErrorDialog = (props: ErrorDialogProps): JSX.Element => (
       classes={{ root: "bg-error text-on-error" }}
     >
       <div className="flex items-center">
-        <Warning className="pr-lg" />
+        <Warning className="mr-lg" />
         <Typography variant="h6">{props.title}</Typography>
       </div>
     </DialogTitle>

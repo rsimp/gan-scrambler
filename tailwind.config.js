@@ -22,8 +22,6 @@ module.exports = {
         dark: "hsl(4, 90%, 40%)",
         disabled: "hsl(4, 33%, 60%)",
       },
-      background: "hsl(0, 0%, 100%)",
-      surface: "hsl(0, 0%, 100%)",
       error: "hsl(349, 85%, 40%)",
     },
     textColor: (theme) => ({
@@ -34,6 +32,13 @@ module.exports = {
       "icon-on-background": "hsla(0, 0%, 0%, 0.54)",
       "on-surface": "hsla(0, 0%, 0%, 0.87)",
       "on-error": "hsl(0, 0%, 100%)",
+      "on-tooltip": "hsl(0, 0%, 100%)",
+    }),
+    backgroundColor: (theme) => ({
+      ...theme("colors"),
+      background: "hsl(0, 0%, 100%)",
+      surface: "hsl(0, 0%, 100%)",
+      tooltip: "black",
     }),
     spacing: {
       0: 0,
@@ -117,6 +122,7 @@ module.exports = {
     "lineHeight",
     "margin",
     "maxHeight",
+    "minWidth",
     "maxWidth",
     "opacity",
     "overflow",
@@ -151,10 +157,13 @@ module.exports = {
   ],
   variants: {
     extend: {
-      margin: ["children", "children-first"],
-      flex: ["children"],
-      width: ["children"],
-      cursor: ["children"],
+      margin: ["children", "children-first", "DEFAULT", "first"],
+      padding: ["children", "DEFAULT"],
+      flex: ["children", "DEFAULT"],
+      flexGrow: ["children", "DEFAULT"],
+      width: ["children", "DEFAULT"],
+      cursor: ["children", "DEFAULT"],
+      display: ["children", "DEFAULT"],
     },
   },
   plugins: [require("tailwindcss-children")],

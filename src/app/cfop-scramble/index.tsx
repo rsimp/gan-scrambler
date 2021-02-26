@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, FormControl, Select, MenuItem } from "@material-ui/core";
+import {
+  Button,
+  FormControl,
+  Select,
+  MenuItem,
+  Tooltip,
+} from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "core/redux/store";
@@ -144,6 +150,12 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
     }
   };
 
+  const tooltipText = !Boolean(props.robotServer)
+    ? "Robot not connected"
+    : !scramble
+    ? "Scramble required"
+    : "";
+
   return (
     <ContentContainer>
       <FormControl component="fieldset">
@@ -177,13 +189,19 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
         <Button variant="contained" onClick={onSendBtnClick}>
           <FormattedMessage id="scramble.actions.scramble" />
         </Button>
-        <Button
-          variant="contained"
-          disabled={!Boolean(scramble) || !Boolean(props.robotServer)}
-          onClick={() => executeScramble(props.robotServer, scramble)}
-        >
-          <FormattedMessage id="scramble.actions.send" />
-        </Button>
+
+        <Tooltip arrow title={tooltipText}>
+          <span>
+            <Button
+              variant="contained"
+              disabled={!Boolean(scramble) || !Boolean(props.robotServer)}
+              onClick={() => executeScramble(props.robotServer, scramble)}
+              className="flex flex-grow"
+            >
+              <FormattedMessage id="scramble.actions.send" />
+            </Button>
+          </span>
+        </Tooltip>
       </ButtonRow>
     </ContentContainer>
   );

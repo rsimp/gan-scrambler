@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button, InputLabel, OutlinedInput } from "@material-ui/core";
+import { Button, InputLabel, OutlinedInput, Tooltip } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "core/redux/store";
@@ -17,6 +17,12 @@ interface RandomScrambleProps {
 
 export function RandomScramble(props: RandomScrambleProps): JSX.Element {
   const [scramble, setScramble] = useState<string>("");
+  const tooltipText = !Boolean(props.robotServer)
+    ? "Robot not connected"
+    : !scramble
+    ? "Scramble required"
+    : "";
+
   return (
     <ContentContainer>
       <div className="flex flex-col w-full">
@@ -44,14 +50,20 @@ export function RandomScramble(props: RandomScrambleProps): JSX.Element {
         >
           <FormattedMessage id="scramble.actions.scramble" />
         </Button>
-        <Button
-          variant="contained"
-          size="large"
-          disabled={!scramble || !Boolean(props.robotServer)}
-          onClick={() => executeScramble(props.robotServer, scramble)}
-        >
-          <FormattedMessage id="scramble.actions.send" />
-        </Button>
+
+        <Tooltip arrow title={tooltipText}>
+          <span>
+            <Button
+              variant="contained"
+              size="large"
+              disabled={!scramble || !Boolean(props.robotServer)}
+              onClick={() => executeScramble(props.robotServer, scramble)}
+              className="flex flex-grow"
+            >
+              <FormattedMessage id="scramble.actions.send" />
+            </Button>
+          </span>
+        </Tooltip>
       </ButtonRow>
     </ContentContainer>
   );

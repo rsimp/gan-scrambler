@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { connect } from "react-redux";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Tooltip } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
 import { ApplicationState } from "core/redux/store";
@@ -53,6 +53,12 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
     () => executeScramble(props.robotServer, scramble),
     [scramble, props.robotServer]
   );
+  const tooltipText = !Boolean(props.robotServer)
+    ? "Robot not connected"
+    : !scramble
+    ? "Scramble required"
+    : "";
+
   return (
     <ContentContainer>
       <form noValidate autoComplete="off" className="container">
@@ -73,13 +79,18 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
       </form>
       <CubePreview scrambleCode={scramble} />
       <ButtonRow>
-        <Button
-          variant="contained"
-          disabled={!Boolean(props.robotServer) || !Boolean(scramble)}
-          onClick={sendClickHandler}
-        >
-          <FormattedMessage id="scramble.actions.send" />
-        </Button>
+        <Tooltip arrow title={tooltipText}>
+          <span>
+            <Button
+              variant="contained"
+              disabled={!Boolean(props.robotServer) || !Boolean(scramble)}
+              onClick={sendClickHandler}
+              className="flex flex-grow"
+            >
+              <FormattedMessage id="scramble.actions.send" />
+            </Button>
+          </span>
+        </Tooltip>
       </ButtonRow>
     </ContentContainer>
   );
