@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   FormControl,
@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
-import { ApplicationState } from "core/redux/store";
 import { generateScramble } from "core/cube/scramblers/full";
 import {
   generateOLLScramble,
@@ -30,11 +29,7 @@ import { ButtonRow, ContentContainer } from "core/components/presentation";
 
 import { getRobotServer } from "app/robot/store/selectors";
 import { CubePreview } from "app/cube-preview";
-import { executeScramble } from "app/robot/bluetooth-utils";
-
-interface CFOPScrambleProps {
-  robotServer: BluetoothRemoteGATTServer | null;
-}
+import { scrambleSubmitted } from "app/robot/store/actions";
 
 type CFOPPhaseType =
   | "cross"
@@ -87,11 +82,13 @@ const filters: Record<string, FaceletArrayFilter> = {
   oll: ollFilter,
 };
 
-export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
+export const CFOPScramble = (): JSX.Element => {
   const [cfopPhase, setCFOPPhase] = useState<CFOPPhaseType>("cross");
   const [scramble, setScramble] = useState<string>("");
+  const robotServer = useSelector(getRobotServer);
+  const dispatch = useDispatch();
 
-  const onSendBtnClick = () => {
+  const handleScrambleClick = useCallback(() => {
     let scramble: string | false;
     switch (cfopPhase) {
       case "cross":
@@ -148,9 +145,24 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
         }
         break;
     }
-  };
+  }, [scramble]);
 
-  const tooltipText = !Boolean(props.robotServer)
+  const handleCFOPPhaseChange = useCallback(
+    (e: React.ChangeEvent<{ value: unknown }>) => {
+      const phase = e.target.value as CFOPPhaseType;
+      if (phase !== cfopPhase) {
+        setScramble("");
+      }
+      setCFOPPhase(phase);
+    },
+    []
+  );
+
+  const handleSendClick = useCallback(() => {
+    dispatch(scrambleSubmitted(scramble));
+  }, [scramble]);
+
+  const tooltipText = !Boolean(robotServer)
     ? "Robot not connected"
     : !scramble
     ? "Scramble required"
@@ -162,13 +174,7 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
         <Select
           className="computer:w-24"
           value={cfopPhase}
-          onChange={(e) => {
-            const phase = e.target.value as CFOPPhaseType;
-            if (phase !== cfopPhase) {
-              setScramble("");
-            }
-            setCFOPPhase(phase);
-          }}
+          onChange={handleCFOPPhaseChange}
         >
           <MenuItem value="cross">Cross</MenuItem>
           <MenuItem value="f2l">F2L</MenuItem>
@@ -186,7 +192,7 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
         colorMap={invertedColorMap}
       />
       <ButtonRow>
-        <Button variant="contained" onClick={onSendBtnClick}>
+        <Button variant="contained" onClick={handleScrambleClick}>
           <FormattedMessage id="scramble.actions.scramble" />
         </Button>
 
@@ -194,8 +200,8 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
           <span>
             <Button
               variant="contained"
-              disabled={!Boolean(scramble) || !Boolean(props.robotServer)}
-              onClick={() => executeScramble(props.robotServer, scramble)}
+              disabled={!Boolean(scramble) || !Boolean(robotServer)}
+              onClick={handleSendClick}
               className="flex flex-grow"
             >
               <FormattedMessage id="scramble.actions.send" />
@@ -205,8 +211,4 @@ export function CFOPScramble(props: CFOPScrambleProps): JSX.Element {
       </ButtonRow>
     </ContentContainer>
   );
-}
-
-export const ConnectedCFOPScramble = connect((state: ApplicationState) => ({
-  robotServer: getRobotServer(state),
-}))(CFOPScramble);
+};

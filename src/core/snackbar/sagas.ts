@@ -1,8 +1,8 @@
 import { ProviderContext } from "notistack";
 import { takeEvery } from "typed-redux-saga/macro";
-import { SagaIterator } from "redux-saga";
 import { Action } from "@reduxjs/toolkit";
 
+import { SagaIterator } from "core/redux/types";
 import { enqueueSnackbar, closeSnackbar } from "core/snackbar/actions";
 
 function* processSnackbarActions(

@@ -1,13 +1,19 @@
 import { createAction } from "@reduxjs/toolkit";
 
-const actionPrefix = "robot";
+const actionPrefix = "bluetooth";
 
-export const registerRobot = createAction<BluetoothDevice>(
-  `${actionPrefix}/register_robot`
+export const robotConnected = createAction<BluetoothDevice>(
+  `${actionPrefix}/robot/connected`
 );
 
-export const unregisterRobot = createAction(`${actionPrefix}/unregister_robot`);
+export const robotDisconnected = createAction(
+  `${actionPrefix}/robot/disconnected`
+);
 
 export const bluetoothDeviceSelected = createAction<BluetoothDevice>(
-  `${actionPrefix}/bluetooth_device_selected`
+  `${actionPrefix}/device_selected`
+);
+
+export const scrambleSubmitted = createAction<string>(
+  `${actionPrefix}/robot/scramble_submitted`
 );

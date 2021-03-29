@@ -20,9 +20,9 @@ import { detectBluetoothSupport } from "core/utils/feature-detection";
 import { useSessionStorage } from "core/hooks/useSessionStorage";
 
 import { RobotWidget } from "app/robot/widget";
-import { ConnectedCFOPScramble } from "app/cfop-scramble";
-import { ConnectedRandomScramble } from "app/random-scramble";
-import { ConnectedManualScramble } from "app/manual-scramble";
+import { CFOPScramble } from "app/cfop-scramble";
+import { RandomScramble } from "app/random-scramble";
+import { ManualScramble } from "app/manual-scramble";
 import { appInitialized } from "app/main-screen/actions";
 import { IncompatibleBrowserDialog } from "app/incompatible-browser-dialoag";
 
@@ -140,9 +140,9 @@ export const MainScreen = (): JSX.Element => {
         </Paper>
 
         <div className="flex flex-grow flex-col h-full">
-          {navigationValue === "random" && <ConnectedRandomScramble />}
-          {navigationValue === "cfop" && <ConnectedCFOPScramble />}
-          {navigationValue === "manual" && <ConnectedManualScramble />}
+          {navigationValue === "random" && <RandomScramble />}
+          {navigationValue === "cfop" && <CFOPScramble />}
+          {navigationValue === "manual" && <ManualScramble />}
 
           <div className="landscape:hidden computer:hidden w-full mt-auto">
             <BottomNavigation

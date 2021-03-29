@@ -1,24 +1,21 @@
 import React, { useState, useCallback } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, TextField, Tooltip } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 
-import { ApplicationState } from "core/redux/store";
 import { fiveSideSolver } from "core/cube/solvers/five-side-solver";
 import { validateAlgorithm, invertAlgorithm } from "core/cube/libs/algorithms";
 import { ButtonRow, ContentContainer } from "core/components/presentation";
 
 import { getRobotServer } from "app/robot/store/selectors";
 import { CubePreview } from "app/cube-preview";
-import { executeScramble } from "app/robot/bluetooth-utils";
+import { scrambleSubmitted } from "app/robot/store/actions";
 
-interface ManualScrambleProps {
-  robotServer: BluetoothRemoteGATTServer | null;
-}
-
-export function ManualScramble(props: ManualScrambleProps): JSX.Element {
+export const ManualScramble = (): JSX.Element => {
   const [scramble, setScramble] = useState<string>("");
   const [hasError, setHasError] = useState(false);
+  const robotServer = useSelector(getRobotServer);
+  const dispatch = useDispatch();
 
   const processScrambleInput = useCallback((scramble: string) => {
     if (scramble.length > 0) {
@@ -38,22 +35,25 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
     }
   }, []);
 
-  const manualScrambleBlurHandler = useCallback(
+  const handleManualScrambleBlur = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) =>
       processScrambleInput(event.currentTarget.value),
     []
   );
-  const manualScrambleKeyDownHandler = useCallback((e: React.KeyboardEvent) => {
+
+  const handleManualScrambleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       e.preventDefault();
       processScrambleInput((e.target as HTMLInputElement).value);
     }
   }, []);
-  const sendClickHandler = useCallback(
-    () => executeScramble(props.robotServer, scramble),
-    [scramble, props.robotServer]
+
+  const handleSendClick = useCallback(
+    () => dispatch(scrambleSubmitted(scramble)),
+    [scramble]
   );
-  const tooltipText = !Boolean(props.robotServer)
+
+  const tooltipText = !Boolean(robotServer)
     ? "Robot not connected"
     : !scramble
     ? "Scramble required"
@@ -73,8 +73,8 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
           }}
           error={hasError}
           helperText={hasError && "Invalid Scramble Code"}
-          onBlur={manualScrambleBlurHandler}
-          onKeyDown={manualScrambleKeyDownHandler}
+          onBlur={handleManualScrambleBlur}
+          onKeyDown={handleManualScrambleKeyDown}
         />
       </form>
       <CubePreview scrambleCode={scramble} />
@@ -83,8 +83,8 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
           <span>
             <Button
               variant="contained"
-              disabled={!Boolean(props.robotServer) || !Boolean(scramble)}
-              onClick={sendClickHandler}
+              disabled={!Boolean(robotServer) || !Boolean(scramble)}
+              onClick={handleSendClick}
               className="flex flex-grow"
             >
               <FormattedMessage id="scramble.actions.send" />
@@ -94,8 +94,4 @@ export function ManualScramble(props: ManualScrambleProps): JSX.Element {
       </ButtonRow>
     </ContentContainer>
   );
-}
-
-export const ConnectedManualScramble = connect((state: ApplicationState) => ({
-  robotServer: getRobotServer(state),
-}))(ManualScramble);
+};
