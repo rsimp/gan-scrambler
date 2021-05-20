@@ -1,44 +1,14 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Gan Scrambler is a PWA for controlling the GAN Robot: https://www.amazon.com/GAN-Automatic-Artificial-Intelligence-Compatible/dp/B081CWHMNL
+It can execute manual scrambles, manual scrambles (you input the scramble sequence e.g. L U' B D2 R...), and can scramble the cube for any of the four stages of CFOP solving method.
 
-## Available Scripts
+This project uses a modified (and typed) version of cube-solver[https://github.com/torjusti/cube-solver] to solve the cube with the kociemba algorithm. Modified for a 5 sided cube solve for the robot, as opposed to being able to turn all 6 faces. It also uses some of the solvers to help with partial CFOP solves, with some new ones added to it.
 
-In the project directory, you can run:
+It also uses logic from cubejs[https://github.com/ldez/cubejs] (converted from coffeescript to typescript) and cube-preview[https://www.npmjs.com/package/cube-preview] for creating svg previews of the scrambled cubes.
 
-### `npm start`
+The project is hosted at rsimp.io/gan-scrambler. You can create various scrambles without the robot, but will need to purchase the robot above in order to scramble a compatible cube (GAN-356i, or GAN-356XS, maybe GAN-356X, you just need the correct center caps).
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+As a PWA it can be installed on windows/mac/linux/android via the chrome browser. Unfortunately iOS will not allow bluetooth connections via a web browser even with chrome. Once installed an internet connection is not required to operate the robot.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The following flags in chrome are required to enable persistent bluetooth connections: #enable-experimental-web-platform-features and #enable-web-bluetooth-new-permissions-backend.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The project was written with React/Redux/Sagas in typescript. Uses the tailwind css library with the classed.macro npm package for creating styled components.
