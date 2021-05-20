@@ -18,6 +18,6 @@ The project was written with React/Redux/Sagas in typescript, and generated with
 ### Inspiration
 A native android and iOS app, called Cube Station, already exists for the robot and the corresponding bluetooth cubes (GAN-356i, GAN-356iplay). Certain features are disabled without a bluetooth cube (GAN-356XS is not bluetooth), such as just doing a simple scramble. Manual scrambles are not available, and it only performs virtual scrambles for CFOP training.
 I wanted an app that:
-1. Took less steps to scramble the cube
+1. Took less steps to scramble the cube and only required the correct center caps
 2. Could execute manual scramble codes generated from other apps or competition solves
 3. Could do physical scrambles for CFOP
