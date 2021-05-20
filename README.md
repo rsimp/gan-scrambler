@@ -7,7 +7,7 @@ This project uses a modified (and typed) version of [cube-solver](https://github
 
 It also uses logic from [cubejs](https://github.com/ldez/cubejs) (converted from coffeescript to typescript) and [cube-preview](https://www.npmjs.com/package/cube-preview) for creating svg previews of the scrambled cubes.
 
-The project is hosted at https://rsimp.io/gan-scrambler. You can create various scrambles without the robot, but will need the gan-robot above and a compatible cube to execute the scramble. Compatible cubes include: GAN-356i, GAN-356iplay, GAN-356XS, and maybe the GAN-356X. You just need the correct center caps for the robot to attach to.
+The project is hosted at https://rsimp.io/gan-scrambler. You can create various scrambles without the robot, but will need the gan-robot and a compatible cube to execute the scramble. Compatible cubes include: GAN-356i, GAN-356iplay, GAN-356XS, and maybe the GAN-356X. You just need the correct center caps for the robot to attach to.
 
 As a PWA it can be installed on windows/mac/linux/android via the chrome browser. Unfortunately iOS will not allow bluetooth connections via a web browser even with chrome. Once installed an internet connection is not required to operate the robot.
 
