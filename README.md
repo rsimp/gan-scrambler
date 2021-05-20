@@ -13,7 +13,7 @@ As a PWA it can be installed on windows, macOS, linux, and android via the chrom
 
 The following flags in chrome are required to enable persistent bluetooth connections: #enable-experimental-web-platform-features and #enable-web-bluetooth-new-permissions-backend. This simply means you won't need to reconnect to a previously paired robot everytime you open the app or refresh.
 
-The project was written with React/Redux/Sagas in typescript, tailwind and classed.macro for CSS, and was generated with `create-react-app`. It uses the react material UI library for visual components: https://material-ui.com/
+The project was written with React/Redux/Sagas in typescript, uses tailwind and classed.macro for CSS, and was generated with `create-react-app`. It uses the react material UI library for visual components: https://material-ui.com/
 
 ### Inspiration
 A native android and iOS app, called Cube Station, already exists for the robot and the corresponding bluetooth cubes (GAN-356i, GAN-356iplay). Certain features are disabled without a bluetooth cube (GAN-356XS is not bluetooth), such as just doing a simple scramble. Manual scrambles are not available, and it only performs virtual scrambles for CFOP training.
