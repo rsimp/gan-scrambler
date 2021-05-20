@@ -1,4 +1,4 @@
-### Gan Scrambler is a PWA for controlling the GAN Robot: https://www.amazon.com/GAN-Automatic-Artificial-Intelligence-Compatible/dp/B081CWHMNL
+### Gan Scrambler is a PWA for controlling the GAN Robot: https://www.gancube.com/gan-robot
 It can execute manual scrambles, manual scrambles (you input the scramble sequence e.g. L U' B D2 R...), and can scramble the cube for any of the four stages of CFOP solving method.
 
 This project uses a modified (and typed) version of cube-solver[https://github.com/torjusti/cube-solver] to solve the cube with the kociemba algorithm. Modified for a 5 sided cube solve for the robot, as opposed to being able to turn all 6 faces. It also uses some of the solvers to help with partial CFOP solves, with some new ones added to it.
