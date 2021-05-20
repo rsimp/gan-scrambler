@@ -9,7 +9,7 @@ It also uses logic from [cubejs](https://github.com/ldez/cubejs) (converted from
 
 The project is hosted at https://rsimp.io/gan-scrambler. You can create various scrambles without the robot, but will need the gan-robot and a compatible cube to execute the scramble. Compatible cubes include: GAN-356i, GAN-356iplay, GAN-356XS, and maybe the GAN-356X. You just need the correct center caps for the robot to attach to.
 
-As a PWA it can be installed on windows, macOS, linux, and android via the chrome browser. Unfortunately iOS will not allow bluetooth connections via a web browser even with chrome. Once installed an internet connection is not required to operate the robot.
+As a PWA it can be installed on windows, macOS, linux, and android via the chrome browser. Unfortunately iOS will not allow bluetooth connections via a web browser even with chrome. Once installed an internet connection is not required to operate the robot. Installing the app is optional, you can also simply browse to https://rsimp.io/gan-scrambler with chrome.
 
 The following flags in chrome are required to enable persistent bluetooth connections: #enable-experimental-web-platform-features and #enable-web-bluetooth-new-permissions-backend. This simply means you won't need to reconnect to a previously paired robot everytime you open the app or refresh.
 
