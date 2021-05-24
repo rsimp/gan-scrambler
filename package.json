@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lingui/react": "^3.8.2",
     "@material-ui/core": "^4.10.2",
     "@material-ui/icons": "^4.9.1",
     "@reduxjs/toolkit": "^1.5.0",
@@ -46,13 +47,19 @@
       "plugin:react/recommended",
       "plugin:prettier/recommended"
     ],
-    "plugins": ["react", "prettier", "@typescript-eslint"],
+    "plugins": [
+      "react",
+      "prettier",
+      "@typescript-eslint"
+    ],
     "rules": {
       "prettier/prettier": "error"
     },
     "overrides": [
       {
-        "files": ["**/*.tsx"],
+        "files": [
+          "**/*.tsx"
+        ],
         "rules": {
           "react/prop-types": "off"
         }
@@ -73,6 +80,8 @@
     ]
   },
   "devDependencies": {
+    "@lingui/cli": "^3.8.2",
+    "@lingui/macro": "^3.8.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",

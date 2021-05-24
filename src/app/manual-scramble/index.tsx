@@ -11,9 +11,16 @@ import { getRobotServer } from "app/robot/store/selectors";
 import { CubePreview } from "app/cube-preview";
 import { scrambleSubmitted } from "app/robot/store/actions";
 
+interface ScrambleState {
+  previewCode: string;
+  hasError: boolean;
+}
+
 export const ManualScramble = (): JSX.Element => {
-  const [scramble, setScramble] = useState<string>("");
-  const [hasError, setHasError] = useState(false);
+  const [scramble, setScramble] = useState<ScrambleState>({
+    previewCode: "",
+    hasError: false,
+  });
   const robotServer = useSelector(getRobotServer);
   const dispatch = useDispatch();
 
@@ -23,33 +30,42 @@ export const ManualScramble = (): JSX.Element => {
         const fiveSideSolve = fiveSideSolver(scramble);
         if (fiveSideSolve) {
           const fiveSideScramble = invertAlgorithm(fiveSideSolve);
-          setScramble(fiveSideScramble);
+          setScramble({
+            previewCode: fiveSideScramble,
+            hasError: false,
+          });
         }
       } else {
-        setHasError(true);
-        setScramble("");
+        setScramble({
+          previewCode: "",
+          hasError: true,
+        });
       }
     } else {
-      setHasError(false);
-      setScramble("");
+      setScramble({
+        previewCode: "",
+        hasError: false,
+      });
     }
   }, []);
 
-  const handleManualScrambleBlur = useCallback(
+  const handleManualScrambleChange = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) =>
       processScrambleInput(event.currentTarget.value),
     []
   );
 
   const handleManualScrambleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    const target = e.target as HTMLInputElement;
+    if (e.key === "’") {
+      target.value += "'";
       e.preventDefault();
-      processScrambleInput((e.target as HTMLInputElement).value);
+      e.stopPropagation();
     }
   }, []);
 
   const handleSendClick = useCallback(
-    () => dispatch(scrambleSubmitted(scramble)),
+    () => dispatch(scrambleSubmitted(scramble.previewCode)),
     [scramble]
   );
 
@@ -71,13 +87,13 @@ export const ManualScramble = (): JSX.Element => {
           InputLabelProps={{
             shrink: true,
           }}
-          error={hasError}
-          helperText={hasError && "Invalid Scramble Code"}
-          onBlur={handleManualScrambleBlur}
+          error={scramble.hasError}
+          helperText={scramble.hasError && "Invalid Scramble Code"}
+          onChange={handleManualScrambleChange}
           onKeyDown={handleManualScrambleKeyDown}
         />
       </form>
-      <CubePreview scrambleCode={scramble} />
+      <CubePreview scrambleCode={scramble.previewCode} />
       <ButtonRow>
         <Tooltip arrow title={tooltipText}>
           <span>
