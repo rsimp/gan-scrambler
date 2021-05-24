@@ -23,17 +23,21 @@ import {
 } from "app/robot/store/actions";
 import { appInitialized } from "app/main-screen/actions";
 import { getRobotServer } from "app/robot/store/selectors";
+import { ExperimentalBluetoothDevice } from "app/robot/types";
+
 import {
-  ExperimentalBluetoothDevice,
-  ExperimentalBluetooth,
-} from "app/robot/types";
-
-export const PRIMARY_SERVICE = 0xfff0;
-const SCRAMBLE_CHARACTERISTIC = 0xfff3;
-const ROBOT_STATUS_CHARACTERISTIC = 0xfff2;
-
-export const DEVICE_INFO_SERVICE = 0x180a;
-const MODEL_NUMBER_SERVICE = 0x2a24;
+  PRIMARY_SERVICE,
+  SCRAMBLE_CHARACTERISTIC,
+  ROBOT_STATUS_CHARACTERISTIC,
+  DEVICE_INFO_SERVICE,
+  MODEL_NUMBER_SERVICE,
+  getDevices,
+  connect,
+  getPrimaryService,
+  getCharacteristic,
+  readValue,
+  writeValue,
+} from "app/robot/bluetooth";
 
 const moveMap: Record<string, number> = {
   R: 0,
@@ -52,7 +56,6 @@ const moveMap: Record<string, number> = {
   B2: 13,
   "B'": 14,
 };
-
 export class GANDeviceTypeError extends Error {
   modelNumber: string;
   constructor(message: string, modelNumber: string) {
@@ -91,22 +94,25 @@ function* executeChunk(
   chunk: Uint8Array
 ) {
   const primaryService = yield* call(
-    robotServer.getPrimaryService,
+    getPrimaryService,
+    robotServer,
     PRIMARY_SERVICE
   );
   const scrambleExecuteCharacteristic = yield* call(
-    primaryService.getCharacteristic,
+    getCharacteristic,
+    primaryService,
     SCRAMBLE_CHARACTERISTIC
   );
-  yield* call(scrambleExecuteCharacteristic.writeValue, chunk);
+  yield* call(writeValue, scrambleExecuteCharacteristic, chunk);
   const statusCharacteristic = yield* call(
-    primaryService.getCharacteristic,
+    getCharacteristic,
+    primaryService,
     ROBOT_STATUS_CHARACTERISTIC
   );
 
   let hasHadNonZeroValue = false;
   while (true) {
-    const robotStatus = (yield* call(statusCharacteristic.readValue)).getUint8(
+    const robotStatus = (yield* call(readValue, statusCharacteristic)).getUint8(
       0
     );
     if (hasHadNonZeroValue && robotStatus === 0) {
@@ -153,24 +159,27 @@ function* handleBluetoothDeviceSelected({
       );
     } else {
       console.log("bluetooth device couldn't connect");
+      console.log(e);
     }
   }
 }
 
 function* connectToGANRobot(device: ExperimentalBluetoothDevice) {
-  const server = device.gatt ? yield* call(device.gatt.connect) : null;
+  const server = yield* call(connect, device);
   if (!server) {
     throw new Error("Could not connect to Bluetooth Server");
   }
   const deviceInfoService = yield* call(
-    server.getPrimaryService,
+    getPrimaryService,
+    server,
     DEVICE_INFO_SERVICE
   );
   const modelCharacteristic = yield* call(
-    deviceInfoService.getCharacteristic,
+    getCharacteristic,
+    deviceInfoService,
     MODEL_NUMBER_SERVICE
   );
-  const modelNumberValue = yield* call(modelCharacteristic.readValue);
+  const modelNumberValue = yield* call(readValue, modelCharacteristic);
   const modelNumber = new TextDecoder().decode(modelNumberValue);
   if (modelNumber.toUpperCase() !== "GAN ROBOTCUBE") {
     throw new GANDeviceTypeError(
@@ -222,12 +231,10 @@ export function* watchForRobotConnected(): SagaIterator {
 function* connectToKnownGANRobots(): SagaIterator<
   ExperimentalBluetoothDevice | false
 > {
-  const experimentalBluetooth = navigator?.bluetooth as ExperimentalBluetooth;
-  if (!experimentalBluetooth || !experimentalBluetooth.getDevices) {
+  const devices = yield* call(getDevices, navigator.bluetooth);
+  if (devices.length === 0) {
     return false;
   }
-
-  const devices = yield* call(experimentalBluetooth.getDevices);
   const deviceChannel = eventChannel<ExperimentalBluetoothDevice>((emitter) => {
     for (const device of devices) {
       const abortController = new AbortController();
@@ -258,7 +265,9 @@ function* connectToKnownGANRobots(): SagaIterator<
         yield* call(connectToGANRobot, result.connectableDevice);
         deviceChannel.close();
         return result.connectableDevice;
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 }

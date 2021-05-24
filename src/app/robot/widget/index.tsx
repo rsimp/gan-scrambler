@@ -11,7 +11,7 @@ import { detectBluetoothSupport } from "core/utils/feature-detection";
 
 import { bluetoothDeviceSelected } from "app/robot/store/actions";
 import { getRobotDevice } from "app/robot/store/selectors";
-import { PRIMARY_SERVICE, DEVICE_INFO_SERVICE } from "app/robot/store/sagas";
+import { PRIMARY_SERVICE, DEVICE_INFO_SERVICE } from "app/robot/bluetooth";
 import { IncompatibleBrowserDialog } from "app/incompatible-browser-dialoag";
 
 export function RobotWidget(): JSX.Element {

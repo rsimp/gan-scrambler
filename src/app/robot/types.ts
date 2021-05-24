@@ -9,5 +9,5 @@ export interface ExperimentalBluetoothDevice
 }
 
 export interface ExperimentalBluetooth extends Bluetooth {
-  getDevices?: () => ExperimentalBluetoothDevice[];
+  getDevices?: () => Promise<ExperimentalBluetoothDevice[]>;
 }
