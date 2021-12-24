@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/gan-scrambler/static/css/main.a6172738.chunk.css",
+    "main.css": "/gan-scrambler/static/css/main.22c36aa1.chunk.css",
     "main.js": "/gan-scrambler/static/js/main.a4543e77.chunk.js",
     "main.js.map": "/gan-scrambler/static/js/main.a4543e77.chunk.js.map",
     "runtime-main.js": "/gan-scrambler/static/js/runtime-main.6baab05e.js",
@@ -12,7 +12,7 @@
     "service-worker.js": "/gan-scrambler/service-worker.js",
     "service-worker.js.map": "/gan-scrambler/service-worker.js.map",
     "static/css/2.a7ce03c5.chunk.css.map": "/gan-scrambler/static/css/2.a7ce03c5.chunk.css.map",
-    "static/css/main.a6172738.chunk.css.map": "/gan-scrambler/static/css/main.a6172738.chunk.css.map",
+    "static/css/main.22c36aa1.chunk.css.map": "/gan-scrambler/static/css/main.22c36aa1.chunk.css.map",
     "static/js/2.b4a93077.chunk.js.LICENSE.txt": "/gan-scrambler/static/js/2.b4a93077.chunk.js.LICENSE.txt",
     "static/media/300.css": "/gan-scrambler/static/media/roboto-vietnamese-300-normal.54344cce.woff2",
     "static/media/400.css": "/gan-scrambler/static/media/roboto-vietnamese-400-normal.52cebac0.woff2",
@@ -23,7 +23,7 @@
     "static/js/runtime-main.6baab05e.js",
     "static/css/2.a7ce03c5.chunk.css",
     "static/js/2.b4a93077.chunk.js",
-    "static/css/main.a6172738.chunk.css",
+    "static/css/main.22c36aa1.chunk.css",
     "static/js/main.a4543e77.chunk.js"
   ]
 }
